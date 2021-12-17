@@ -1,6 +1,5 @@
 version: "3.7"
 services:
-  # Wallet for Institutional Agent
   issuer-verifier-wallet-db:
     container_name: issuer-verifier-wallet-db
     image: ${POSTGRES_IMAGE}
@@ -19,7 +18,6 @@ services:
         max-size: "50m"
     restart: always
 
-  # Institutional Agent with
   issuer-verifier-acapy:
     container_name: issuer-verifier-acapy
     image: ${ACAPY_IMAGE}
@@ -32,7 +30,7 @@ services:
         --inbound-transport http 0.0.0.0 10001 \
         --outbound-transport http \
         --admin 0.0.0.0 10000 \
-        --endpoint http://load-aries-cloud-agent-institutional:10001 \
+        --endpoint http://issuer-verifier-acapy:10001 \
         ${LEDGER_GENESIS} \
         --ledger-pool-name ${LEDGER_POOL_NAME} \
         --invite-base-url didcomm://aries_connection_invitation \
@@ -80,7 +78,6 @@ services:
       - acapy-load-test
     restart: always
 
-  # Example Alice Agent with insecure admin API reachable from host OS over localhost:10010. This agent has enabled the following automatism: --auto-accept-invites --auto-accept-requests --auto-ping-connection
   holder-acapy:
     container_name: holder-acapy
     image: ${ACAPY_IMAGE}
