@@ -3,8 +3,13 @@
 export MSYS_NO_PATHCONV=1
 set -e
 
+
 # getting script path
 SCRIPT_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+# export environment variables from .env
+export $(grep -v '^#' $SCRIPT_HOME/.env | xargs)
+
 
 # ignore orphans warning
 export COMPOSE_IGNORE_ORPHANS=True
@@ -43,15 +48,21 @@ start)
   echo "Starting the VON Network ..."
   ./von-network/manage build
   ./von-network/manage start
+  sleep 30
+  echo "Registering issuer DID..."
+  curl -d "{\"role\": \"ENDORSER\", \"seed\":\"$ISSUER_DID_SEED\"}" -H "Content-Type: application/json" -X POST $LEDGER_REGISTER_DID_ENDPOINT
   echo "Starting all aca-py related docker containers ..."
   docker-compose -f docker-compose.yml up -d
   docker-compose -f docker-compose.yml logs -f
- ;;
+  ;;
 stop)
   echo "Stopping the VON Network ..."
   ./von-network/manage stop
   echo "Stopping and removing any running aca-py containers ..."
   docker-compose -f docker-compose.yml rm -f -s
+  ;;
+test)
+  curl -d "{\"role\": \"ENDORSER\", \"seed\":\"$ISSUER_DID_SEED\"}" -H "Content-Type: application/json" -X POST $LEDGER_REGISTER_DID_ENDPOINT
   ;;
 down)
   echo "Stopping the VON Network and deleting ledger data ..."
