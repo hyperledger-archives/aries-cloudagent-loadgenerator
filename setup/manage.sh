@@ -61,9 +61,6 @@ stop)
   echo "Stopping and removing any running aca-py containers ..."
   docker-compose -f docker-compose.yml rm -f -s
   ;;
-test)
-  curl -d "{\"role\": \"ENDORSER\", \"seed\":\"$ISSUER_DID_SEED\"}" -H "Content-Type: application/json" -X POST $LEDGER_REGISTER_DID_ENDPOINT
-  ;;
 down)
   echo "Stopping the VON Network and deleting ledger data ..."
   ./von-network/manage down
