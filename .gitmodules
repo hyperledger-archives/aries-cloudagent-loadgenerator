@@ -1,0 +1,3 @@
+[submodule "setup/von-network"]
+	path = setup/von-network
+	url = https://github.com/bcgov/von-network.git
