@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 export MSYS_NO_PATHCONV=1
 set -e
 
@@ -39,16 +40,23 @@ shift || COMMAND=usage
 
 case "${COMMAND}" in
 start)
-  echo "Starting all docker containers ..."
+  echo "Starting the VON Network ..."
+  ./von-network/manage build
+  ./von-network/manage start
+  echo "Starting all aca-py related docker containers ..."
   docker-compose -f docker-compose.yml up -d
   docker-compose -f docker-compose.yml logs -f
  ;;
 stop)
-  echo "Stopping and removing any running containers ..."
+  echo "Stopping the VON Network ..."
+  ./von-network/manage stop
+  echo "Stopping and removing any running aca-py containers ..."
   docker-compose -f docker-compose.yml rm -f -s
   ;;
 down)
-  echo "Stopping and removing any running containers as well as volumes ..."
+  echo "Stopping the VON Network and deleting ledger data ..."
+  ./von-network/manage down
+  echo "Stopping and removing any running aca-py containers as well as volumes ..."
   docker-compose -f docker-compose.yml down -v
   ;;
 *)
