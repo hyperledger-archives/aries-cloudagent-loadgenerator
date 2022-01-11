@@ -31,7 +31,7 @@ services:
         --outbound-transport http \
         --admin 0.0.0.0 10000 \
         --endpoint http://issuer-verifier-acapy:10001 \
-        ${LEDGER_GENESIS} \
+        --genesis-url ${LEDGER_GENESIS} \
         --ledger-pool-name ${LEDGER_POOL_NAME} \
         --invite-base-url didcomm://aries_connection_invitation \
         --admin-insecure-mode \
@@ -58,6 +58,7 @@ services:
       - issuer-verifier-wallet-db
     networks:
       - acapy-load-test
+      - von
     logging:
       driver: "json-file"
       options:
@@ -91,7 +92,7 @@ services:
         --outbound-transport http \
         --admin 0.0.0.0 10010 \
         --endpoint http://holder-acapy:10011 \
-        ${LEDGER_GENESIS} \
+        --genesis-url ${LEDGER_GENESIS} \
         --ledger-pool-name $LEDGER_POOL_NAME \
         --ledger-pool-name ${LEDGER_POOL_NAME} \
         --admin-insecure-mode \
@@ -129,6 +130,9 @@ services:
 networks:
   acapy-load-test:
     name: acapy-load-test
+  von:
+    external: true
+    name: von_von
 
 volumes:
   issuer-verifier-wallet-db-volume:
