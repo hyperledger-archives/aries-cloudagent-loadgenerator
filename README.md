@@ -26,7 +26,7 @@ like so:
 ```
 
 ### Open the SwaggerUI
-As automatically generarted SwaggerUI is available after startup under http://localhost:8080/swagger-ui.html 
+An automatically generarted SwaggerUI is available after startup under http://localhost:8080/swagger-ui.html 
 
 ## Docker setup
 
