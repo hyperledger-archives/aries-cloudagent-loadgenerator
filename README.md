@@ -9,7 +9,7 @@ A simple load generator to test the performance of the ACA-PY agent.
 To compile and package the application use the following command:
 
 ```sh
-mvn package
+./mvnw package
 ```
 
 ### Running the application locally
@@ -22,8 +22,11 @@ the [Spring Boot Maven plugin](https://docs.spring.io/spring-boot/docs/current/r
 like so:
 
 ```sh
-mvn spring-boot:run
+./mvnw spring-boot:run
 ```
+
+### Open the SwaggerUI
+A automatically generarted SwaggerUI is available after startup under http://localhost:8080/swagger-ui.html 
 
 ## Docker setup
 
@@ -37,7 +40,7 @@ docker build -t loadgenerator .
 
 ### Running the application with docker
 
-```
+```sh
 docker run --rm -p 8080:8080 loadgenerator
 ```
 
@@ -52,7 +55,7 @@ IntelliJ: https://www.jetbrains.com/help/idea/performing-tests.html
 Alternatively the unit test can also be run using the following command:
 
 ```sh
-mvn test
+./mvnw test
 ```
 
 ### Coverage
