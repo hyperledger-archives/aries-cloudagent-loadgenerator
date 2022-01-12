@@ -56,9 +56,9 @@ services:
       - "127.0.0.1:10000:10000" # AcaPy Admin API
     depends_on:
       - issuer-verifier-wallet-db
+      - tails-server
     networks:
       - acapy-load-test
-      - von
     logging:
       driver: "json-file"
       options:
@@ -123,17 +123,34 @@ services:
       - "127.0.0.1:10010:10010" # AcaPy Admin API
     depends_on:
       - holder-wallet-db
+      - tails-server
     networks:
       - acapy-load-test
     restart: on-failure
+  
+  tails-server:
+    container_name: tails-server
+    build:
+      context: ./indy-tails-server
+      dockerfile: docker/Dockerfile.tails-server
+    command: >
+      tails-server
+        --host 0.0.0.0
+        --port 6543
+        --log-level INFO
+    volumes:
+      - tails-server-volume:/home/indy/tails-files
+    ports:
+      - 6543:6543
+    networks:
+      - acapy-load-test
+      
 
 networks:
   acapy-load-test:
     name: acapy-load-test
-  von:
-    external: true
-    name: von_von
 
 volumes:
   issuer-verifier-wallet-db-volume:
   holder-wallet-db-volume:
+  tails-server-volume:
