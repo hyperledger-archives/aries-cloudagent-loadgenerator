@@ -16,22 +16,33 @@
  *
  */
 
-package com.bka.ssi.generator.controller
+package com.bka.ssi.generator.api
 
+import org.hyperledger.acy_py.generated.model.DID
+import org.hyperledger.aries.AriesClient
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
-@RestController
-@RequestMapping("/webhook")
-class Webhook {
+@RestController()
+@RequestMapping("/generator")
+class LoadGeneratorController(
+    private val acaPy: AriesClient
+) {
 
-    var logger: Logger = LoggerFactory.getLogger(Webhook::class.java)
+    var logger: Logger = LoggerFactory.getLogger(LoadGeneratorController::class.java)
 
-    @GetMapping("/")
-    private fun callback() {
-        this.logger.info("Received webhook callback.")
+    @GetMapping("/public-did")
+    private fun getDid(): DID? {
+        return acaPy.walletDidPublic().orElse(null)
     }
+
+    @PostMapping("/start")
+    private fun start() {
+        this.logger.info("Started load generation.")
+    }
+
 }
