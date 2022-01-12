@@ -1,3 +1,6 @@
 [submodule "setup/von-network"]
 	path = setup/von-network
 	url = https://github.com/bcgov/von-network.git
+[submodule "setup/indy-tails-server"]
+	path = setup/indy-tails-server
+	url = https://github.com/bcgov/indy-tails-server
