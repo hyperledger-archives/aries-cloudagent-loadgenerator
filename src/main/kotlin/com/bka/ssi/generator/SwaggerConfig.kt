@@ -17,7 +17,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2
 @EnableSwagger2
 class SwaggerConfig {
 
-    private val apiPackage = "com.bka.ssi.generator.controller"
+    private val apiPackage = "com.bka.ssi.generator.api"
     private val title = "API Documentation for AcaPy Load Generator"
     private val description = "This is an automatically generated RESTfull API documentation and UI."
     private val version = "v1.0"
