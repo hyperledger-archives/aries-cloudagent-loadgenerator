@@ -14,7 +14,7 @@
 	<name>generator</name>
 	<description>Load Generator for Aca-Py</description>
 	<properties>
-		<java.version>17</java.version>
+		<java.version>11</java.version>
 		<kotlin.version>1.6.10</kotlin.version>
 	</properties>
 	<dependencies>
