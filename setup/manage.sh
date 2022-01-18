@@ -24,13 +24,19 @@ usage() {
 
       Commands:
 
-      start -  Creates the application containers from the built images
-            and starts the services based on the docker-compose.yml file.
+      start - Creates the application containers from the built images
+              and starts the services based on the docker-compose.yml file.
 
       stop - Stops and remove the services.
              The volumes are not deleted so they will be reused the next time you run start.
 
       down - Brings down the services and removes the volumes (storage) and containers.
+
+      logs - To tail the logs of running containers (ctrl-c to exit).
+             Possible to print logs for acapy or ledger related containers.
+             Examples:
+              $0 logs --acapy
+              $0 logs --ledger
 EOF
   exit 1
 }
@@ -43,6 +49,36 @@ pushd ${SCRIPT_HOME} >/dev/null
 COMMAND=$(toLower ${1})
 shift || COMMAND=usage
 
+function initEnv() {
+  for arg in "$@"; do
+    # Remove recognized arguments from the list after processing.
+    shift
+    case "$arg" in
+      *=*)
+        export "${arg}"
+        ;;
+      --ledger)
+        LOG_LEDGER=1
+        ;;
+      --acapy)
+        LOG_ACAPY=1
+        ;;
+      *)
+        # If not recognized, save it for later procesing ...
+        set -- "$@" "$arg"
+        ;;
+    esac
+  done
+}
+
+function logs() {
+  if [ ! -z "${LOG_LEDGER}" ]; then
+    docker-compose -p von -f von-network/docker-compose.yml logs -f
+  elif [ ! -z "${LOG_ACAPY}" ]; then
+    docker-compose -f docker-compose.yml logs -f
+  fi
+}
+
 case "${COMMAND}" in
 start)
   echo "Starting the VON Network ..."
@@ -53,7 +89,7 @@ start)
   curl -d "{\"role\": \"ENDORSER\", \"seed\":\"$ISSUER_DID_SEED\"}" -H "Content-Type: application/json" -X POST $LEDGER_REGISTER_DID_ENDPOINT
   echo "Starting all aca-py related docker containers ..."
   docker-compose -f docker-compose.yml up -d
-  docker-compose -f docker-compose.yml logs -f
+  #docker-compose -f docker-compose.yml logs -f
   ;;
 stop)
   echo "Stopping the VON Network ..."
@@ -66,6 +102,10 @@ down)
   ./von-network/manage down
   echo "Stopping and removing any running aca-py containers as well as volumes ..."
   docker-compose -f docker-compose.yml down -v
+  ;;
+logs)
+  initEnv "$@"
+  logs
   ;;
 *)
   usage
