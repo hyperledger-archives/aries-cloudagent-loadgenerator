@@ -1,0 +1,348 @@
+{
+	"info": {
+		"_postman_id": "c0d978a5-8eb6-4c70-a093-3562956e286d",
+		"name": "AcaPy Load Generator",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Test Local Setup (Build Connection, Issue Credential, Requests Proof)",
+			"item": [
+				{
+					"name": "Register Schema (Issuer-Verifier)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"name-schemaId\", jsonData.schema_id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"attributes\": [\n        \"first name\",\n        \"last name\"\n    ],\n    \"schema_name\": \"name\",\n    \"schema_version\": \"1.{{$timestamp}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrlIssuerVerifier}}/schemas",
+							"host": [
+								"{{baseUrlIssuerVerifier}}"
+							],
+							"path": [
+								"schemas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register Credential Definition (Issuer-Verifier)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"name-credentialDefinitionId\", jsonData.credential_definition_id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"revocation_registry_size\": 1000,\n    \"schema_id\": \"{{name-schemaId}}\",\n    \"support_revocation\": true,\n    \"tag\": \"{{$timestamp}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrlIssuerVerifier}}/credential-definitions",
+							"host": [
+								"{{baseUrlIssuerVerifier}}"
+							],
+							"path": [
+								"credential-definitions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create connection invitation (Issuer-Verifier)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"connection-invitation\", JSON.stringify(jsonData.invitation));",
+									"pm.environment.set(\"connectionId\", jsonData.connection_id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrlIssuerVerifier}}/connections/create-invitation?alias=holder-acapy&auto_accept=true&multi_use=false&public=false",
+							"host": [
+								"{{baseUrlIssuerVerifier}}"
+							],
+							"path": [
+								"connections",
+								"create-invitation"
+							],
+							"query": [
+								{
+									"key": "alias",
+									"value": "holder-acapy",
+									"description": "Alias"
+								},
+								{
+									"key": "auto_accept",
+									"value": "true",
+									"description": "Auto-accept connection (defaults to configuration)"
+								},
+								{
+									"key": "multi_use",
+									"value": "false",
+									"description": "Create invitation for multiple use (default false)"
+								},
+								{
+									"key": "public",
+									"value": "false",
+									"description": "Create invitation from public DID (default false)"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Receive connection invitation (Holder)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"setTimeout(function(){}, 5000);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{connection-invitation}}"
+						},
+						"url": {
+							"raw": "{{baseUrlHolder}}/connections/receive-invitation?alias=issuer-verifier-acapy&auto_accept=true",
+							"host": [
+								"{{baseUrlHolder}}"
+							],
+							"path": [
+								"connections",
+								"receive-invitation"
+							],
+							"query": [
+								{
+									"key": "alias",
+									"value": "issuer-verifier-acapy",
+									"description": "Alias"
+								},
+								{
+									"key": "auto_accept",
+									"value": "true",
+									"description": "Auto-accept connection (defaults to configuration)"
+								},
+								{
+									"key": "mediation_id",
+									"value": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+									"description": "Identifier for active mediation record to be used",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Issue Credential to Holder (Issuer-Verifier)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"setTimeout(function(){}, 5000);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"connection_id\": \"{{connectionId}}\",\n    \"comment\": \"name credential offer\",\n    \"cred_def_id\": \"{{name-credentialDefinitionId}}\",\n     \"credential_proposal\": {\n        \"attributes\": [\n            {\n                \"name\": \"first name\",\n                \"value\": \"Holder\",\n                \"mime-type\": \"text/plain\"\n            },\n            {\n                \"name\": \"last name\",\n                \"value\": \"Mustermann\",\n                \"mime-type\": \"text/plain\"\n            }\n        ],\n        \"@type\": \"issue-credential/1.0/credential-preview\"\n    }\n}"
+						},
+						"url": {
+							"raw": "{{baseUrlIssuerVerifier}}/issue-credential/send",
+							"host": [
+								"{{baseUrlIssuerVerifier}}"
+							],
+							"path": [
+								"issue-credential",
+								"send"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send Proof Request to Holder (Issuer-Verifier)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"presentationExchangeId\", jsonData.presentation_exchange_id);",
+									"",
+									"setTimeout(function(){}, 5000);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"comment\": \"name credential proof request\",\n    \"connection_id\": \"{{connectionId}}\",\n    \"proof_request\": {\n        \"name\": \"Proof request\",\n        \"non_revoked\": {\n            \"from\": {{$timestamp}},\n            \"to\": {{$timestamp}}\n        },\n        \"requested_attributes\": {\n            \"nameCredential\": {\n                \"names\": [\n                    \"first name\",\n                    \"last name\"\n                ],\n                \"restrictions\": [\n                    {\n                        \"cred_def_id\": \"{{name-credentialDefinitionId}}\"\n                    }\n                ]\n            }\n        },\n        \"requested_predicates\": {},\n        \"version\": \"1.0\"\n    },\n    \"trace\": false\n}"
+						},
+						"url": {
+							"raw": "{{baseUrlIssuerVerifier}}/present-proof/send-request",
+							"host": [
+								"{{baseUrlIssuerVerifier}}"
+							],
+							"path": [
+								"present-proof",
+								"send-request"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify received proof presentation (Issuer-Verifier)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.test(\"Proof presentation is verified\", function () {",
+									"    pm.expect(jsonData.verified).to.eql(\"true\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrlIssuerVerifier}}/present-proof/records/{{presentationExchangeId}}",
+							"host": [
+								"{{baseUrlIssuerVerifier}}"
+							],
+							"path": [
+								"present-proof",
+								"records",
+								"{{presentationExchangeId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
