@@ -82,6 +82,7 @@ function logs() {
 case "${COMMAND}" in
 start)
   echo "Starting the VON Network ..."
+  git submodule update --init --recursive
   ./von-network/manage build
   ./von-network/manage start
   echo "Registering issuer DID... (takes 30 seconds)"
