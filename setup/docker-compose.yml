@@ -137,7 +137,9 @@ services:
       tails-server
         --host 0.0.0.0
         --port 6543
+        --storage-path /tmp/tails-files
         --log-level INFO
+
     volumes:
       - tails-server-volume:/home/indy/tails-files
     ports:
