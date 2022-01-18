@@ -14,7 +14,7 @@
 	<name>generator</name>
 	<description>Load Generator for Aca-Py</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>14</java.version>
 		<kotlin.version>1.6.10</kotlin.version>
 	</properties>
 	<dependencies>
@@ -56,6 +56,11 @@
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>2.9.2</version>
 		</dependency>
+        <dependency>
+            <groupId>network.idu.acapy</groupId>
+            <artifactId>aries-client-python</artifactId>
+            <version>0.7.19</version>
+        </dependency>
 	</dependencies>
 
 	<build>
