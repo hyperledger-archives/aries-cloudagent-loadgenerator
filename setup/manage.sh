@@ -84,12 +84,11 @@ start)
   echo "Starting the VON Network ..."
   ./von-network/manage build
   ./von-network/manage start
+  echo "Registering issuer DID... (takes 30 seconds)"
   sleep 30
-  echo "Registering issuer DID..."
   curl -d "{\"role\": \"ENDORSER\", \"seed\":\"$ISSUER_DID_SEED\"}" -H "Content-Type: application/json" -X POST $LEDGER_REGISTER_DID_ENDPOINT
   echo "Starting all aca-py related docker containers ..."
   docker-compose -f docker-compose.yml up -d
-  #docker-compose -f docker-compose.yml logs -f
   ;;
 stop)
   echo "Stopping the VON Network ..."
