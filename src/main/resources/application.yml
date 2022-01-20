@@ -7,3 +7,10 @@ generator:
   acapy:
     api-key:
     url: "http://localhost:10000"
+
+test-cases:
+  full-process:
+    active: true
+    number-of-iterations: 10
+    number-of-parallel-iterations: 2
+
