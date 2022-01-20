@@ -3,9 +3,11 @@ package com.bka.ssi.generator.application.testcases.fullprocess
 import com.bka.ssi.generator.application.testcases.TestRunner
 import org.hyperledger.aries.AriesClient
 import org.hyperledger.aries.api.connection.ConnectionRecord
+import org.hyperledger.aries.api.credential_definition.CredentialDefinition
 import org.hyperledger.aries.api.issue_credential_v1.V1CredentialExchange
 import org.hyperledger.aries.api.present_proof.PresentationExchangeRecord
 import org.hyperledger.aries.api.revocation.RevocationEvent
+import org.hyperledger.aries.api.schema.SchemaSendRequest
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -38,6 +40,32 @@ class FullProcessRunner(
     }
 
     private fun setUp() {
+        val schemaSendResponse = acaPy.schemas(
+            SchemaSendRequest.builder()
+                .attributes(listOf("first name", "last name"))
+                .schemaName("name")
+                .schemaVersion("1.0")
+                .build()
+        )
+
+        if (schemaSendResponse.isEmpty) {
+            throw Exception("Failed to create schema.")
+        }
+
+        val credentialDefinitionResponse = acaPy.credentialDefinitionsCreate(
+            CredentialDefinition.CredentialDefinitionRequest.builder()
+                .schemaId(schemaSendResponse.get().schemaId)
+                .revocationRegistrySize(500)
+                .supportRevocation(true)
+                .tag("1.0")
+                .build()
+        )
+
+        if (credentialDefinitionResponse.isEmpty) {
+            throw Exception("Failed to create credential definition.")
+        }
+
+        logger.info("Setup completed")
     }
 
     private fun startIteration() {
