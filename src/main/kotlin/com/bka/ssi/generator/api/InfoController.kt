@@ -18,6 +18,7 @@
 
 package com.bka.ssi.generator.api
 
+import io.swagger.annotations.Api
 import org.hyperledger.acy_py.generated.model.DID
 import org.hyperledger.aries.AriesClient
 import org.slf4j.Logger
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController()
+@Api(tags = ["info"])
 @RequestMapping("/info")
 class InfoController(
     private val acaPy: AriesClient

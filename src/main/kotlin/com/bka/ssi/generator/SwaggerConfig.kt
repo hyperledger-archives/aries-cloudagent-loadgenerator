@@ -6,6 +6,7 @@ import springfox.documentation.builders.ApiInfoBuilder
 import springfox.documentation.builders.PathSelectors
 import springfox.documentation.builders.RequestHandlerSelectors
 import springfox.documentation.service.ApiInfo
+import springfox.documentation.service.Tag
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger2.annotations.EnableSwagger2
@@ -26,6 +27,8 @@ class SwaggerConfig {
     fun createRestApi(): Docket {
         return Docket(DocumentationType.SWAGGER_2)
             .apiInfo(apiInfo())
+            .tags(Tag("info", "Endpoints to get information"))
+            .tags(Tag("test", "Endpoints to start the different test cases"))
             .select()
             .apis(RequestHandlerSelectors.basePackage(apiPackage))
             .paths(PathSelectors.any())
