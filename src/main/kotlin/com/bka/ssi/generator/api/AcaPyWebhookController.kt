@@ -4,9 +4,11 @@ import org.hyperledger.aries.webhook.EventHandler
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.*
+import springfox.documentation.annotations.ApiIgnore
 
 
 @RestController
+@ApiIgnore
 @RequestMapping("/webhook")
 class AcaPyWebhookController(
     private val handler: EventHandler
