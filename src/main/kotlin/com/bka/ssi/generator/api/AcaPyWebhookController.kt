@@ -10,13 +10,13 @@ import springfox.documentation.annotations.ApiIgnore
 @ApiIgnore
 @RequestMapping("/webhook")
 class AcaPyWebhookController(
-    private val handler: EventHandler
+    private val handlers: List<EventHandler>
 ) {
 
     var logger: Logger = LoggerFactory.getLogger(AcaPyWebhookController::class.java)
 
     @PostMapping("/topic/{topic}")
     fun ariesEvent(@PathVariable topic: String?, @RequestBody message: String?) {
-        handler.handleEvent(topic, message)
+        handlers.forEach { it.handleEvent(topic, message) }
     }
 }
