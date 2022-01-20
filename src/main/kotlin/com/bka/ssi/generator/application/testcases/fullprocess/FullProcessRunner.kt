@@ -10,6 +10,7 @@ import org.hyperledger.aries.api.revocation.RevocationEvent
 import org.hyperledger.aries.api.schema.SchemaSendRequest
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Service
@@ -20,7 +21,8 @@ import org.springframework.stereotype.Service
     matchIfMissing = false
 )
 class FullProcessRunner(
-    private val acaPy: AriesClient,
+    @Qualifier("IssuerVerifier") private val issuerVerifierAcaPy: AriesClient,
+    @Qualifier("Holder") private val holderAcaPy: AriesClient,
     @Value("\${test-cases.full-process.number-of-iterations}") val numberOfIterations: Int,
     @Value("\${test-cases.full-process.number-of-parallel-iterations}") val numberOfParallelIterations: Int
 ) : TestRunner() {
@@ -40,7 +42,7 @@ class FullProcessRunner(
     }
 
     private fun setUp() {
-        val schemaSendResponse = acaPy.schemas(
+        val schemaSendResponse = issuerVerifierAcaPy.schemas(
             SchemaSendRequest.builder()
                 .attributes(listOf("first name", "last name"))
                 .schemaName("name")
@@ -52,7 +54,7 @@ class FullProcessRunner(
             throw Exception("Failed to create schema.")
         }
 
-        val credentialDefinitionResponse = acaPy.credentialDefinitionsCreate(
+        val credentialDefinitionResponse = issuerVerifierAcaPy.credentialDefinitionsCreate(
             CredentialDefinition.CredentialDefinitionRequest.builder()
                 .schemaId(schemaSendResponse.get().schemaId)
                 .revocationRegistrySize(500)

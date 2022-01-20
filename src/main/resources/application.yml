@@ -3,10 +3,15 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher # required for the Swagger UI to work
 
-generator:
+issuer-verifier:
   acapy:
     api-key:
     url: "http://localhost:10000"
+
+holder:
+  acapy:
+    api-key:
+    url: "http://localhost:10010"
 
 test-cases:
   full-process:
