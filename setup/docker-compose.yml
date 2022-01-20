@@ -50,6 +50,7 @@ services:
         --tails-server-base-url ${ACAPY_TAILS_SERVER_BASE_URL} \
         --seed ${ISSUER_DID_SEED} \
         --log-level ${ACAPY_LOG_LEVEL} \
+        --webhook-url ${LOAD_TESTING_WEBHOOK_ENDPOINT} \
         ${ACAPY_DEBUG_OPTIONS}"
     ]
     ports:

@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Primary
 
 @Configuration
 class AcaPyClient(
-    @Value("\${generator.acapy.api-key}") private val acaPyApiKey: String?,
-    @Value("\${generator.acapy.url}") private val acaPyUrl: String?
+        @Value("\${generator.acapy.api-key}") private val acaPyApiKey: String?,
+        @Value("\${generator.acapy.url}") private val acaPyUrl: String?
 ) {
     var logger: Logger = LoggerFactory.getLogger(AcaPyClient::class.java)
 
@@ -22,11 +22,6 @@ class AcaPyClient(
             logger.error("Unable to establish connection to AcaPy. AcaPy URL not configured.")
             return null
         }
-
-        return AriesClient
-            .builder()
-            .url(acaPyUrl)
-            .apiKey(acaPyApiKey)
-            .build();
+        return AriesClient.builder().url(acaPyUrl).apiKey(acaPyApiKey).build()
     }
 }

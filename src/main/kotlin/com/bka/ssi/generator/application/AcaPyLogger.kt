@@ -14,18 +14,26 @@ class AcaPyLogger : EventHandler() {
     var logger: Logger = LoggerFactory.getLogger(AcaPyLogger::class.java)
 
     override fun handleConnection(connection: ConnectionRecord?) {
-        logger.info("New ConnectionRecord!")
+        logger.info(
+                "Connection: time: ${connection?.updatedAt}, Connection-Id: ${connection?.connectionId}, state: ${connection?.state}"
+        )
     }
 
     override fun handleCredential(credential: V1CredentialExchange?) {
-        logger.info("New CredentialExchangeRecord!")
+        logger.info(
+                "Credential: time: ${credential?.updatedAt}, Cred-Ex-Id: ${credential?.credentialExchangeId}, Connection-Id: ${credential?.connectionId}, state: ${credential?.state}"
+        )
     }
 
     override fun handleRevocation(revocation: RevocationEvent?) {
-        logger.info("New ConnectionRevocationEvent!")
+        logger.info(
+                "Revocation: time: ${revocation?.createdAt}, Rev-Reg-Id: ${revocation?.revRegId}, Cred-Def-Id: ${revocation?.credDefId}, Cred-Ex-Id: ${revocation?.credExId}, state: ${revocation?.state}"
+        )
     }
 
-    override fun handleProof(proof: PresentationExchangeRecord) {
-        logger.info("New PresentationExchangeRecord!")
+    override fun handleProof(proof: PresentationExchangeRecord?) {
+        logger.info(
+                "Presentation: time: ${proof?.updatedAt}, Presentation-Ex-Id: ${proof?.presentationExchangeId}, Connection-Id: ${proof?.connectionId}, state: ${proof?.state}"
+        )
     }
 }
