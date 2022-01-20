@@ -3,6 +3,9 @@ package com.bka.ssi.generator.application.testcases.fullprocess
 import com.bka.ssi.generator.application.testcases.TestRunner
 import org.hyperledger.aries.AriesClient
 import org.hyperledger.aries.api.connection.ConnectionRecord
+import org.hyperledger.aries.api.connection.CreateInvitationParams
+import org.hyperledger.aries.api.connection.CreateInvitationRequest
+import org.hyperledger.aries.api.connection.ReceiveInvitationRequest
 import org.hyperledger.aries.api.credential_definition.CredentialDefinition
 import org.hyperledger.aries.api.issue_credential_v1.V1CredentialExchange
 import org.hyperledger.aries.api.present_proof.PresentationExchangeRecord
@@ -71,7 +74,32 @@ class FullProcessRunner(
     }
 
     private fun startIteration() {
+        val createInvitationRequest = issuerVerifierAcaPy.connectionsCreateInvitation(
+            CreateInvitationRequest.builder().build(),
+            CreateInvitationParams(
+                "holder-acapy",
+                true,
+                false,
+                false
+            )
+        )
 
+        if (createInvitationRequest.isEmpty) {
+            throw Exception("Failed to create connection invitation.")
+        }
+
+        holderAcaPy.connectionsReceiveInvitation(
+            ReceiveInvitationRequest.builder()
+                .type(createInvitationRequest.get().invitation.atType)
+                .id(createInvitationRequest.get().invitation.atId)
+                .recipientKeys(createInvitationRequest.get().invitation.recipientKeys)
+                .serviceEndpoint(createInvitationRequest.get().invitation.serviceEndpoint)
+                .label(createInvitationRequest.get().invitation.label)
+                .build(),
+            null
+        )
+
+        logger.info("Started one iteration")
     }
 
     override fun handleConnection(connection: ConnectionRecord?) {
