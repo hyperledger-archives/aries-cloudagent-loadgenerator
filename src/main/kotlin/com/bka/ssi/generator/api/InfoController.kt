@@ -23,6 +23,7 @@ import org.hyperledger.acy_py.generated.model.DID
 import org.hyperledger.aries.AriesClient
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -31,14 +32,14 @@ import org.springframework.web.bind.annotation.RestController
 @Api(tags = ["info"])
 @RequestMapping("/info")
 class InfoController(
-    private val acaPy: AriesClient
+    @Qualifier("IssuerVerifier") private val issuerVerifierAcaPy: AriesClient
 ) {
 
     var logger: Logger = LoggerFactory.getLogger(InfoController::class.java)
 
     @GetMapping("/public-did")
     private fun getDid(): DID? {
-        return acaPy.walletDidPublic().orElse(null)
+        return issuerVerifierAcaPy.walletDidPublic().orElse(null)
     }
     
 }

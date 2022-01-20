@@ -6,22 +6,31 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Primary
 
 @Configuration
 class AcaPyClient(
-        @Value("\${generator.acapy.api-key}") private val acaPyApiKey: String?,
-        @Value("\${generator.acapy.url}") private val acaPyUrl: String?
+    @Value("\${issuer-verifier.acapy.api-key}") private val issuerVerifierAcaPyApiKey: String?,
+    @Value("\${issuer-verifier.acapy.url}") private val issuerVerifierAcaPyUrl: String?,
+    @Value("\${holder.acapy.api-key}") private val holderAcaPyApiKey: String?,
+    @Value("\${holder.acapy.url}") private val holderAcaPyUrl: String?
 ) {
     var logger: Logger = LoggerFactory.getLogger(AcaPyClient::class.java)
 
-    @Bean
-    @Primary
-    fun ariesClient(): AriesClient? {
-        if (acaPyUrl == null) {
-            logger.error("Unable to establish connection to AcaPy. AcaPy URL not configured.")
+    @Bean(name = ["IssuerVerifier"])
+    fun issuerVerifierAriesClient(): AriesClient? {
+        if (issuerVerifierAcaPyUrl == null) {
+            logger.error("Unable to establish connection to Issuer/Verifier AcaPy. Issuer/Verifier AcaPy URL not configured.")
             return null
         }
-        return AriesClient.builder().url(acaPyUrl).apiKey(acaPyApiKey).build()
+        return AriesClient.builder().url(issuerVerifierAcaPyUrl).apiKey(issuerVerifierAcaPyApiKey).build()
+    }
+
+    @Bean(name = ["Holder"])
+    fun holderAriesClient(): AriesClient? {
+        if (holderAcaPyUrl == null) {
+            logger.error("Unable to establish connection to Holder AcaPy. Holder AcaPy URL not configured.")
+            return null
+        }
+        return AriesClient.builder().url(holderAcaPyUrl).apiKey(holderAcaPyApiKey).build()
     }
 }
