@@ -56,11 +56,17 @@
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>2.9.2</version>
 		</dependency>
-        <dependency>
-            <groupId>network.idu.acapy</groupId>
-            <artifactId>aries-client-python</artifactId>
-            <version>0.7.19</version>
-        </dependency>
+		<dependency>
+			<groupId>network.idu.acapy</groupId>
+			<artifactId>aries-client-python</artifactId>
+			<version>0.7.19</version>
+		</dependency>
+		<!--  Needed to avoid conflict with OkHttp being used in auth0-java and okhttp3 being used by spring -->
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+			<version>4.9.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
