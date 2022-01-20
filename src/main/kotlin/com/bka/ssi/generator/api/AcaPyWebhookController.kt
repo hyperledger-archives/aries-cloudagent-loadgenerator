@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/webhook")
-class WebhookController(
+class AcaPyWebhookController(
     private val handler: EventHandler
 ) {
 
-    var logger: Logger = LoggerFactory.getLogger(WebhookController::class.java)
+    var logger: Logger = LoggerFactory.getLogger(AcaPyWebhookController::class.java)
 
     @PostMapping("/topic/{topic}")
     fun ariesEvent(
