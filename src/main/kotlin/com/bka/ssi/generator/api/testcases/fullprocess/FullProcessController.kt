@@ -16,33 +16,28 @@
  *
  */
 
-package com.bka.ssi.generator.api
+package com.bka.ssi.generator.api.testcases
 
-import org.hyperledger.acy_py.generated.model.DID
+import io.swagger.annotations.Api
 import org.hyperledger.aries.AriesClient
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController()
-@RequestMapping("/generator")
-class LoadGeneratorController(
+@Api(tags = ["test"])
+@RequestMapping("/test/full-process")
+class FullProcessController(
     private val acaPy: AriesClient
 ) {
 
-    var logger: Logger = LoggerFactory.getLogger(LoadGeneratorController::class.java)
-
-    @GetMapping("/public-did")
-    private fun getDid(): DID? {
-        return acaPy.walletDidPublic().orElse(null)
-    }
+    var logger: Logger = LoggerFactory.getLogger(FullProcessController::class.java)
 
     @PostMapping("/start")
     private fun start() {
-        this.logger.info("Started load generation.")
+        this.logger.info("Started FULL_PROCESS test.")
     }
 
 }
