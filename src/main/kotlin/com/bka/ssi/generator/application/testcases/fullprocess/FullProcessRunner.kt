@@ -1,13 +1,18 @@
 package com.bka.ssi.generator.application.testcases.fullprocess
 
 import com.bka.ssi.generator.application.testcases.TestRunner
+import com.google.gson.JsonObject
 import org.hyperledger.aries.AriesClient
 import org.hyperledger.aries.api.connection.ConnectionRecord
 import org.hyperledger.aries.api.connection.CreateInvitationParams
 import org.hyperledger.aries.api.connection.CreateInvitationRequest
 import org.hyperledger.aries.api.connection.ReceiveInvitationRequest
 import org.hyperledger.aries.api.credential_definition.CredentialDefinition
+import org.hyperledger.aries.api.credentials.CredentialAttributes
+import org.hyperledger.aries.api.credentials.CredentialPreview
 import org.hyperledger.aries.api.issue_credential_v1.V1CredentialExchange
+import org.hyperledger.aries.api.issue_credential_v1.V1CredentialProposalRequest
+import org.hyperledger.aries.api.present_proof.PresentProofRequest
 import org.hyperledger.aries.api.present_proof.PresentationExchangeRecord
 import org.hyperledger.aries.api.revocation.RevocationEvent
 import org.hyperledger.aries.api.schema.SchemaSendRequest
@@ -17,6 +22,7 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Service
+import java.time.Instant
 
 @Service
 @ConditionalOnProperty(
@@ -29,6 +35,11 @@ class FullProcessRunner(
     @Value("\${test-cases.full-process.number-of-iterations}") val numberOfIterations: Int,
     @Value("\${test-cases.full-process.number-of-parallel-iterations}") val numberOfParallelIterations: Int
 ) : TestRunner() {
+
+    companion object {
+        var credentialDefinitionId = ""
+        var numberOfIterationsStarted = 0
+    }
 
     var logger: Logger = LoggerFactory.getLogger(FullProcessRunner::class.java)
 
@@ -70,10 +81,16 @@ class FullProcessRunner(
             throw Exception("Failed to create credential definition.")
         }
 
+        FullProcessRunner.credentialDefinitionId = credentialDefinitionResponse.get().credentialDefinitionId
+
         logger.info("Setup completed")
     }
 
     private fun startIteration() {
+        if (FullProcessRunner.numberOfIterationsStarted >= numberOfIterations) {
+            return
+        }
+
         val createInvitationRequest = issuerVerifierAcaPy.connectionsCreateInvitation(
             CreateInvitationRequest.builder().build(),
             CreateInvitationParams(
@@ -99,22 +116,89 @@ class FullProcessRunner(
             null
         )
 
-        logger.info("Started one iteration")
+        FullProcessRunner.numberOfIterationsStarted++
+
+        logger.info("Started ${FullProcessRunner.numberOfIterationsStarted} of $numberOfIterations iteration")
     }
 
-    override fun handleConnection(connection: ConnectionRecord?) {
-        logger.info("New ConnectionRecord!")
+    override fun handleConnection(connection: ConnectionRecord) {
+        if (!connection.stateIsActive()) {
+            return
+        }
+
+        issuerVerifierAcaPy.issueCredentialSend(
+            V1CredentialProposalRequest(
+                true,
+                true,
+                "name credential offer",
+                connection.connectionId,
+                FullProcessRunner.credentialDefinitionId,
+                CredentialPreview(
+                    listOf(
+                        CredentialAttributes("first name", "Holder"),
+                        CredentialAttributes("last name", "Mustermann")
+                    )
+                ),
+                null,
+                null,
+                null,
+                null,
+                null,
+                false
+            )
+        )
+
+        logger.info("Issued credential to new connection")
     }
 
-    override fun handleCredential(credential: V1CredentialExchange?) {
-        logger.info("New CredentialExchangeRecord!")
+    override fun handleCredential(credential: V1CredentialExchange) {
+        if (!credential.stateIsCredentialAcked()) {
+            return
+        }
+
+        val nameCredentialRestriction = JsonObject()
+        nameCredentialRestriction.addProperty("cred_def_id", credentialDefinitionId)
+
+        issuerVerifierAcaPy.presentProofSendRequest(
+            PresentProofRequest(
+                credential.connectionId,
+                PresentProofRequest.ProofRequest.builder()
+                    .name("Proof Request")
+                    .nonRevoked(
+                        PresentProofRequest.ProofRequest.ProofNonRevoked(
+                            Instant.now().toEpochMilli(),
+                            Instant.now().toEpochMilli()
+                        )
+                    )
+                    .requestedAttributes(
+                        mapOf(
+                            "nameCredential" to PresentProofRequest.ProofRequest.ProofRequestedAttributes.builder()
+                                .names(listOf("first name", "last name"))
+                                .restriction(
+                                    nameCredentialRestriction
+                                )
+                                .build()
+                        )
+                    )
+                    .version("1.0")
+                    .build(),
+                false,
+                "name credential proof request"
+            )
+        )
+        logger.info("Send proof request")
     }
 
-    override fun handleRevocation(revocation: RevocationEvent?) {
-        logger.info("New ConnectionRevocationEvent!")
+    override fun handleRevocation(revocation: RevocationEvent) {
     }
 
     override fun handleProof(proof: PresentationExchangeRecord) {
-        logger.info("New PresentationExchangeRecord!")
+        if (!proof.isVerified) {
+            return
+        }
+
+        logger.info("Received proof presentation")
+
+        startIteration()
     }
 }
