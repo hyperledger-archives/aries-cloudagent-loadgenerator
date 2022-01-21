@@ -1,6 +1,7 @@
 package com.bka.ssi.generator.infrastructure.ariesclient
 
-import com.bka.ssi.generator.domain.*
+import com.bka.ssi.generator.domain.objects.*
+import com.bka.ssi.generator.domain.services.IAriesClient
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import org.hyperledger.aries.AriesClient

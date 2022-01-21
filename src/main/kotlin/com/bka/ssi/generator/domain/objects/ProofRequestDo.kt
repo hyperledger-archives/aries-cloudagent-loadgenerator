@@ -16,9 +16,17 @@
  *
  */
 
-package com.bka.ssi.generator.domain
+package com.bka.ssi.generator.domain.objects
 
-class CredentialDefinitionDo(
-    val id: String
+class ProofRequestDo(
+    val connectionId: String,
+    val nonRevokedFrom: Long,
+    val nonRevokedTo: Long,
+    val requestedCredentials: List<CredentialRequestDo>
 ) {
 }
+
+class CredentialRequestDo(
+    val claims: List<String>,
+    val credentialDefinitionId: String
+)

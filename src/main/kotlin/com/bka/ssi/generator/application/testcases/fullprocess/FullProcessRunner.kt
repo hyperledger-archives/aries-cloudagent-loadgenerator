@@ -1,8 +1,8 @@
 package com.bka.ssi.generator.application.testcases.fullprocess
 
 import com.bka.ssi.generator.application.testcases.TestRunner
-import com.bka.ssi.generator.domain.*
-import com.bka.ssi.generator.infrastructure.ariesclient.IAriesClient
+import com.bka.ssi.generator.domain.objects.*
+import com.bka.ssi.generator.domain.services.IAriesClient
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
@@ -80,7 +80,7 @@ class FullProcessRunner(
         issuerVerifierAriesClient.issueCredential(
             CredentialDo(
                 connectionRecord.connectionId,
-                FullProcessRunner.credentialDefinitionId,
+                credentialDefinitionId,
                 mapOf(
                     "first name" to "Holder",
                     "last name" to "Mustermann"
@@ -104,7 +104,7 @@ class FullProcessRunner(
                 listOf(
                     CredentialRequestDo(
                         listOf("first name", "last name"),
-                        FullProcessRunner.credentialDefinitionId
+                        credentialDefinitionId
                     )
                 )
             )
