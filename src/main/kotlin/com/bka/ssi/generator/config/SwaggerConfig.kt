@@ -1,4 +1,4 @@
-package com.bka.ssi.generator
+package com.bka.ssi.generator.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
