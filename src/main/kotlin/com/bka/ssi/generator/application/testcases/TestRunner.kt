@@ -1,9 +1,9 @@
 package com.bka.ssi.generator.application.testcases
 
-import org.hyperledger.aries.webhook.EventHandler
+import com.bka.ssi.generator.infrastructure.ariesevents.IAriesObserver
 
 abstract class TestRunner(
-) : EventHandler() {
+) : IAriesObserver {
 
     abstract fun run()
 }
