@@ -7,7 +7,8 @@ The load generator application relies on third party software to work. This fold
 The architecture mainly consists of three underlying building blocks:
 
 - [VON-Network](https://github.com/bcgov/von-network) for a local deployment of an indy ledger
-- Two [ACA-Py](https://github.com/hyperledger/aries-cloudagent-python)-instances representing a holder and an issuer/verifier (+ PostgreSQL as the wallet backend)
+- Two [ACA-Py](https://github.com/hyperledger/aries-cloudagent-python) instances representing a holder and an
+  issuer/verifier (+ PostgreSQL as the wallet backend)
 - [Tails Server](https://github.com/bcgov/indy-tails-server/) to support revocation
 
 ## Prerequisites
@@ -20,7 +21,7 @@ You need to have [Docker](https://docs.docker.com/get-docker/) installed and acc
 
 Environment variables can be set via the provided `.env` file. However, the existing values are sufficient for a functioning setup.
 
-> **NOTE**: Linux users may need to change part of the `LEDGER_GENESIS` variable from `host.docker.internal` to `172.17.0.1`
+> **NOTE**: Linux users may need to change all occurrences of `host.docker.internal` to `172.17.0.1`
 
 ### Manage Script
 
@@ -46,4 +47,6 @@ Where `--$TYPE` can either be `--ledger` or `--acapy` depending on your needs.
 
 ## Next steps
 
-For monitoring purposes you can open `localhost:9000` to see the transactions written to the ledger. Additionally, you can interact with the issuer/verifier ACA-Py directly on `localhost:10000` or on `localhost:11000` for the holder ACA-Py.
+For monitoring purposes you can open http://localhost:9000/ to see the transactions written to the ledger. Additionally,
+you can interact with the issuer/verifier ACA-Py directly on http://localhost:10000/api/doc or
+on http://localhost:10010/api/doc for the holder ACA-Py.
