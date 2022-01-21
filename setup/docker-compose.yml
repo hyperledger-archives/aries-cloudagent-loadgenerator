@@ -65,7 +65,7 @@ services:
       options:
         max-file: "5"
         max-size: "50m"
-    restart: on-failure
+    restart: always
 
   holder-wallet-db:
     container_name: holder-wallet-db
@@ -127,7 +127,7 @@ services:
       - tails-server
     networks:
       - acapy-load-test
-    restart: on-failure
+    restart: always
   
   tails-server:
     container_name: tails-server
@@ -147,7 +147,8 @@ services:
       - 6543:6543
     networks:
       - acapy-load-test
-      
+    restart: always
+
 
 networks:
   acapy-load-test:
