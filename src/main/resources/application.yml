@@ -1,4 +1,8 @@
 spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/
+    username: postgres
+    password: postgres
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher # required for the Swagger UI to work
@@ -7,6 +11,7 @@ issuer-verifier:
   acapy:
     api-key:
     url: "http://localhost:10000"
+  wallet-db-name: wallet_db
 
 holder:
   acapy:
@@ -18,4 +23,3 @@ test-cases:
     active: true
     number-of-iterations: 10
     number-of-parallel-iterations: 2
-

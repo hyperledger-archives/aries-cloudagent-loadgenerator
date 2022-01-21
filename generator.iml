@@ -143,5 +143,11 @@
     <orderEntry type="library" name="Maven: com.google.code.findbugs:jsr305:3.0.2" level="project" />
     <orderEntry type="library" name="Maven: com.squareup.okhttp3:okhttp:4.9.0" level="project" />
     <orderEntry type="library" name="Maven: com.squareup.okio:okio:2.8.0" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-jdbc:2.6.2" level="project" />
+    <orderEntry type="library" name="Maven: com.zaxxer:HikariCP:4.0.3" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-jdbc:5.3.14" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-tx:5.3.14" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.postgresql:postgresql:42.3.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.checkerframework:checker-qual:3.5.0" level="project" />
   </component>
 </module>
