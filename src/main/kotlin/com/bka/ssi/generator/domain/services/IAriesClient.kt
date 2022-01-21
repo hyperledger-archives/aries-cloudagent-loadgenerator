@@ -1,6 +1,6 @@
-package com.bka.ssi.generator.infrastructure.ariesclient
+package com.bka.ssi.generator.domain.services
 
-import com.bka.ssi.generator.domain.*
+import com.bka.ssi.generator.domain.objects.*
 
 interface IAriesClient {
     fun getPublicDid(): String?

@@ -1,8 +1,9 @@
 package com.bka.ssi.generator.infrastructure.ariesevents
 
-import com.bka.ssi.generator.domain.ConnectionRecordDo
-import com.bka.ssi.generator.domain.CredentialExchangeRecordDo
-import com.bka.ssi.generator.domain.ProofExchangeRecordDo
+import com.bka.ssi.generator.domain.objects.ConnectionRecordDo
+import com.bka.ssi.generator.domain.objects.CredentialExchangeRecordDo
+import com.bka.ssi.generator.domain.objects.ProofExchangeRecordDo
+import com.bka.ssi.generator.domain.services.IAriesObserver
 import org.hyperledger.aries.api.connection.ConnectionRecord
 import org.hyperledger.aries.api.issue_credential_v1.V1CredentialExchange
 import org.hyperledger.aries.api.present_proof.PresentationExchangeRecord

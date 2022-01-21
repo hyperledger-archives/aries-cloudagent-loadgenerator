@@ -1,6 +1,6 @@
 package com.bka.ssi.generator.application.testcases
 
-import com.bka.ssi.generator.infrastructure.ariesevents.IAriesObserver
+import com.bka.ssi.generator.domain.services.IAriesObserver
 
 abstract class TestRunner(
 ) : IAriesObserver {
