@@ -18,6 +18,8 @@
 
 package com.bka.ssi.generator.config
 
+import com.bka.ssi.generator.infrastructure.ariesclient.AcaPyAriesClient
+import com.bka.ssi.generator.infrastructure.ariesclient.IAriesClient
 import org.hyperledger.aries.AriesClient
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -35,20 +37,33 @@ class AriesClientConfig(
     var logger: Logger = LoggerFactory.getLogger(AriesClientConfig::class.java)
 
     @Bean(name = ["IssuerVerifier"])
-    fun issuerVerifierAriesClient(): AriesClient? {
+    fun issuerVerifierAriesClient(): IAriesClient? {
         if (issuerVerifierAcaPyUrl == null) {
             logger.error("Unable to establish connection to Issuer/Verifier AcaPy. Issuer/Verifier AcaPy URL not configured.")
             return null
         }
-        return AriesClient.builder().url(issuerVerifierAcaPyUrl).apiKey(issuerVerifierAcaPyApiKey).build()
+
+        val issuerVerifierAcaPyClient =
+            AriesClient.builder()
+                .url(issuerVerifierAcaPyUrl)
+                .apiKey(issuerVerifierAcaPyApiKey)
+                .build()
+
+        return AcaPyAriesClient(issuerVerifierAcaPyClient)
     }
 
     @Bean(name = ["Holder"])
-    fun holderAriesClient(): AriesClient? {
+    fun holderAriesClient(): IAriesClient? {
         if (holderAcaPyUrl == null) {
             logger.error("Unable to establish connection to Holder AcaPy. Holder AcaPy URL not configured.")
             return null
         }
-        return AriesClient.builder().url(holderAcaPyUrl).apiKey(holderAcaPyApiKey).build()
+        val holderAcaPyClient =
+            AriesClient.builder()
+                .url(holderAcaPyUrl)
+                .apiKey(holderAcaPyApiKey)
+                .build()
+
+        return AcaPyAriesClient(holderAcaPyClient)
     }
 }
