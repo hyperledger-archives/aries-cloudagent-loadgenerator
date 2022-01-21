@@ -16,6 +16,8 @@ services:
       options:
         max-file: "5"
         max-size: "50m"
+    ports:
+      - 5432:5432
     restart: always
 
   issuer-verifier-acapy:
