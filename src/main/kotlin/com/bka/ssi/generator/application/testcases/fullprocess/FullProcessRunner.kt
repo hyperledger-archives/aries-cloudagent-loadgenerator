@@ -1,16 +1,8 @@
 package com.bka.ssi.generator.application.testcases.fullprocess
 
 import com.bka.ssi.generator.application.testcases.TestRunner
-import com.bka.ssi.generator.domain.CredentialDo
-import com.bka.ssi.generator.domain.CredentialRequestDo
-import com.bka.ssi.generator.domain.ProofRequestDo
-import com.bka.ssi.generator.domain.SchemaDo
+import com.bka.ssi.generator.domain.*
 import com.bka.ssi.generator.infrastructure.ariesclient.IAriesClient
-import org.hyperledger.aries.api.connection.ConnectionRecord
-import org.hyperledger.aries.api.issue_credential_v1.V1CredentialExchange
-import org.hyperledger.aries.api.present_proof.PresentationExchangeRecord
-import org.hyperledger.aries.api.present_proof.PresentationExchangeState
-import org.hyperledger.aries.api.revocation.RevocationEvent
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
@@ -80,14 +72,14 @@ class FullProcessRunner(
         logger.info("Started ${FullProcessRunner.numberOfIterationsStarted} of $numberOfIterations iteration")
     }
 
-    override fun handleConnection(connection: ConnectionRecord) {
-        if (!connection.stateIsActive()) {
+    override fun handleConnectionRecord(connectionRecord: ConnectionRecordDo) {
+        if (!connectionRecord.active) {
             return
         }
 
         issuerVerifierAriesClient.issueCredential(
             CredentialDo(
-                connection.connectionId,
+                connectionRecord.connectionId,
                 FullProcessRunner.credentialDefinitionId,
                 mapOf(
                     "first name" to "Holder",
@@ -99,14 +91,14 @@ class FullProcessRunner(
         logger.info("Issued credential to new connection")
     }
 
-    override fun handleCredential(credential: V1CredentialExchange) {
-        if (!credential.stateIsCredentialAcked()) {
+    override fun handleCredentialExchangeRecord(credentialExchangeRecord: CredentialExchangeRecordDo) {
+        if (!credentialExchangeRecord.issued) {
             return
         }
 
         issuerVerifierAriesClient.sendProofRequest(
             ProofRequestDo(
-                credential.connectionId,
+                credentialExchangeRecord.connectionId,
                 Instant.now().toEpochMilli(),
                 Instant.now().toEpochMilli(),
                 listOf(
@@ -121,11 +113,8 @@ class FullProcessRunner(
         logger.info("Send proof request")
     }
 
-    override fun handleRevocation(revocation: RevocationEvent) {
-    }
-
-    override fun handleProof(proof: PresentationExchangeRecord) {
-        if (!proof.isVerified || proof.state != PresentationExchangeState.VERIFIED) {
+    override fun handleProofRequestRecord(proofExchangeRecord: ProofExchangeRecordDo) {
+        if (!proofExchangeRecord.verifiedAndValid) {
             return
         }
 
