@@ -18,8 +18,8 @@
 
 package com.bka.ssi.generator.config
 
+import com.bka.ssi.generator.domain.services.IAriesClient
 import com.bka.ssi.generator.infrastructure.ariesclient.AcaPyAriesClient
-import com.bka.ssi.generator.infrastructure.ariesclient.IAriesClient
 import org.hyperledger.aries.AriesClient
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

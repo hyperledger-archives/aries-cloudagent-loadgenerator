@@ -18,7 +18,7 @@
 
 package com.bka.ssi.generator.api
 
-import com.bka.ssi.generator.infrastructure.ariesclient.IAriesClient
+import com.bka.ssi.generator.domain.services.IAriesClient
 import io.swagger.annotations.Api
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

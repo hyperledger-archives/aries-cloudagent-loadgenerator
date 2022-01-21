@@ -1,8 +1,8 @@
-package com.bka.ssi.generator.infrastructure.ariesevents
+package com.bka.ssi.generator.domain.services
 
-import com.bka.ssi.generator.domain.ConnectionRecordDo
-import com.bka.ssi.generator.domain.CredentialExchangeRecordDo
-import com.bka.ssi.generator.domain.ProofExchangeRecordDo
+import com.bka.ssi.generator.domain.objects.ConnectionRecordDo
+import com.bka.ssi.generator.domain.objects.CredentialExchangeRecordDo
+import com.bka.ssi.generator.domain.objects.ProofExchangeRecordDo
 
 interface IAriesObserver {
     fun handleConnectionRecord(connectionRecord: ConnectionRecordDo)

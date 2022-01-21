@@ -1,4 +1,4 @@
-package com.bka.ssi.generator.domain
+package com.bka.ssi.generator.domain.objects
 
 class ConnectionInvitationDo(
     var type: String,
