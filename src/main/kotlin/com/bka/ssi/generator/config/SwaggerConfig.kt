@@ -28,7 +28,6 @@ class SwaggerConfig {
         return Docket(DocumentationType.SWAGGER_2)
             .apiInfo(apiInfo())
             .tags(Tag("info", "Endpoints to get information"))
-            .tags(Tag("test", "Endpoints to start the different test cases"))
             .select()
             .apis(RequestHandlerSelectors.basePackage(apiPackage))
             .paths(PathSelectors.any())
