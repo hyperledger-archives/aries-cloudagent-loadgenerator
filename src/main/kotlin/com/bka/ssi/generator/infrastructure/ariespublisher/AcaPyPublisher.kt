@@ -1,4 +1,4 @@
-package com.bka.ssi.generator.infrastructure.ariesevents
+package com.bka.ssi.generator.infrastructure.ariespublisher
 
 import com.bka.ssi.generator.domain.objects.ConnectionRecordDo
 import com.bka.ssi.generator.domain.objects.CredentialExchangeRecordDo
