@@ -18,9 +18,8 @@
 
 package com.bka.ssi.generator.api
 
+import com.bka.ssi.generator.infrastructure.ariesclient.IAriesClient
 import io.swagger.annotations.Api
-import org.hyperledger.acy_py.generated.model.DID
-import org.hyperledger.aries.AriesClient
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
@@ -32,14 +31,14 @@ import org.springframework.web.bind.annotation.RestController
 @Api(tags = ["info"])
 @RequestMapping("/info")
 class InfoController(
-    @Qualifier("IssuerVerifier") private val issuerVerifierAcaPy: AriesClient
+    @Qualifier("IssuerVerifier") private val issuerVerifierAcaPy: IAriesClient
 ) {
 
     var logger: Logger = LoggerFactory.getLogger(InfoController::class.java)
 
     @GetMapping("/public-did")
-    private fun getDid(): DID? {
-        return issuerVerifierAcaPy.walletDidPublic().orElse(null)
+    private fun getDid(): String? {
+        return issuerVerifierAcaPy.getPublicDid()
     }
     
 }
