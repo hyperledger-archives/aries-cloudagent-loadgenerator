@@ -2,9 +2,44 @@
 
 A simple load generator to test the performance of the ACA-PY agent.
 
-## Local setup
+## Startup a Test Environment
 
-### Building the application
+This repository comes with an automated testing setup consisting of:
+
+- Issuer/Verifier AcaPy (+ Postgres Wallet DB)
+- Holder AcaPy (+ Postgres Wallet DB)
+- Tails Server
+- VON Network
+
+To start it run:
+
+```
+./setup/manage.sh start
+```
+
+For more details check this [README](./setup/README.md).
+
+## Startup the Load Generator
+
+### Configuration
+
+The load generator as well as the test case to run is configured via the [application.yml](
+./src/main/resources/application.yml). Alternatively, you can set the same parameters using environment variables.
+
+```
+test-cases:
+  full-process:
+    active: true
+    number-of-iterations: 10
+    number-of-parallel-iterations: 2
+```
+
+Only one test case should be set to `active: true` at a time. This test case will **automatically be executed** once the
+application is started.
+
+### Local setup
+
+#### Building the application
 
 To compile and package the application use the following command:
 
@@ -12,7 +47,7 @@ To compile and package the application use the following command:
 ./mvnw package
 ```
 
-### Running the application locally
+#### Running the application locally
 
 Run the `main` method in the `com.bka.ssi.generator.GeneratorApplication` from your
 IDE.
@@ -25,12 +60,9 @@ like so:
 ./mvnw spring-boot:run
 ```
 
-### Open the SwaggerUI
-An automatically generarted SwaggerUI is available after startup under http://localhost:8080/swagger-ui.html 
+### Docker setup
 
-## Docker setup
-
-### Building the application
+#### Building the application
 
 To build the docker image run the following command from the root directory:
 
@@ -38,29 +70,13 @@ To build the docker image run the following command from the root directory:
 docker build -t loadgenerator .
 ```
 
-### Running the application with docker
+#### Running the application with docker
 
 ```sh
 docker run --rm -p 8080:8080 loadgenerator
 ```
 
-## Testing
+### Open the SwaggerUI
 
-### Running the Unit Tests
-
-The unit test can be run through your preferred IDE.
-
-IntelliJ: https://www.jetbrains.com/help/idea/performing-tests.html
-
-Alternatively the unit test can also be run using the following command:
-
-```sh
-./mvnw test
-```
-
-### Coverage
-
-The coverage report can be generated through your preferred IDE.
-
-IntelliJ: https://www.jetbrains.com/help/idea/running-test-with-coverage.html
+An automatically generated SwaggerUI is available after startup under http://localhost:8080/swagger-ui.html 
 
