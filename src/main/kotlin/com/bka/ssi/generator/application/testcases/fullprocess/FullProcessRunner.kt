@@ -58,7 +58,7 @@ class FullProcessRunner(
     }
 
     private fun startIteration() {
-        if (FullProcessRunner.numberOfIterationsStarted >= numberOfIterations) {
+        if (terminateRunner()) {
             return
         }
 
@@ -70,6 +70,10 @@ class FullProcessRunner(
         FullProcessRunner.numberOfIterationsStarted++
 
         logger.info("Started ${FullProcessRunner.numberOfIterationsStarted} of $numberOfIterations iteration")
+    }
+
+    private fun terminateRunner(): Boolean {
+        return FullProcessRunner.numberOfIterationsStarted >= numberOfIterations
     }
 
     override fun handleConnectionRecord(connectionRecord: ConnectionRecordDo) {
