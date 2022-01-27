@@ -32,19 +32,21 @@ class AriesEventLogger : IAriesObserver {
 
     override fun handleConnectionRecord(connectionRecord: ConnectionRecordDo) {
         logger.info(
-            "Connection: time: ${connectionRecord.time}, Connection-Id: ${connectionRecord.connectionId}, state: ${connectionRecord.state}"
+                "type=connection time=${connectionRecord.time} Connection-Id=${connectionRecord.connectionId} state=${connectionRecord.state}"
         )
     }
 
-    override fun handleCredentialExchangeRecord(credentialExchangeRecord: CredentialExchangeRecordDo) {
+    override fun handleCredentialExchangeRecord(
+            credentialExchangeRecord: CredentialExchangeRecordDo
+    ) {
         logger.info(
-            "Credential: time: ${credentialExchangeRecord.time}, Cred-Ex-Id: ${credentialExchangeRecord.id}, Connection-Id: ${credentialExchangeRecord.connectionId}, state: ${credentialExchangeRecord.state}"
+                "type=credential time=${credentialExchangeRecord.time} Cred-Ex-Id=${credentialExchangeRecord.id} Connection-Id=${credentialExchangeRecord.connectionId} state=${credentialExchangeRecord.state}"
         )
     }
 
     override fun handleProofRequestRecord(proofExchangeRecord: ProofExchangeRecordDo) {
         logger.info(
-            "Presentation: time: ${proofExchangeRecord.time}, Presentation-Ex-Id: ${proofExchangeRecord.id}, Connection-Id: ${proofExchangeRecord.connectionId}, state: ${proofExchangeRecord.state}"
+                "type=presentation time=${proofExchangeRecord.time} Presentation-Ex-Id=${proofExchangeRecord.id} Connection-Id=${proofExchangeRecord.connectionId} state=${proofExchangeRecord.state}"
         )
     }
 }
