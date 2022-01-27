@@ -1,5 +1,25 @@
 version: "3.7"
 services:
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-volume:/var/lib/grafana
+    networks:
+      - acapy-load-test
+  loki:
+    image: grafana/loki:2.4.2
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    volumes:
+      - loki-volume:/data/loki
+    depends_on:
+      - grafana
+    networks:
+      - acapy-load-test
   issuer-verifier-wallet-db:
     container_name: issuer-verifier-wallet-db
     image: ${POSTGRES_IMAGE}
@@ -157,6 +177,9 @@ networks:
     name: acapy-load-test
 
 volumes:
+  grafana-volume:
+  loki-volume:
+  loadgenerator-logging-db-volume:
   issuer-verifier-wallet-db-volume:
   holder-wallet-db-volume:
   tails-server-volume:

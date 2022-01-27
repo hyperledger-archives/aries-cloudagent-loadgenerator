@@ -1,0 +1,43 @@
+<configuration>
+    <!-- <appender name="db" class="ch.qos.logback.classic.db.DBAppender">
+        <connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource">
+            <driverClass>org.postgresql.Driver</driverClass>
+            <url>jdbc:postgresql://localhost:5433;databaseName=postgres</url>
+            <user>postgres</user>
+            <password>postgres</password> 
+        </connectionSource>
+    </appender>
+     <root level="debug">
+        <appender-ref ref="db" />
+    </root> -->
+    <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
+        <http>
+            <url>http://localhost:3100/loki/api/v1/push</url>
+        </http>
+        <format>
+            <label>
+                <pattern>app=my-app,host=${HOSTNAME},level=%level</pattern>
+            </label>
+            <message>
+                <pattern>l=%level h=${HOSTNAME} c=%logger{20} t=%thread | %msg %ex</pattern>
+            </message>
+            <sortByTime>true</sortByTime>
+        </format>
+    </appender>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%-5relative %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="LOKI" />
+        <appender-ref ref="STDOUT" />
+    </root>
+
+    <!-- <root level="INFO">
+        <appender-ref ref="LOKI" />
+        <appender-ref ref="STDOUT" />
+    </root> -->
+</configuration> 
