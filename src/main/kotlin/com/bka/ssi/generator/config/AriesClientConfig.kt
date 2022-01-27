@@ -20,6 +20,8 @@ package com.bka.ssi.generator.config
 
 import com.bka.ssi.generator.domain.services.IAriesClient
 import com.bka.ssi.generator.infrastructure.ariesclient.AcaPyAriesClient
+import com.bka.ssi.generator.infrastructure.httpclient.OkHttpPublisher
+import okhttp3.OkHttpClient
 import org.hyperledger.aries.AriesClient
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -37,31 +39,42 @@ class AriesClientConfig(
     var logger: Logger = LoggerFactory.getLogger(AriesClientConfig::class.java)
 
     @Bean(name = ["IssuerVerifier"])
-    fun issuerVerifierAriesClient(): IAriesClient? {
+    fun issuerVerifierAriesClient(okHttpPublisher: OkHttpPublisher): IAriesClient? {
         if (issuerVerifierAcaPyUrl == null) {
             logger.error("Unable to establish connection to Issuer/Verifier AcaPy. Issuer/Verifier AcaPy URL not configured.")
             return null
         }
 
+        val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(okHttpPublisher)
+            .build()
+
         val issuerVerifierAcaPyClient =
             AriesClient.builder()
                 .url(issuerVerifierAcaPyUrl)
                 .apiKey(issuerVerifierAcaPyApiKey)
+                .client(okHttpClient)
                 .build()
 
         return AcaPyAriesClient(issuerVerifierAcaPyClient)
     }
 
     @Bean(name = ["Holder"])
-    fun holderAriesClient(): IAriesClient? {
+    fun holderAriesClient(okHttpPublisher: OkHttpPublisher): IAriesClient? {
         if (holderAcaPyUrl == null) {
             logger.error("Unable to establish connection to Holder AcaPy. Holder AcaPy URL not configured.")
             return null
         }
+
+        val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(okHttpPublisher)
+            .build()
+
         val holderAcaPyClient =
             AriesClient.builder()
                 .url(holderAcaPyUrl)
                 .apiKey(holderAcaPyApiKey)
+                .client(okHttpClient)
                 .build()
 
         return AcaPyAriesClient(holderAcaPyClient)
