@@ -1,4 +1,4 @@
-package com.bka.ssi.generator.infrastructure.ariesclient
+package com.bka.ssi.generator.agents.acapy
 
 import com.bka.ssi.generator.domain.objects.*
 import com.bka.ssi.generator.domain.services.IAriesClient
