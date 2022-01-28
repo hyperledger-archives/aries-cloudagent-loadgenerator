@@ -85,7 +85,7 @@ start)
   git submodule update --init --recursive
   ./von-network/manage build
   ./von-network/manage start
-  echo "Wait for ledger to start... (takes 30 seconds)"
+  echo "Waiting for the ledger to start... (takes 30 seconds)"
   sleep 30
   echo "Registering issuer DID..."
   curl -d "{\"role\": \"ENDORSER\", \"seed\":\"$ISSUER_DID_SEED\"}" -H "Content-Type: application/json" -X POST $LEDGER_REGISTER_DID_ENDPOINT
