@@ -1,4 +1,4 @@
-package com.bka.ssi.generator.infrastructure.ariespublisher
+package com.bka.ssi.generator.agents.acapy
 
 import com.bka.ssi.generator.domain.objects.ConnectionRecordDo
 import com.bka.ssi.generator.domain.objects.CredentialExchangeRecordDo

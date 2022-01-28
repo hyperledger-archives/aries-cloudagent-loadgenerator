@@ -1,6 +1,6 @@
 package com.bka.ssi.generator.api
 
-import com.bka.ssi.generator.infrastructure.ariespublisher.AcaPyPublisher
+import com.bka.ssi.generator.agents.acapy.AcaPyPublisher
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.*

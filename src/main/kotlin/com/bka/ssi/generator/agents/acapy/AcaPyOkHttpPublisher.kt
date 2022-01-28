@@ -1,10 +1,9 @@
-package com.bka.ssi.generator.infrastructure.httpclient
+package com.bka.ssi.generator.agents.acapy
 
 import com.bka.ssi.generator.domain.services.IHttpRequestObserver
 import okhttp3.Interceptor
 import okhttp3.Response
 import org.springframework.stereotype.Service
-
 
 @Service
 class OkHttpPublisher(

@@ -1,4 +1,4 @@
-package com.bka.ssi.generator.infrastructure.wallet
+package com.bka.ssi.generator.agents.acapy
 
 import com.bka.ssi.generator.domain.services.IWallet
 import org.slf4j.Logger
