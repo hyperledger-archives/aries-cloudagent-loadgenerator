@@ -85,8 +85,9 @@ start)
   git submodule update --init --recursive
   ./von-network/manage build
   ./von-network/manage start
-  echo "Registering issuer DID... (takes 30 seconds)"
+  echo "Wait for ledger to start... (takes 30 seconds)"
   sleep 30
+  echo "Registering issuer DID..."
   curl -d "{\"role\": \"ENDORSER\", \"seed\":\"$ISSUER_DID_SEED\"}" -H "Content-Type: application/json" -X POST $LEDGER_REGISTER_DID_ENDPOINT
   echo "Starting all aca-py related docker containers ..."
   docker-compose -f docker-compose.yml up -d
