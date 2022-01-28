@@ -18,9 +18,9 @@
 
 package com.bka.ssi.generator.config
 
+import com.bka.ssi.generator.agents.acapy.AcaPyAriesClient
+import com.bka.ssi.generator.agents.acapy.OkHttpPublisher
 import com.bka.ssi.generator.domain.services.IAriesClient
-import com.bka.ssi.generator.infrastructure.ariesclient.AcaPyAriesClient
-import com.bka.ssi.generator.infrastructure.httpclient.OkHttpPublisher
 import okhttp3.OkHttpClient
 import org.hyperledger.aries.AriesClient
 import org.slf4j.Logger
@@ -30,13 +30,13 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-class AriesClientConfig(
+class AcaPyConfig(
     @Value("\${issuer-verifier.acapy.api-key}") private val issuerVerifierAcaPyApiKey: String?,
     @Value("\${issuer-verifier.acapy.url}") private val issuerVerifierAcaPyUrl: String?,
     @Value("\${holder.acapy.api-key}") private val holderAcaPyApiKey: String?,
     @Value("\${holder.acapy.url}") private val holderAcaPyUrl: String?
 ) {
-    var logger: Logger = LoggerFactory.getLogger(AriesClientConfig::class.java)
+    var logger: Logger = LoggerFactory.getLogger(AcaPyConfig::class.java)
 
     @Bean(name = ["IssuerVerifier"])
     fun issuerVerifierAriesClient(okHttpPublisher: OkHttpPublisher): IAriesClient? {
