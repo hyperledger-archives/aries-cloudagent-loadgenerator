@@ -28,13 +28,16 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import java.util.concurrent.TimeUnit
 
 @Configuration
 class AcaPyConfig(
     @Value("\${issuer-verifier.acapy.api-key}") private val issuerVerifierAcaPyApiKey: String?,
     @Value("\${issuer-verifier.acapy.url}") private val issuerVerifierAcaPyUrl: String?,
+    @Value("\${issuer-verifier.acapy.http-timeout}") private val issuerVerifierAcaPyHttpTimeout: Long,
     @Value("\${holder.acapy.api-key}") private val holderAcaPyApiKey: String?,
-    @Value("\${holder.acapy.url}") private val holderAcaPyUrl: String?
+    @Value("\${holder.acapy.url}") private val holderAcaPyUrl: String?,
+    @Value("\${holder.acapy.http-timeout}") private val holderAcapyHttpTimeout: Long
 ) {
     var logger: Logger = LoggerFactory.getLogger(AcaPyConfig::class.java)
 
@@ -45,16 +48,13 @@ class AcaPyConfig(
             return null
         }
 
-        val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor(okHttpPublisher)
-            .build()
-
         val issuerVerifierAcaPyClient =
-            AriesClient.builder()
-                .url(issuerVerifierAcaPyUrl)
-                .apiKey(issuerVerifierAcaPyApiKey)
-                .client(okHttpClient)
-                .build()
+            buildAcaPyAriesClient(
+                okHttpPublisher,
+                issuerVerifierAcaPyUrl,
+                issuerVerifierAcaPyApiKey,
+                issuerVerifierAcaPyHttpTimeout
+            )
 
         return AcaPyAriesClient(issuerVerifierAcaPyClient)
     }
@@ -66,17 +66,30 @@ class AcaPyConfig(
             return null
         }
 
-        val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor(okHttpPublisher)
-            .build()
-
         val holderAcaPyClient =
-            AriesClient.builder()
-                .url(holderAcaPyUrl)
-                .apiKey(holderAcaPyApiKey)
-                .client(okHttpClient)
-                .build()
+            buildAcaPyAriesClient(okHttpPublisher, holderAcaPyUrl, holderAcaPyApiKey, holderAcapyHttpTimeout)
 
         return AcaPyAriesClient(holderAcaPyClient)
+    }
+
+    private fun buildAcaPyAriesClient(
+        okHttpPublisher: OkHttpPublisher,
+        acaPyUrl: String,
+        acaPyApiKey: String?,
+        acaPyHttpTimeout: Long
+    ): AriesClient {
+        val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(okHttpPublisher)
+            .writeTimeout(acaPyHttpTimeout, TimeUnit.SECONDS)
+            .readTimeout(acaPyHttpTimeout, TimeUnit.SECONDS)
+            .connectTimeout(acaPyHttpTimeout, TimeUnit.SECONDS)
+            .callTimeout(acaPyHttpTimeout, TimeUnit.SECONDS)
+            .build()
+
+        return AriesClient.builder()
+            .url(acaPyUrl)
+            .apiKey(acaPyApiKey)
+            .client(okHttpClient)
+            .build()
     }
 }
