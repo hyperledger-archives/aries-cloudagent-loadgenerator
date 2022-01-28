@@ -179,7 +179,6 @@ networks:
 volumes:
   grafana-volume:
   loki-volume:
-  loadgenerator-logging-db-volume:
   issuer-verifier-wallet-db-volume:
   holder-wallet-db-volume:
   tails-server-volume:
