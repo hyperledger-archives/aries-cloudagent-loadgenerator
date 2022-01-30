@@ -6,10 +6,10 @@
         </http>
         <format>
             <label>
-                <pattern>app=my-app,host=${HOSTNAME},level=%level</pattern>
+                <pattern>app=aries-load-generator,level=%level</pattern>
             </label>
             <message>
-                <pattern>l=%level h=${HOSTNAME} c=%logger{20} t=%thread | %msg %ex</pattern>
+                <pattern>class=%logger{20} thread=%thread | %msg %ex</pattern>
             </message>
             <sortByTime>true</sortByTime>
         </format>
