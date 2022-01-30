@@ -27,4 +27,4 @@ test-cases:
     full-process:
         active: true
         number-of-iterations: 100
-        number-of-parallel-iterations: 10
+        number-of-parallel-iterations: 5
