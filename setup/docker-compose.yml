@@ -2,6 +2,7 @@ version: "3.7"
 services:
 
   grafana:
+    container_name: grafana
     image: grafana/grafana:latest
     ports:
       - "3000:3000"
@@ -10,6 +11,7 @@ services:
     networks:
       - acapy-load-test
   loki:
+    container_name: loki
     image: grafana/loki:2.4.2
     ports:
       - "3100:3100"
