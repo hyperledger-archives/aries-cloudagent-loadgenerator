@@ -10,6 +10,7 @@ This repository comes with an automated testing setup consisting of:
 - Holder AcaPy (+ Postgres Wallet DB)
 - Tails Server
 - VON Network
+- Analysis Tools ([see below](#analysis-tools))
 
 To start it run:
 
@@ -78,5 +79,33 @@ docker run --rm -p 8080:8080 loadgenerator
 
 ### Open the SwaggerUI
 
-An automatically generated SwaggerUI is available after startup under http://localhost:8080/swagger-ui.html 
+An automatically generated SwaggerUI is available after startup under http://localhost:8080/swagger-ui.html
+
+## Analyse the Test Results
+
+This project includes a setup for analysing and visualizing the test results. The whole analysis setup is started
+automatically when starting the test environment.
+
+### Analysis Tools
+
+- **Grafana:** is used to visualize the collected data on a dashboard
+- **Grafana Loki:** is used to collect logs from services like the Load Generator
+
+### View Test Results in Grafana
+
+Grafana runs on http://localhost:3000. It comes preconfigured with dashboards to visualize the test results from the
+load tests. You can for example open http://localhost:3000/d/0Pe9llbnz/full-process to the test results for
+the `Full Process` test.
+
+To see any data on the dashboard, ensure to select the right time range in Grafana for which data has been collected.
+
+### Grafana Configuration
+
+The data sources, as well as dashboards, are provisioned automatically when running the Grafana container.
+
+Data sources are configured manually
+in [./setup/grafana/grafana-provisioning/datasources/](./setup/grafana/grafana-provisioning/datasources/) using YAML
+files. Dashboards are configured in [./setup/grafana/dashboards](./setup/grafana/dashboards) using JSON files.
+Dashboards can be created via the Grafana Web UI and exported as JSON afterwards.
+
 

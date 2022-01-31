@@ -10,6 +10,7 @@ services:
       - grafana-volume:/var/lib/grafana
       - ./grafana/grafana-provisioning:/etc/grafana/provisioning
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
     networks:
       - acapy-load-test
   loki:

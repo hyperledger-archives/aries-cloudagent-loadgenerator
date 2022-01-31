@@ -1,0 +1,8 @@
+apiVersion: 1
+
+providers:
+  - name: Default
+    folder: Load Generator
+    type: file
+    options:
+      path: /var/lib/grafana/dashboards
