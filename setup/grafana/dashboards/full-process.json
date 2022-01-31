@@ -648,12 +648,308 @@
       "type": "timeseries"
     },
     {
+      "description": "Average Number of Connections that are being activated per second",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 12
+      },
+      "id": 24,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "rate(\n  {app=\"aries-load-generator\"}\n    |= \"type=connection_record\"\n    |= \"state=ACTIVE\"\n[1m])",
+          "legendFormat": "Connection Activations per Second",
+          "refId": "A"
+        }
+      ],
+      "title": "Connection Activation Rate (in Seconds)",
+      "type": "timeseries"
+    },
+    {
+      "description": "Average Number of Credentials issued per second",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Credentials Issued per Second"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 12
+      },
+      "id": 25,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "rate(\n  {app=\"aries-load-generator\"}\n    |= \"type=credential_record\"\n    |= \"state=CREDENTIAL_ACKED\"\n[1m])",
+          "legendFormat": "Credentials Issued per Second",
+          "refId": "A"
+        }
+      ],
+      "title": " Credential Issuance Rate (in Seconds)",
+      "type": "timeseries"
+    },
+    {
+      "description": "Average Number of Proof Requests verified per second",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Credentials Issued per Second"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Proof Requests verified per Second"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 12
+      },
+      "id": 26,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "rate(\n  {app=\"aries-load-generator\"}\n    |= \"type=presentation_record\"\n    |= \"state=VERIFIED\"\n[1m])",
+          "legendFormat": "Proof Requests verified per Second",
+          "refId": "A"
+        }
+      ],
+      "title": " Proof Request Verification Rate (in Seconds)",
+      "type": "timeseries"
+    },
+    {
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 12
+        "y": 20
       },
       "id": 22,
       "panels": [],
@@ -687,7 +983,7 @@
         "h": 3,
         "w": 24,
         "x": 0,
-        "y": 13
+        "y": 21
       },
       "id": 14,
       "options": {
@@ -773,7 +1069,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 16
+        "y": 24
       },
       "id": 12,
       "options": {
@@ -866,7 +1162,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 16
+        "y": 24
       },
       "id": 16,
       "options": {
@@ -889,7 +1185,7 @@
           "refId": "A"
         }
       ],
-      "title": "HTTP Response Times",
+      "title": "HTTP Response Times (in Milliseconds)",
       "type": "timeseries"
     },
     {
@@ -898,7 +1194,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 25
+        "y": 33
       },
       "id": 20,
       "panels": [],
@@ -960,7 +1256,7 @@
         "h": 11,
         "w": 24,
         "x": 0,
-        "y": 26
+        "y": 34
       },
       "id": 2,
       "options": {
@@ -995,8 +1291,8 @@
     "list": []
   },
   "time": {
-    "from": "2022-01-31T18:12:41.145Z",
-    "to": "2022-01-31T18:14:54.755Z"
+    "from": "2022-01-31T18:09:16.543Z",
+    "to": "2022-01-31T18:18:15.794Z"
   },
   "timepicker": {},
   "timezone": "",
