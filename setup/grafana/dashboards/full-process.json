@@ -25,6 +25,19 @@
   "liveNow": false,
   "panels": [
     {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 18,
+      "panels": [],
+      "title": "AcaPy Event Logger",
+      "type": "row"
+    },
+    {
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -51,7 +64,7 @@
         "h": 3,
         "w": 8,
         "x": 0,
-        "y": 0
+        "y": 1
       },
       "id": 6,
       "options": {
@@ -109,7 +122,7 @@
         "h": 3,
         "w": 8,
         "x": 8,
-        "y": 0
+        "y": 1
       },
       "id": 10,
       "options": {
@@ -167,7 +180,7 @@
         "h": 3,
         "w": 8,
         "x": 16,
-        "y": 0
+        "y": 1
       },
       "id": 8,
       "options": {
@@ -284,7 +297,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 3
+        "y": 4
       },
       "id": 4,
       "options": {
@@ -427,7 +440,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 3
+        "y": 4
       },
       "id": 9,
       "options": {
@@ -587,7 +600,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 3
+        "y": 4
       },
       "id": 7,
       "options": {
@@ -633,6 +646,264 @@
       ],
       "title": "Proof Request Status",
       "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 12
+      },
+      "id": 22,
+      "panels": [],
+      "title": "HTTP Logger",
+      "type": "row"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 24,
+        "x": 0,
+        "y": 13
+      },
+      "id": 14,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n  {app=\"aries-load-generator\"}\n    |= \"type=http_request\"\n    != \"http-code=200\"\n[10d])",
+          "refId": "A"
+        }
+      ],
+      "title": "Number of HTTP Request without HTTP Code 200",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 16
+      },
+      "id": 12,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n  {app=\"aries-load-generator\"}\n    |= \"type=http_request\"\n    |= \"http-code=200\"\n[10d])",
+          "hide": false,
+          "legendFormat": "HTTP Code 200",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n  {app=\"aries-load-generator\"}\n    |= \"type=http_request\"\n    != \"http-code=200\"\n[10d])",
+          "hide": false,
+          "legendFormat": "HTTP Code != 200",
+          "refId": "C"
+        }
+      ],
+      "title": "HTTP Response Codes",
+      "type": "timeseries"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 16
+      },
+      "id": 16,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "avg_over_time (\n  {app=\"aries-load-generator\"}\n    |= \"type=http_request\"\n    |= \"http-code=200\"\n    != \"request=POST/schemas\"\n    != \"request=POST/credential-definitions\"\n    | logfmt\n    | unwrap duration_in_ms\n[10s]) by (request)",
+          "refId": "A"
+        }
+      ],
+      "title": "HTTP Response Times",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 25
+      },
+      "id": 20,
+      "panels": [],
+      "title": "Wallet Database Logger",
+      "type": "row"
     },
     {
       "fieldConfig": {
@@ -689,7 +960,7 @@
         "h": 11,
         "w": 24,
         "x": 0,
-        "y": 11
+        "y": 26
       },
       "id": 2,
       "options": {
@@ -724,8 +995,8 @@
     "list": []
   },
   "time": {
-    "from": "2022-01-31T12:52:38.519Z",
-    "to": "2022-01-31T12:52:51.758Z"
+    "from": "2022-01-31T18:12:41.145Z",
+    "to": "2022-01-31T18:14:54.755Z"
   },
   "timepicker": {},
   "timezone": "",
