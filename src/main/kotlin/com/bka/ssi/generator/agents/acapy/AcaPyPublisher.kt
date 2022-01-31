@@ -18,14 +18,17 @@ class AcaPyPublisher(
     private val handlers: List<IAriesObserver>
 ) : EventHandler() {
 
-    var dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'")
+    private fun dateStringToMilliseconds(date: String): Long {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+        return dateFormat.parse(date.dropLast(4)).getTime()
+    }
 
     override fun handleConnection(connection: ConnectionRecord) {
         handlers.forEach {
             it.handleConnectionRecord(
                 ConnectionRecordDo(
                     connection.connectionId,
-                    dateFormat.parse(connection.updatedAt).getTime(),
+                    dateStringToMilliseconds(connection.updatedAt),
                     connection.state.toString(),
                     connection.stateIsActive()
                 )
@@ -38,7 +41,7 @@ class AcaPyPublisher(
             it.handleProofRequestRecord(
                 ProofExchangeRecordDo(
                     proof.presentationExchangeId,
-                    dateFormat.parse(proof.updatedAt).getTime(),
+                    dateStringToMilliseconds(proof.updatedAt),
                     proof.connectionId,
                     proof.state.toString(),
                     proof.isVerified && proof.state == PresentationExchangeState.VERIFIED
@@ -53,7 +56,7 @@ class AcaPyPublisher(
                 CredentialExchangeRecordDo(
                     credential.credentialExchangeId,
                     credential.connectionId,
-                    dateFormat.parse(credential.updatedAt).getTime(),
+                    dateStringToMilliseconds(credential.updatedAt),
                     credential.state.toString(),
                     credential.stateIsCredentialAcked()
                 )
