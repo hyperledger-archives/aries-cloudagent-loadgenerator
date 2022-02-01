@@ -32,7 +32,7 @@ class AriesEventLogger : IAriesObserver {
 
     override fun handleConnectionRecord(connectionRecord: ConnectionRecordDo) {
         logger.info(
-                "type=connection_record time=${connectionRecord.time} Connection-Id=${connectionRecord.connectionId} state=${connectionRecord.state}"
+                "type=connectionRecord time=${connectionRecord.time} connectionId=${connectionRecord.connectionId} state=${connectionRecord.state}"
         )
     }
 
@@ -40,13 +40,13 @@ class AriesEventLogger : IAriesObserver {
             credentialExchangeRecord: CredentialExchangeRecordDo
     ) {
         logger.info(
-            "type=credential_record time=${credentialExchangeRecord.time} Cred-Ex-Id=${credentialExchangeRecord.id} Connection-Id=${credentialExchangeRecord.connectionId} state=${credentialExchangeRecord.state}"
+            "type=credentialRecord time=${credentialExchangeRecord.time} credentialExchangeId=${credentialExchangeRecord.id} connectionId=${credentialExchangeRecord.connectionId} state=${credentialExchangeRecord.state}"
         )
     }
 
     override fun handleProofRequestRecord(proofExchangeRecord: ProofExchangeRecordDo) {
         logger.info(
-            "type=presentation_record time=${proofExchangeRecord.time} Presentation-Ex-Id=${proofExchangeRecord.id} Connection-Id=${proofExchangeRecord.connectionId} state=${proofExchangeRecord.state}"
+            "type=presentationRecord time=${proofExchangeRecord.time} presentationExchangeId=${proofExchangeRecord.id} connectionId=${proofExchangeRecord.connectionId} state=${proofExchangeRecord.state}"
         )
     }
 }
