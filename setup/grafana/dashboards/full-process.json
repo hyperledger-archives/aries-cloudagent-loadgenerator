@@ -889,7 +889,7 @@
           "refId": "A"
         }
       ],
-      "title": "Connection Activation Rate (in Seconds)",
+      "title": "Connection Activation Rate (in Minutes)",
       "type": "timeseries"
     },
     {
@@ -988,7 +988,7 @@
           "refId": "A"
         }
       ],
-      "title": " Credential Issuance Rate (in Seconds)",
+      "title": " Credential Issuance Rate (in Minutes)",
       "type": "timeseries"
     },
     {
@@ -1102,7 +1102,7 @@
           "refId": "A"
         }
       ],
-      "title": " Proof Request Verification Rate (in Seconds)",
+      "title": " Proof Request Verification Rate (in Minutes)",
       "type": "timeseries"
     },
     {
