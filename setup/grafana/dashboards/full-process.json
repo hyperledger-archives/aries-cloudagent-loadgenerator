@@ -34,7 +34,7 @@
       },
       "id": 18,
       "panels": [],
-      "title": "AcaPy Event Logger",
+      "title": "Aries Event Logger - General",
       "type": "row"
     },
     {
@@ -84,7 +84,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=connection_record\"\n  |= \"state=INVITATION\" [10d])",
+          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=connectionRecord\"\n  |= \"state=INVITATION\" [10d])",
           "refId": "A"
         }
       ],
@@ -138,7 +138,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=credential_record\"\n  |= \"state=OFFER_SENT\" [10d])",
+          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=credentialRecord\"\n  |= \"state=OFFER_SENT\" [10d])",
           "refId": "A"
         }
       ],
@@ -192,7 +192,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentation_record\"\n  |= \"state=REQUEST_SENT\" [10d])",
+          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=REQUEST_SENT\" [10d])",
           "refId": "A"
         }
       ],
@@ -250,7 +250,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=connection_record\"\n  |= \"state=INVITATION\" [10d]) -\n  \ncount_over_time({app=\"aries-load-generator\"}\n  |= \"type=connection_record\"\n  |= \"state=ACTIVE\" [10d])",
+          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=connectionRecord\"\n  |= \"state=INVITATION\" [10d]) -\n  \ncount_over_time({app=\"aries-load-generator\"}\n  |= \"type=connectionRecord\"\n  |= \"state=ACTIVE\" [10d])",
           "refId": "A"
         }
       ],
@@ -308,7 +308,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=credential_record\"\n  |= \"state=OFFER_SENT\" [10d]) -\n  \ncount_over_time({app=\"aries-load-generator\"}\n  |= \"type=credential_record\"\n  |= \"state=CREDENTIAL_ACKED\" [10d])",
+          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=credentialRecord\"\n  |= \"state=OFFER_SENT\" [10d]) -\n  \ncount_over_time({app=\"aries-load-generator\"}\n  |= \"type=credentialRecord\"\n  |= \"state=CREDENTIAL_ACKED\" [10d])",
           "refId": "A"
         }
       ],
@@ -366,7 +366,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentation_record\"\n  |= \"state=REQUEST_SENT\" [10d]) -\n  \ncount_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentation_record\"\n  |= \"state=VERIFIED\" [10d])",
+          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=REQUEST_SENT\" [10d]) -\n  \ncount_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=VERIFIED\" [10d])",
           "refId": "A"
         }
       ],
@@ -478,7 +478,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=connection_record\"\n  |= \"state=INVITATION\" [10d])",
+          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=connectionRecord\"\n  |= \"state=INVITATION\" [10d])",
           "hide": false,
           "legendFormat": "Invited",
           "refId": "B"
@@ -488,7 +488,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=connection_record\"\n  |= \"state=REQUEST\" [10d])",
+          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=connectionRecord\"\n  |= \"state=REQUEST\" [10d])",
           "hide": false,
           "legendFormat": "Requested",
           "refId": "C"
@@ -498,7 +498,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=connection_record\"\n  |= \"state=RESPONSE\" [10d])",
+          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=connectionRecord\"\n  |= \"state=RESPONSE\" [10d])",
           "hide": false,
           "legendFormat": "Responded",
           "refId": "D"
@@ -508,7 +508,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=connection_record\"\n  |= \"state=ACTIVE\" [10d])",
+          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=connectionRecord\"\n  |= \"state=ACTIVE\" [10d])",
           "legendFormat": "Active",
           "refId": "A"
         }
@@ -621,7 +621,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=credential_record\"\n  |= \"state=OFFER_SENT\" [10d])",
+          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=credentialRecord\"\n  |= \"state=OFFER_SENT\" [10d])",
           "hide": false,
           "legendFormat": "Offers Sent",
           "refId": "C"
@@ -631,7 +631,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=credential_record\"\n  |= \"state=REQUEST_RECEIVED\" [10d])",
+          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=credentialRecord\"\n  |= \"state=REQUEST_RECEIVED\" [10d])",
           "hide": false,
           "instant": false,
           "legendFormat": "Request Received",
@@ -643,7 +643,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=credential_record\"\n  |= \"state=CREDENTIAL_ISSUED\" [10d])",
+          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=credentialRecord\"\n  |= \"state=CREDENTIAL_ISSUED\" [10d])",
           "legendFormat": "Issued",
           "refId": "A"
         },
@@ -652,7 +652,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=credential_record\"\n  |= \"state=CREDENTIAL_ACKED\" [10d])",
+          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=credentialRecord\"\n  |= \"state=CREDENTIAL_ACKED\" [10d])",
           "hide": false,
           "legendFormat": "Issuance Acknowledged",
           "refId": "B"
@@ -781,7 +781,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentation_record\"\n  |= \"state=REQUEST_SENT\" [10d])",
+          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=REQUEST_SENT\" [10d])",
           "hide": false,
           "legendFormat": "Sent",
           "refId": "B"
@@ -791,7 +791,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentation_record\"\n  |= \"state=PRESENTATION_RECEIVED\" [10d])",
+          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=PRESENTATION_RECEIVED\" [10d])",
           "hide": false,
           "legendFormat": "Received Presentation",
           "refId": "C"
@@ -801,7 +801,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentation_record\"\n  |= \"state=VERIFIED\" [10d])",
+          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=VERIFIED\" [10d])",
           "legendFormat": "Verified",
           "refId": "A"
         }
@@ -884,7 +884,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "rate(\n  {app=\"aries-load-generator\"}\n    |= \"type=connection_record\"\n    |= \"state=ACTIVE\"\n[1m])",
+          "expr": "rate(\n  {app=\"aries-load-generator\"}\n    |= \"type=connectionRecord\"\n    |= \"state=ACTIVE\"\n[1m])",
           "legendFormat": "Connection Activations per Second",
           "refId": "A"
         }
@@ -983,7 +983,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "rate(\n  {app=\"aries-load-generator\"}\n    |= \"type=credential_record\"\n    |= \"state=CREDENTIAL_ACKED\"\n[1m])",
+          "expr": "rate(\n  {app=\"aries-load-generator\"}\n    |= \"type=credentialRecord\"\n    |= \"state=CREDENTIAL_ACKED\"\n[1m])",
           "legendFormat": "Credentials Issued per Second",
           "refId": "A"
         }
@@ -1097,7 +1097,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "rate(\n  {app=\"aries-load-generator\"}\n    |= \"type=presentation_record\"\n    |= \"state=VERIFIED\"\n[1m])",
+          "expr": "rate(\n  {app=\"aries-load-generator\"}\n    |= \"type=presentationRecord\"\n    |= \"state=VERIFIED\"\n[1m])",
           "legendFormat": "Proof Requests verified per Second",
           "refId": "A"
         }
@@ -1112,6 +1112,345 @@
         "w": 24,
         "x": 0,
         "y": 23
+      },
+      "id": 31,
+      "panels": [],
+      "title": "Aries Event Logger - State Changes",
+      "type": "row"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 24
+      },
+      "id": 33,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "avg (\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=connectionRecord\"\n      |= \"state=ACTIVE\"\n      | logfmt \n      | unwrap time\n  [1m]) by (connectionId) -\n\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=connectionRecord\"\n      |= \"state=INVITATION\"\n      | logfmt \n      | unwrap time\n  [1m]) by (connectionId)\n)",
+          "legendFormat": "E2E - INVITATION to ACTIVE",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "avg (\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=connectionRecord\"\n      |= \"state=REQUEST\"\n      | logfmt \n      | unwrap time\n  [1m]) by (connectionId) -\n\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=connectionRecord\"\n      |= \"state=INVITATION\"\n      | logfmt \n      | unwrap time\n  [1m]) by (connectionId)\n)",
+          "hide": false,
+          "legendFormat": "INVITATION to REQUEST",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "avg (\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=connectionRecord\"\n      |= \"state=RESPONSE\"\n      | logfmt \n      | unwrap time\n  [1m]) by (connectionId) -\n\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=connectionRecord\"\n      |= \"state=REQUEST\"\n      | logfmt \n      | unwrap time\n  [1m]) by (connectionId)\n)",
+          "hide": false,
+          "legendFormat": "REQUEST to RESPONSE",
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "avg (\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=connectionRecord\"\n      |= \"state=ACTIVE\"\n      | logfmt \n      | unwrap time\n  [1m]) by (connectionId) -\n\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=connectionRecord\"\n      |= \"state=RESPONSE\"\n      | logfmt \n      | unwrap time\n  [1m]) by (connectionId)\n)",
+          "hide": false,
+          "legendFormat": "RESPONSE to ACTIVE",
+          "refId": "D"
+        }
+      ],
+      "title": "Connection Protocol Transition Times  (in Milliseconds)",
+      "type": "timeseries"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 24
+      },
+      "id": 34,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "avg (\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=credentialRecord\"\n      |= \"state=CREDENTIAL_ACKED\"\n      | logfmt \n      | unwrap time\n  [1m]) by (credentialExchangeId) -\n\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=credentialRecord\"\n      |= \"state=OFFER_SENT\"\n      | logfmt \n      | unwrap time\n  [1m]) by (credentialExchangeId)\n)",
+          "legendFormat": "E2E - OFFER_SENT to CREDENTIAL_ACKED",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "avg (\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=credentialRecord\"\n      |= \"state=REQUEST_RECEIVED\"\n      | logfmt \n      | unwrap time\n  [1m]) by (credentialExchangeId) -\n\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=credentialRecord\"\n      |= \"state=OFFER_SENT\"\n      | logfmt \n      | unwrap time\n  [1m]) by (credentialExchangeId)\n)",
+          "hide": false,
+          "legendFormat": "OFFER_SENT to REQUEST_RECEIVED",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "avg (\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=credentialRecord\"\n      |= \"state=CREDENTIAL_ISSUED\"\n      | logfmt \n      | unwrap time\n  [1m]) by (credentialExchangeId) -\n\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=credentialRecord\"\n      |= \"state=REQUEST_RECEIVED\"\n      | logfmt \n      | unwrap time\n  [1m]) by (credentialExchangeId)\n)",
+          "hide": false,
+          "legendFormat": "REQUEST_RECEIVED to CREDENTIAL_ISSUED",
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "avg (\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=credentialRecord\"\n      |= \"state=CREDENTIAL_ACKED\"\n      | logfmt \n      | unwrap time\n  [1m]) by (credentialExchangeId) -\n\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=credentialRecord\"\n      |= \"state=CREDENTIAL_ISSUED\"\n      | logfmt \n      | unwrap time\n  [1m]) by (credentialExchangeId)\n)",
+          "hide": false,
+          "legendFormat": "CREDENTIAL_ISSUED to CREDENTIAL_ACKED",
+          "refId": "D"
+        }
+      ],
+      "title": "Credential Issuance Protocol Transition Times  (in Milliseconds)",
+      "type": "timeseries"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 24
+      },
+      "id": 35,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "avg (\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=presentationRecord\"\n      |= \"state=VERIFIED\"\n      | logfmt \n      | unwrap time\n  [1m]) by (presentationExchangeId) -\n\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=presentationRecord\"\n      |= \"state=REQUEST_SENT\"\n      | logfmt \n      | unwrap time\n  [1m]) by (presentationExchangeId)\n)",
+          "legendFormat": "E2E - REQUEST_SENT to VERIFIED",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "avg (\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=presentationRecord\"\n      |= \"state=PRESENTATION_RECEIVED\"\n      | logfmt \n      | unwrap time\n  [1m]) by (presentationExchangeId) -\n\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=presentationRecord\"\n      |= \"state=REQUEST_SENT\"\n      | logfmt \n      | unwrap time\n  [1m]) by (presentationExchangeId)\n)",
+          "hide": false,
+          "legendFormat": "REQUEST_SENT to PRESENTATION_RECEIVED",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "avg (\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=presentationRecord\"\n      |= \"state=VERIFIED\"\n      | logfmt \n      | unwrap time\n  [1m]) by (presentationExchangeId) -\n\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=presentationRecord\"\n      |= \"state=PRESENTATION_RECEIVED\"\n      | logfmt \n      | unwrap time\n  [1m]) by (presentationExchangeId)\n)",
+          "hide": false,
+          "legendFormat": "PRESENTATION_RECEIVED to VERIFIED",
+          "refId": "C"
+        }
+      ],
+      "title": "Proof Request Protocol Transition Times  (in Milliseconds)",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 32
       },
       "id": 22,
       "panels": [],
@@ -1145,7 +1484,7 @@
         "h": 3,
         "w": 24,
         "x": 0,
-        "y": 24
+        "y": 33
       },
       "id": 14,
       "options": {
@@ -1169,7 +1508,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time(\n  {app=\"aries-load-generator\"}\n    |= \"type=http_request\"\n    != \"http-code=200\"\n[10d])",
+          "expr": "count_over_time(\n  {app=\"aries-load-generator\"}\n    |= \"type=http_request\"\n    != \"httpCode=200\"\n[10d])",
           "refId": "A"
         }
       ],
@@ -1231,7 +1570,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 27
+        "y": 36
       },
       "id": 12,
       "options": {
@@ -1250,7 +1589,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time(\n  {app=\"aries-load-generator\"}\n    |= \"type=http_request\"\n    |= \"http-code=200\"\n[10d])",
+          "expr": "count_over_time(\n  {app=\"aries-load-generator\"}\n    |= \"type=http_request\"\n    |= \"httpCode=200\"\n[10d])",
           "hide": false,
           "legendFormat": "HTTP Code 200",
           "refId": "B"
@@ -1260,7 +1599,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time(\n  {app=\"aries-load-generator\"}\n    |= \"type=http_request\"\n    != \"http-code=200\"\n[10d])",
+          "expr": "count_over_time(\n  {app=\"aries-load-generator\"}\n    |= \"type=http_request\"\n    != \"httpCode=200\"\n[10d])",
           "hide": false,
           "legendFormat": "HTTP Code != 200",
           "refId": "C"
@@ -1324,7 +1663,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 27
+        "y": 36
       },
       "id": 16,
       "options": {
@@ -1343,7 +1682,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "avg_over_time (\n  {app=\"aries-load-generator\"}\n    |= \"type=http_request\"\n    |= \"http-code=200\"\n    != \"request=POST/schemas\"\n    != \"request=POST/credential-definitions\"\n    | logfmt\n    | unwrap duration_in_ms\n[10s]) by (request)",
+          "expr": "avg_over_time (\n  {app=\"aries-load-generator\"}\n    |= \"type=http_request\"\n    |= \"httpCode=200\"\n    != \"request=POST/schemas\"\n    != \"request=POST/credential-definitions\"\n    | logfmt\n    | unwrap durationInMs\n[10s]) by (request)",
           "refId": "A"
         }
       ],
@@ -1351,98 +1690,98 @@
       "type": "timeseries"
     },
     {
-      "collapsed": false,
+      "collapsed": true,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 36
+        "y": 45
       },
       "id": 20,
-      "panels": [],
-      "title": "Wallet Database Logger",
-      "type": "row"
-    },
-    {
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
+      "panels": [
+        {
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
           },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
+          "gridPos": {
+            "h": 11,
+            "w": 24,
+            "x": 0,
+            "y": 4
+          },
+          "id": 2,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
             },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
+            "tooltip": {
+              "mode": "single"
             }
           },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
+          "targets": [
+            {
+              "datasource": {
+                "type": "loki",
+                "uid": "P8E80F9AEF21F6940"
               },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 11,
-        "w": 24,
-        "x": 0,
-        "y": 37
-      },
-      "id": 2,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "expr": "max(max_over_time({app=\"aries-load-generator\",level=\"INFO\"} |= \"type=database_size\" | logfmt | unwrap size_in_bytes [10m]))",
-          "refId": "A"
+              "expr": "max(max_over_time({app=\"aries-load-generator\",level=\"INFO\"} |= \"type=database_size\" | logfmt | unwrap sizeInBytes [10m]))",
+              "refId": "A"
+            }
+          ],
+          "title": "Wallet Database Size (in Bytes)",
+          "type": "timeseries"
         }
       ],
-      "title": "Wallet Database Size (in Bytes)",
-      "type": "timeseries"
+      "title": "Wallet Database Logger",
+      "type": "row"
     }
   ],
   "refresh": false,
@@ -1453,8 +1792,8 @@
     "list": []
   },
   "time": {
-    "from": "2022-02-01T06:13:33.328Z",
-    "to": "2022-02-01T06:14:42.369Z"
+    "from": "2022-02-01T11:00:53.236Z",
+    "to": "2022-02-01T11:03:37.164Z"
   },
   "timepicker": {},
   "timezone": "",
