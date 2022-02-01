@@ -14,7 +14,7 @@ class WalletLogger(var wallet: IWallet) {
     @Scheduled(fixedRate = 10000)
     fun reportCurrentTime() {
         logger.info(
-            "type=database_size size-in-bytes=${wallet.walletDatabaseSizeInBytes()} time=${
+            "type=database_size sizeInBytes=${wallet.walletDatabaseSizeInBytes()} time=${
                 Instant.now().toEpochMilli()
             }"
         )

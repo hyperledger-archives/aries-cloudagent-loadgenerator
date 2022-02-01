@@ -15,6 +15,6 @@ class HttpRequestLogger : IHttpRequestObserver {
         httpResponseCode: Int,
         durationInMs: Double
     ) {
-        logger.info("type=http_request request=${httpMethod}${urlPath} http-code=${httpResponseCode} duration-in-ms=${durationInMs}")
+        logger.info("type=http_request request=${httpMethod}${urlPath} httpCode=${httpResponseCode} durationInMs=${durationInMs}")
     }
 }
