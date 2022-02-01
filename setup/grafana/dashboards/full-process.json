@@ -1682,7 +1682,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "avg_over_time (\n  {app=\"aries-load-generator\"}\n    |= \"type=http_request\"\n    |= \"httpCode=200\"\n    != \"request=POST/schemas\"\n    != \"request=POST/credential-definitions\"\n    | logfmt\n    | unwrap durationInMs\n[10s]) by (request)",
+          "expr": "avg_over_time (\n  {app=\"aries-load-generator\"}\n    |= \"type=http_request\"\n    |= \"httpCode=200\"\n    != \"request=POST/schemas\"\n    != \"request=POST/credential-definitions\"\n    | logfmt\n    | unwrap durationInMs\n[1m]) by (request)",
           "refId": "A"
         }
       ],
@@ -1690,7 +1690,7 @@
       "type": "timeseries"
     },
     {
-      "collapsed": true,
+      "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1698,90 +1698,90 @@
         "y": 45
       },
       "id": 20,
-      "panels": [
-        {
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 0,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "lineInterpolation": "linear",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "auto",
-                "spanNulls": false,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green"
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              }
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 11,
-            "w": 24,
-            "x": 0,
-            "y": 4
-          },
-          "id": 2,
-          "options": {
-            "legend": {
-              "calcs": [],
-              "displayMode": "list",
-              "placement": "bottom"
-            },
-            "tooltip": {
-              "mode": "single"
-            }
-          },
-          "targets": [
-            {
-              "datasource": {
-                "type": "loki",
-                "uid": "P8E80F9AEF21F6940"
-              },
-              "expr": "max(max_over_time({app=\"aries-load-generator\",level=\"INFO\"} |= \"type=database_size\" | logfmt | unwrap sizeInBytes [10m]))",
-              "refId": "A"
-            }
-          ],
-          "title": "Wallet Database Size (in Bytes)",
-          "type": "timeseries"
-        }
-      ],
+      "panels": [],
       "title": "Wallet Database Logger",
       "type": "row"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 24,
+        "x": 0,
+        "y": 46
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "max(max_over_time({app=\"aries-load-generator\",level=\"INFO\"} |= \"type=database_size\" | logfmt | unwrap sizeInBytes [10m]))",
+          "refId": "A"
+        }
+      ],
+      "title": "Wallet Database Size (in Bytes)",
+      "type": "timeseries"
     }
   ],
   "refresh": false,
@@ -1792,8 +1792,8 @@
     "list": []
   },
   "time": {
-    "from": "2022-02-01T11:00:53.236Z",
-    "to": "2022-02-01T11:03:37.164Z"
+    "from": "2022-02-01T12:48:21.698Z",
+    "to": "2022-02-01T14:10:18.772Z"
   },
   "timepicker": {},
   "timezone": "",
