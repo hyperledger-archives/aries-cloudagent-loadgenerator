@@ -89,6 +89,10 @@ automatically when starting the test environment.
 ### Analysis Tools
 
 - **Grafana:** is used to visualize the collected data on a dashboard
+- **Grafane Image Renderer:** used to render Grafana graphs as images to export them to a PDF (uses
+  the [Image Renderer Plugin](https://grafana.com/grafana/plugins/grafana-image-renderer/))
+- **Grafana PDF Exporter:** used to export a Grafana dashboard as a PDF (
+  uses [IzakMarais/reporter](https://github.com/IzakMarais/reporter))
 - **Grafana Loki:** is used to collect logs from services like the Load Generator
 
 ### View Test Results in Grafana
@@ -98,6 +102,13 @@ load tests. You can for example open http://localhost:3000/d/0Pe9llbnz/full-proc
 the `Full Process` test.
 
 To see any data on the dashboard, ensure to select the right time range in Grafana for which data has been collected.
+
+### Export Grafana Dashboard as PDF
+
+Using [IzakMarais/reporter](https://github.com/IzakMarais/reporter) it is possible to export a dashboard as a PDF. For
+this a link exists in the top right corner of the dashboards. The PDF generation can take multiple minutes depending on
+the Dashboard complexity. Check the logs of the `grafana-pdf-exporter` container in case you want to see the progress of
+the PDF generation.
 
 ### Grafana Configuration
 
