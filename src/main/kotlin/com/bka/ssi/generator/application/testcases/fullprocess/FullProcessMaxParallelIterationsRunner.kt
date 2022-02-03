@@ -13,14 +13,14 @@ import java.time.Instant
 
 @Service
 @ConditionalOnProperty(
-    name = ["test-cases.full-process.active"],
+    name = ["test-cases.full-process-max-parallel-iterations.active"],
     matchIfMissing = false
 )
-class FullProcessRunner(
+class FullProcessMaxParallelIterationsRunner(
     @Qualifier("IssuerVerifier") private val issuerVerifierAriesClient: IAriesClient,
     @Qualifier("Holder") private val holderAriesClient: IAriesClient,
-    @Value("\${test-cases.full-process.number-of-iterations}") val numberOfIterations: Int,
-    @Value("\${test-cases.full-process.number-of-parallel-iterations}") val numberOfParallelIterations: Int
+    @Value("\${test-cases.full-process-max-parallel-iterations.number-of-iterations}") val numberOfIterations: Int,
+    @Value("\${test-cases.full-process-max-parallel-iterations.number-of-parallel-iterations}") val numberOfParallelIterations: Int
 ) : TestRunner() {
 
     private companion object {
@@ -28,7 +28,7 @@ class FullProcessRunner(
         var numberOfIterationsStarted = 0
     }
 
-    var logger: Logger = LoggerFactory.getLogger(FullProcessRunner::class.java)
+    var logger: Logger = LoggerFactory.getLogger(FullProcessMaxParallelIterationsRunner::class.java)
 
     override fun run() {
         logger.info("Starting 'FullProcessTest'...")
@@ -52,7 +52,7 @@ class FullProcessRunner(
         )
 
 
-        FullProcessRunner.credentialDefinitionId = credentialDefinition.id
+        FullProcessMaxParallelIterationsRunner.credentialDefinitionId = credentialDefinition.id
 
         logger.info("Setup completed")
     }
@@ -67,13 +67,13 @@ class FullProcessRunner(
         holderAriesClient.receiveConnectionInvitation(connectionInvitation)
 
 
-        FullProcessRunner.numberOfIterationsStarted++
+        FullProcessMaxParallelIterationsRunner.numberOfIterationsStarted++
 
-        logger.info("Started ${FullProcessRunner.numberOfIterationsStarted} of $numberOfIterations iteration")
+        logger.info("Started ${FullProcessMaxParallelIterationsRunner.numberOfIterationsStarted} of $numberOfIterations iteration")
     }
 
     private fun terminateRunner(): Boolean {
-        return FullProcessRunner.numberOfIterationsStarted >= numberOfIterations
+        return FullProcessMaxParallelIterationsRunner.numberOfIterationsStarted >= numberOfIterations
     }
 
     override fun handleConnectionRecord(connectionRecord: ConnectionRecordDo) {
