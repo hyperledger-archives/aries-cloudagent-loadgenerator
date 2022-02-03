@@ -25,12 +25,93 @@
   "liveNow": false,
   "panels": [
     {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 37,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n  {app=\"aries-load-generator\"}\n    |= \"Started\"\n    |= \"of\"\n    |= \"iteration\"\n[1m])",
+          "refId": "A"
+        }
+      ],
+      "title": "Number of Iterations started per Minute",
+      "type": "timeseries"
+    },
+    {
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 0
+        "y": 7
       },
       "id": 18,
       "panels": [],
@@ -60,7 +141,7 @@
         "h": 3,
         "w": 8,
         "x": 0,
-        "y": 1
+        "y": 8
       },
       "id": 27,
       "options": {
@@ -114,7 +195,7 @@
         "h": 3,
         "w": 8,
         "x": 8,
-        "y": 1
+        "y": 8
       },
       "id": 28,
       "options": {
@@ -158,6 +239,10 @@
               {
                 "color": "green",
                 "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
               }
             ]
           }
@@ -168,9 +253,9 @@
         "h": 3,
         "w": 8,
         "x": 16,
-        "y": 1
+        "y": 8
       },
-      "id": 8,
+      "id": 29,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
@@ -192,11 +277,11 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=REQUEST_SENT\" [10d])",
+          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=REQUEST_SENT\" [10d]) -\n  \ncount_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=VERIFIED\" [10d])",
           "refId": "A"
         }
       ],
-      "title": "Total Number of Proof Requests",
+      "title": "Number of Pending Proof Requests",
       "type": "stat"
     },
     {
@@ -226,7 +311,7 @@
         "h": 3,
         "w": 8,
         "x": 0,
-        "y": 4
+        "y": 11
       },
       "id": 6,
       "options": {
@@ -284,7 +369,7 @@
         "h": 3,
         "w": 8,
         "x": 8,
-        "y": 4
+        "y": 11
       },
       "id": 10,
       "options": {
@@ -328,10 +413,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 1
               }
             ]
           }
@@ -342,9 +423,9 @@
         "h": 3,
         "w": 8,
         "x": 16,
-        "y": 4
+        "y": 11
       },
-      "id": 29,
+      "id": 8,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
@@ -366,11 +447,11 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=REQUEST_SENT\" [10d]) -\n  \ncount_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=VERIFIED\" [10d])",
+          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=REQUEST_SENT\" [10d])",
           "refId": "A"
         }
       ],
-      "title": "Number of Pending Proof Requests",
+      "title": "Total Number of Proof Requests",
       "type": "stat"
     },
     {
@@ -459,7 +540,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 7
+        "y": 14
       },
       "id": 4,
       "options": {
@@ -602,7 +683,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 7
+        "y": 14
       },
       "id": 9,
       "options": {
@@ -762,7 +843,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 7
+        "y": 14
       },
       "id": 7,
       "options": {
@@ -865,7 +946,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 15
+        "y": 22
       },
       "id": 24,
       "options": {
@@ -964,7 +1045,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 15
+        "y": 22
       },
       "id": 25,
       "options": {
@@ -1078,7 +1159,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 15
+        "y": 22
       },
       "id": 26,
       "options": {
@@ -1111,7 +1192,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 23
+        "y": 30
       },
       "id": 31,
       "panels": [],
@@ -1173,7 +1254,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 24
+        "y": 31
       },
       "id": 33,
       "options": {
@@ -1285,7 +1366,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 24
+        "y": 31
       },
       "id": 34,
       "options": {
@@ -1397,7 +1478,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 24
+        "y": 31
       },
       "id": 35,
       "options": {
@@ -1450,7 +1531,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 32
+        "y": 39
       },
       "id": 22,
       "panels": [],
@@ -1484,7 +1565,7 @@
         "h": 3,
         "w": 24,
         "x": 0,
-        "y": 33
+        "y": 40
       },
       "id": 14,
       "options": {
@@ -1570,7 +1651,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 36
+        "y": 43
       },
       "id": 12,
       "options": {
@@ -1663,7 +1744,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 36
+        "y": 43
       },
       "id": 16,
       "options": {
@@ -1695,7 +1776,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 45
+        "y": 52
       },
       "id": 20,
       "panels": [],
@@ -1757,7 +1838,7 @@
         "h": 11,
         "w": 24,
         "x": 0,
-        "y": 46
+        "y": 53
       },
       "id": 2,
       "options": {
@@ -1792,8 +1873,8 @@
     "list": []
   },
   "time": {
-    "from": "2022-02-01T12:48:21.698Z",
-    "to": "2022-02-01T14:10:18.772Z"
+    "from": "now-30m",
+    "to": "now"
   },
   "timepicker": {},
   "timezone": "",
