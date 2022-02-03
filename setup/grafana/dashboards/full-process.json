@@ -1776,11 +1776,11 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "max(max_over_time({app=\"aries-load-generator\",level=\"INFO\"} |= \"type=database_size\" | logfmt | unwrap sizeInBytes [10m]))",
+          "expr": "max(max_over_time({app=\"aries-load-generator\",level=\"INFO\"} |= \"type=database_size\" | logfmt | unwrap sizeInBytes [10m])) / 1024 / 1024",
           "refId": "A"
         }
       ],
-      "title": "Wallet Database Size (in Bytes)",
+      "title": "Wallet Database Size (in MB)",
       "type": "timeseries"
     }
   ],
