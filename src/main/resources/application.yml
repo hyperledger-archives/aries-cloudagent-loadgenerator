@@ -24,7 +24,11 @@ holder:
         http-timeout: 60
 
 test-cases:
-    full-process:
-        active: true
+    full-process-max-parallel-iterations:
+        active: false
         number-of-iterations: 100
         number-of-parallel-iterations: 5
+    full-process-constant-load:
+        active: true
+        number-of-iterations: 100
+        number-of-iterations-per-minute: 30
