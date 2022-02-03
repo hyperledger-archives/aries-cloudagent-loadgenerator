@@ -87,22 +87,35 @@ start)
   ./von-network/manage start
   echo "Waiting for the ledger to start... (takes 45 seconds)"
   sleep 45
+
   echo "Registering issuer DID..."
   curl -d "{\"role\": \"ENDORSER\", \"seed\":\"$ISSUER_DID_SEED\"}" -H "Content-Type: application/json" -X POST $LEDGER_REGISTER_DID_ENDPOINT
+
   echo "Starting all aca-py related docker containers ..."
   docker-compose -f docker-compose.yml up -d
+
+  echo "Starting dashboard and logging containers ..."
+  docker-compose -f ./dashboard/docker-compose.yml up -d
   ;;
 stop)
   echo "Stopping the VON Network ..."
   ./von-network/manage stop
+
   echo "Stopping and removing any running aca-py containers ..."
   docker-compose -f docker-compose.yml rm -f -s
+
+  echo "Stopping and removing dashboard and logging containers ..."
+  docker-compose -f ./dashboard/docker-compose.yml rm -f -s
   ;;
 down)
   echo "Stopping the VON Network and deleting ledger data ..."
   ./von-network/manage down
+
   echo "Stopping and removing any running aca-py containers as well as volumes ..."
   docker-compose -f docker-compose.yml down -v
+
+  echo "Stopping and removing dashboard and logging containers as well as volumes ..."
+  docker-compose -f ./dashboard/docker-compose.yml down -v
   ;;
 logs)
   initEnv "$@"

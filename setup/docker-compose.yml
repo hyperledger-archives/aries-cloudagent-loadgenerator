@@ -1,31 +1,6 @@
 version: "3.7"
 services:
 
-  grafana:
-    container_name: grafana
-    image: grafana/grafana:latest
-    ports:
-      - "3000:3000"
-    volumes:
-      - grafana-volume:/var/lib/grafana
-      - ./grafana/grafana-provisioning:/etc/grafana/provisioning
-      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
-      - ./grafana/dashboards:/var/lib/grafana/dashboards
-    networks:
-      - acapy-load-test
-  loki:
-    container_name: loki
-    image: grafana/loki:2.4.2
-    ports:
-      - "3100:3100"
-    command: -config.file=/etc/loki/local-config.yaml
-    volumes:
-      - loki-volume:/data/loki
-      - ./loki/local-config.yaml:/etc/loki/local-config.yaml
-    depends_on:
-      - grafana
-    networks:
-      - acapy-load-test
   issuer-verifier-wallet-db:
     container_name: issuer-verifier-wallet-db
     image: ${POSTGRES_IMAGE}
@@ -36,7 +11,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     networks:
-      - acapy-load-test
+      - aries-load-test
     logging:
       driver: "json-file"
       options:
@@ -87,7 +62,7 @@ services:
       - issuer-verifier-wallet-db
       - tails-server
     networks:
-      - acapy-load-test
+      - aries-load-test
     logging:
       driver: "json-file"
       options:
@@ -105,7 +80,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     networks:
-      - acapy-load-test
+      - aries-load-test
     restart: always
 
   holder-acapy:
@@ -154,7 +129,7 @@ services:
       - holder-wallet-db
       - tails-server
     networks:
-      - acapy-load-test
+      - aries-load-test
     restart: always
   
   tails-server:
@@ -174,17 +149,15 @@ services:
     ports:
       - 6543:6543
     networks:
-      - acapy-load-test
+      - aries-load-test
     restart: always
 
 
 networks:
-  acapy-load-test:
-    name: acapy-load-test
+  aries-load-test:
+    name: aries-load-test
 
 volumes:
-  grafana-volume:
-  loki-volume:
   issuer-verifier-wallet-db-volume:
   holder-wallet-db-volume:
   tails-server-volume:
