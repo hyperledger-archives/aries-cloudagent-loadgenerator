@@ -21,7 +21,20 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "links": [],
+  "links": [
+    {
+      "asDropdown": false,
+      "icon": "doc",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": true,
+      "title": "Download PDF Report",
+      "tooltip": "",
+      "type": "link",
+      "url": "http://localhost:8686/api/v5/report/0Pe9llbnz"
+    }
+  ],
   "liveNow": false,
   "panels": [
     {
@@ -970,7 +983,7 @@
           "refId": "A"
         }
       ],
-      "title": "Connection Activation Rate (in Minutes)",
+      "title": "Connection Activation Rate (per Minute)",
       "type": "timeseries"
     },
     {
@@ -1069,7 +1082,7 @@
           "refId": "A"
         }
       ],
-      "title": " Credential Issuance Rate (in Minutes)",
+      "title": " Credential Issuance Rate (per Minute)",
       "type": "timeseries"
     },
     {
@@ -1183,7 +1196,7 @@
           "refId": "A"
         }
       ],
-      "title": " Proof Request Verification Rate (in Minutes)",
+      "title": " Proof Request Verification Rate (per Minute)",
       "type": "timeseries"
     },
     {
@@ -1873,8 +1886,8 @@
     "list": []
   },
   "time": {
-    "from": "now-30m",
-    "to": "now"
+    "from": "2022-02-03T18:33:14.729Z",
+    "to": "2022-02-03T18:35:39.758Z"
   },
   "timepicker": {},
   "timezone": "",
