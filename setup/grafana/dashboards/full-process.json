@@ -239,10 +239,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 1
               }
             ]
           }
@@ -255,7 +251,7 @@
         "x": 16,
         "y": 8
       },
-      "id": 29,
+      "id": 8,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
@@ -277,11 +273,11 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=REQUEST_SENT\" [10d]) -\n  \ncount_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=VERIFIED\" [10d])",
+          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=REQUEST_SENT\" [10d])",
           "refId": "A"
         }
       ],
-      "title": "Number of Pending Proof Requests",
+      "title": "Total Number of Proof Requests",
       "type": "stat"
     },
     {
@@ -413,6 +409,10 @@
               {
                 "color": "green",
                 "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
               }
             ]
           }
@@ -425,7 +425,7 @@
         "x": 16,
         "y": 11
       },
-      "id": 8,
+      "id": 29,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
@@ -447,11 +447,11 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=REQUEST_SENT\" [10d])",
+          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=REQUEST_SENT\" [10d]) -\n  \ncount_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=VERIFIED\" [10d])",
           "refId": "A"
         }
       ],
-      "title": "Total Number of Proof Requests",
+      "title": "Number of Pending Proof Requests",
       "type": "stat"
     },
     {
