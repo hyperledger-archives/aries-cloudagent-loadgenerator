@@ -19,7 +19,6 @@
 package com.bka.ssi.generator.domain.objects
 
 class ProofRequestDo(
-    val connectionId: String,
     val nonRevokedFrom: Long,
     val nonRevokedTo: Long,
     val requestedCredentials: List<CredentialRequestDo>
