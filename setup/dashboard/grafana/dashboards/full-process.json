@@ -979,11 +979,11 @@
             "uid": "P8E80F9AEF21F6940"
           },
           "expr": "rate(\n  {app=\"aries-load-generator\"}\n    |= \"type=connectionRecord\"\n    |= \"state=ACTIVE\"\n[1m])",
-          "legendFormat": "Connection Activations per Second",
+          "legendFormat": "Connection Activations",
           "refId": "A"
         }
       ],
-      "title": "Connection Activation Rate (per Minute)",
+      "title": "Connection Activation Rate (per Second)",
       "type": "timeseries"
     },
     {
@@ -1051,6 +1051,21 @@
                 }
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Credentials Issued"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
           }
         ]
       },
@@ -1078,11 +1093,11 @@
             "uid": "P8E80F9AEF21F6940"
           },
           "expr": "rate(\n  {app=\"aries-load-generator\"}\n    |= \"type=credentialRecord\"\n    |= \"state=CREDENTIAL_ACKED\"\n[1m])",
-          "legendFormat": "Credentials Issued per Second",
+          "legendFormat": "Credentials Issued",
           "refId": "A"
         }
       ],
-      "title": " Credential Issuance Rate (per Minute)",
+      "title": " Credential Issuance Rate (per Second)",
       "type": "timeseries"
     },
     {
@@ -1165,6 +1180,21 @@
                 }
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Proof Requests verified"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
           }
         ]
       },
@@ -1192,11 +1222,11 @@
             "uid": "P8E80F9AEF21F6940"
           },
           "expr": "rate(\n  {app=\"aries-load-generator\"}\n    |= \"type=presentationRecord\"\n    |= \"state=VERIFIED\"\n[1m])",
-          "legendFormat": "Proof Requests verified per Second",
+          "legendFormat": "Proof Requests verified",
           "refId": "A"
         }
       ],
-      "title": " Proof Request Verification Rate (per Minute)",
+      "title": " Proof Request Verification Rate (per Second)",
       "type": "timeseries"
     },
     {
@@ -1886,8 +1916,8 @@
     "list": []
   },
   "time": {
-    "from": "2022-02-03T18:33:14.729Z",
-    "to": "2022-02-03T18:35:39.758Z"
+    "from": "2022-02-04T05:37:36.715Z",
+    "to": "2022-02-04T05:39:08.524Z"
   },
   "timepicker": {},
   "timezone": "",
