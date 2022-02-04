@@ -16,7 +16,7 @@ services:
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
       - ./grafana/dashboards:/var/lib/grafana/dashboards
     networks:
-      - aries-load-test
+      - dashboard-and-logging
 
   # https://grafana.com/grafana/plugins/grafana-image-renderer/#installation
   grafana-image-renderer:
@@ -25,7 +25,7 @@ services:
     ports:
       - 8081
     networks:
-      - aries-load-test
+      - dashboard-and-logging
 
   # https://github.com/IzakMarais/reporter
   grafana-pdf-exporter:
@@ -35,7 +35,7 @@ services:
     ports:
       - 8686:8686
     networks:
-      - aries-load-test
+      - dashboard-and-logging
 
   loki:
     container_name: loki
@@ -49,11 +49,11 @@ services:
     depends_on:
       - grafana
     networks:
-      - aries-load-test
+      - dashboard-and-logging
 
 networks:
-  aries-load-test:
-    name: aries-load-test
+  dashboard-and-logging:
+    name: dashboard-and-logging
 
 volumes:
   grafana-volume:
