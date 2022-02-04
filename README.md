@@ -31,7 +31,7 @@ The load generator as well as the test case to run is configured via the [applic
 test-cases:
   full-process:
     active: true
-    number-of-iterations: 10
+    number-of-total-iterations: 10
     number-of-parallel-iterations: 2
 ```
 
