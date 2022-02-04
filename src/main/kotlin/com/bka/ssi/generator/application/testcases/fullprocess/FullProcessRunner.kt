@@ -56,9 +56,9 @@ abstract class FullProcessRunner(
             return
         }
 
-        issuerVerifierAriesClient.issueCredential(
+        issuerVerifierAriesClient.issueCredentialToConnection(
+            connectionRecord.connectionId,
             CredentialDo(
-                connectionRecord.connectionId,
                 credentialDefinitionId,
                 mapOf(
                     "first name" to "Holder",
@@ -75,9 +75,9 @@ abstract class FullProcessRunner(
             return
         }
 
-        issuerVerifierAriesClient.sendProofRequest(
+        issuerVerifierAriesClient.sendProofRequestToConnection(
+            credentialExchangeRecord.connectionId,
             ProofRequestDo(
-                credentialExchangeRecord.connectionId,
                 Instant.now().toEpochMilli(),
                 Instant.now().toEpochMilli(),
                 listOf(
