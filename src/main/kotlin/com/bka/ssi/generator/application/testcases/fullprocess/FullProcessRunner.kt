@@ -11,10 +11,10 @@ import java.time.Instant
 abstract class FullProcessRunner(
     private val issuerVerifierAriesClient: IAriesClient,
     private val holderAriesClient: IAriesClient,
-    private val numberOfIterations: Int
+    private val numberOfTotalIterations: Int
 ) : TestRunner() {
 
-    private companion object {
+    protected companion object {
         var credentialDefinitionId = ""
         var numberOfIterationsStarted = 0
     }
@@ -37,10 +37,6 @@ abstract class FullProcessRunner(
     }
 
     protected fun startIteration() {
-        if (terminateRunner()) {
-            return
-        }
-
         val connectionInvitation = issuerVerifierAriesClient.createConnectionInvitation("holder-acapy")
 
         holderAriesClient.receiveConnectionInvitation(connectionInvitation)
@@ -48,11 +44,11 @@ abstract class FullProcessRunner(
 
         FullProcessRunner.numberOfIterationsStarted++
 
-        logger.info("Started ${FullProcessRunner.numberOfIterationsStarted} of $numberOfIterations iteration")
+        logger.info("Started ${FullProcessRunner.numberOfIterationsStarted} of $numberOfTotalIterations iteration")
     }
 
-    private fun terminateRunner(): Boolean {
-        return FullProcessRunner.numberOfIterationsStarted >= numberOfIterations
+    protected fun terminateRunner(): Boolean {
+        return FullProcessRunner.numberOfIterationsStarted >= numberOfTotalIterations
     }
 
     override fun handleConnectionRecord(connectionRecord: ConnectionRecordDo) {
@@ -102,5 +98,9 @@ abstract class FullProcessRunner(
         }
 
         logger.info("Received valid proof presentation")
+
+        finishedIteration()
     }
+
+    abstract fun finishedIteration()
 }

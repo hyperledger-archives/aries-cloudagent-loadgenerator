@@ -5,8 +5,9 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Service
-import java.util.*
-import kotlin.concurrent.schedule
+import java.util.concurrent.Executors
+import java.util.concurrent.ScheduledFuture
+import java.util.concurrent.TimeUnit
 
 
 @Service
@@ -17,23 +18,37 @@ import kotlin.concurrent.schedule
 class FullProcessConstantLoadRunner(
     @Qualifier("IssuerVerifier") private val issuerVerifierAriesClient: IAriesClient,
     @Qualifier("Holder") private val holderAriesClient: IAriesClient,
-    @Value("\${test-cases.full-process-constant-load.number-of-iterations}") val numberOfIterations: Int,
-    @Value("\${test-cases.full-process-constant-load.number-of-iterations-per-minute}") val numberOfIterationsPerMinute: Int
+    @Value("\${test-cases.full-process-constant-load.number-of-total-iterations}") val numberOfTotalIterations: Int,
+    @Value("\${test-cases.full-process-constant-load.number-of-iterations-per-minute}") val numberOfIterationsPerMinute: Int,
+    @Value("\${test-cases.full-process-constant-load.core-thread-pool-size}")
+    val coreThreadPoolSize: Int
 ) : FullProcessRunner(
     issuerVerifierAriesClient,
     holderAriesClient,
-    numberOfIterations
+    numberOfTotalIterations
 ) {
+
+    lateinit var scheduledFuture: ScheduledFuture<*>
 
     override fun run() {
         logger.info("Starting 'FullProcessTest'...")
-        logger.info("Number of Iterations: $numberOfIterations")
+        logger.info("Number of Iterations: $numberOfTotalIterations")
         logger.info("Number of Iterations per Minute: $numberOfIterationsPerMinute")
 
         setUp()
 
-        Timer("Start Iteration", true).schedule(0L, 60000L / numberOfIterationsPerMinute) {
-            startIteration()
+        val executor = Executors.newScheduledThreadPool(coreThreadPoolSize)
+        scheduledFuture = executor.scheduleAtFixedRate(
+            Runnable { startIteration() },
+            0,
+            60L / numberOfIterationsPerMinute,
+            TimeUnit.SECONDS
+        )
+    }
+
+    override fun finishedIteration() {
+        if (terminateRunner()) {
+            scheduledFuture.cancel(false)
         }
     }
 
