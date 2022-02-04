@@ -96,13 +96,13 @@ class AcaPyAriesClient(
         }
     }
 
-    override fun issueCredential(credentialDo: CredentialDo) {
+    override fun issueCredentialToConnection(connectionId: String, credentialDo: CredentialDo) {
         val credentialExchange = acaPy.issueCredentialSend(
             V1CredentialProposalRequest(
                 true,
                 true,
                 "Credential Offer",
-                credentialDo.connectionId,
+                connectionId,
                 credentialDo.credentialDefinitionId,
                 CredentialPreview(
                     credentialDo.claims.map { CredentialAttributes(it.key, it.value) }
@@ -121,10 +121,10 @@ class AcaPyAriesClient(
         }
     }
 
-    override fun sendProofRequest(proofRequestDo: ProofRequestDo) {
+    override fun sendProofRequestToConnection(connectionId: String, proofRequestDo: ProofRequestDo) {
         acaPy.presentProofSendRequest(
             PresentProofRequest(
-                proofRequestDo.connectionId,
+                connectionId,
                 PresentProofRequest.ProofRequest.builder()
                     .name("Proof Request")
                     .nonRevoked(
