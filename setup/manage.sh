@@ -91,31 +91,34 @@ start)
   echo "Registering issuer DID..."
   curl -d "{\"role\": \"ENDORSER\", \"seed\":\"$ISSUER_DID_SEED\"}" -H "Content-Type: application/json" -X POST $LEDGER_REGISTER_DID_ENDPOINT
 
-  echo "Starting all aca-py related docker containers ..."
-  docker-compose -f docker-compose.yml up -d
-
   echo "Starting dashboard and logging containers ..."
   docker-compose -f ./dashboard/docker-compose.yml up -d
+
+  echo "Provisioning AcaPys and Wallet DBs ..."
+  docker-compose -f docker-compose.yml up -d
+
+  echo "Starting all AcaPy related docker containers ..."
+  docker-compose -f docker-compose.yml up -d --scale issuer-verifier-acapy=2
   ;;
 stop)
   echo "Stopping the VON Network ..."
   ./von-network/manage stop
 
-  echo "Stopping and removing any running aca-py containers ..."
-  docker-compose -f docker-compose.yml rm -f -s
-
   echo "Stopping and removing dashboard and logging containers ..."
   docker-compose -f ./dashboard/docker-compose.yml rm -f -s
+
+  echo "Stopping and removing any running AcaPy containers ..."
+  docker-compose -f docker-compose.yml rm -f -s
   ;;
 down)
   echo "Stopping the VON Network and deleting ledger data ..."
   ./von-network/manage down
 
-  echo "Stopping and removing any running aca-py containers as well as volumes ..."
-  docker-compose -f docker-compose.yml down -v
-
   echo "Stopping and removing dashboard and logging containers as well as volumes ..."
   docker-compose -f ./dashboard/docker-compose.yml down -v
+
+  echo "Stopping and removing any running AcaPy containers as well as volumes ..."
+  docker-compose -f docker-compose.yml down -v
   ;;
 logs)
   initEnv "$@"
