@@ -9,4 +9,6 @@ interface IAriesClient {
     fun receiveConnectionInvitation(connectionInvitationDo: ConnectionInvitationDo)
     fun issueCredentialToConnection(connectionId: String, credentialDo: CredentialDo)
     fun sendProofRequestToConnection(connectionId: String, proofRequestDo: ProofRequestDo)
+    fun createConnectionlessProofRequest(proofRequestDo: ProofRequestDo): ConnectionlessProofRequestDo
+    fun receiveConnectionlessProofRequest(connectionlessProofRequestDo: ConnectionlessProofRequestDo)
 }
