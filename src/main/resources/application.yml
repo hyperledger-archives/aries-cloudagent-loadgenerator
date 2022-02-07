@@ -24,12 +24,15 @@ holder:
         http-timeout: 60
 
 test-cases:
-    full-process-max-parallel-iterations:
-        active: false
-        number-of-total-iterations: 100
-        number-of-parallel-iterations: 5
-    full-process-constant-load:
-        active: true
-        number-of-total-iterations: 100
-        number-of-iterations-per-minute: 30
-        core-thread-pool-size: 4
+    full-process:
+        max-parallel-iterations-runner:
+            active: true
+            number-of-total-iterations: 100
+            number-of-parallel-iterations: 5
+            use-connectionless-proof-requests: false
+        constant-load-runner:
+            active: false
+            number-of-total-iterations: 100
+            number-of-iterations-per-minute: 30
+            core-thread-pool-size: 4
+            use-connectionless-proof-requests: false

@@ -8,18 +8,20 @@ import org.springframework.stereotype.Service
 
 @Service
 @ConditionalOnProperty(
-    name = ["test-cases.full-process-max-parallel-iterations.active"],
+    name = ["test-cases.full-process.max-parallel-iterations-runner.active"],
     matchIfMissing = false
 )
 class FullProcessMaxParallelIterationsRunner(
     @Qualifier("IssuerVerifier") private val issuerVerifierAriesClient: IAriesClient,
     @Qualifier("Holder") private val holderAriesClient: IAriesClient,
-    @Value("\${test-cases.full-process-max-parallel-iterations.number-of-total-iterations}") val numberOfTotalIterations: Int,
-    @Value("\${test-cases.full-process-max-parallel-iterations.number-of-parallel-iterations}") val numberOfParallelIterations: Int
+    @Value("\${test-cases.full-process.max-parallel-iterations-runner.number-of-total-iterations}") val numberOfTotalIterations: Int,
+    @Value("\${test-cases.full-process.max-parallel-iterations-runner.number-of-parallel-iterations}") val numberOfParallelIterations: Int,
+    @Value("\${test-cases.full-process.max-parallel-iterations-runner.use-connectionless-proof-requests}") val useConnectionlessProofRequests: Boolean
 ) : FullProcessRunner(
     issuerVerifierAriesClient,
     holderAriesClient,
-    numberOfTotalIterations
+    numberOfTotalIterations,
+    useConnectionlessProofRequests
 ) {
 
     override fun run() {
