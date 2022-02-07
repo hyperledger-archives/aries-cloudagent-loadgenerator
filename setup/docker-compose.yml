@@ -124,7 +124,8 @@ services:
         ${ACAPY_DEBUG_OPTIONS}"
     ]
     ports:
-      - "127.0.0.1:10010:10010" # AcaPy Admin API
+      - "10010:10010" # AcaPy Admin API
+      - "10011:10011" # DIDComm Endpoint
     depends_on:
       - holder-wallet-db
       - tails-server

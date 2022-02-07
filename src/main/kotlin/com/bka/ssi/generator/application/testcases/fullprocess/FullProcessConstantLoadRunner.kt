@@ -12,20 +12,21 @@ import java.util.concurrent.TimeUnit
 
 @Service
 @ConditionalOnProperty(
-    name = ["test-cases.full-process-constant-load.active"],
+    name = ["test-cases.full-process.constant-load-runner.active"],
     matchIfMissing = false
 )
 class FullProcessConstantLoadRunner(
     @Qualifier("IssuerVerifier") private val issuerVerifierAriesClient: IAriesClient,
     @Qualifier("Holder") private val holderAriesClient: IAriesClient,
-    @Value("\${test-cases.full-process-constant-load.number-of-total-iterations}") val numberOfTotalIterations: Int,
-    @Value("\${test-cases.full-process-constant-load.number-of-iterations-per-minute}") val numberOfIterationsPerMinute: Int,
-    @Value("\${test-cases.full-process-constant-load.core-thread-pool-size}")
-    val coreThreadPoolSize: Int
+    @Value("\${test-cases.full-process.constant-load-runner.number-of-total-iterations}") val numberOfTotalIterations: Int,
+    @Value("\${test-cases.full-process.constant-load-runner.number-of-iterations-per-minute}") val numberOfIterationsPerMinute: Int,
+    @Value("\${test-cases.full-process.constant-load-runner.core-thread-pool-size}") val coreThreadPoolSize: Int,
+    @Value("\${test-cases.full-process.constant-load-runner.use-connectionless-proof-requests}") val useConnectionlessProofRequests: Boolean
 ) : FullProcessRunner(
     issuerVerifierAriesClient,
     holderAriesClient,
-    numberOfTotalIterations
+    numberOfTotalIterations,
+    useConnectionlessProofRequests
 ) {
 
     lateinit var scheduledFuture: ScheduledFuture<*>

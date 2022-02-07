@@ -11,7 +11,8 @@ import java.time.Instant
 abstract class FullProcessRunner(
     private val issuerVerifierAriesClient: IAriesClient,
     private val holderAriesClient: IAriesClient,
-    private val numberOfTotalIterations: Int
+    private val numberOfTotalIterations: Int,
+    private val useConnectionLessProofRequests: Boolean
 ) : TestRunner() {
 
     protected companion object {
@@ -75,19 +76,36 @@ abstract class FullProcessRunner(
             return
         }
 
-        issuerVerifierAriesClient.sendProofRequestToConnection(
-            credentialExchangeRecord.connectionId,
-            ProofRequestDo(
-                Instant.now().toEpochMilli(),
-                Instant.now().toEpochMilli(),
-                listOf(
-                    CredentialRequestDo(
-                        listOf("first name", "last name"),
-                        credentialDefinitionId
+        if (useConnectionLessProofRequests) {
+            val connectionLessProofRequest = issuerVerifierAriesClient.createConnectionlessProofRequest(
+                ProofRequestDo(
+                    Instant.now().toEpochMilli(),
+                    Instant.now().toEpochMilli(),
+                    listOf(
+                        CredentialRequestDo(
+                            listOf("first name", "last name"),
+                            credentialDefinitionId
+                        )
                     )
                 )
             )
-        )
+
+            holderAriesClient.receiveConnectionlessProofRequest(connectionLessProofRequest)
+        } else {
+            issuerVerifierAriesClient.sendProofRequestToConnection(
+                credentialExchangeRecord.connectionId,
+                ProofRequestDo(
+                    Instant.now().toEpochMilli(),
+                    Instant.now().toEpochMilli(),
+                    listOf(
+                        CredentialRequestDo(
+                            listOf("first name", "last name"),
+                            credentialDefinitionId
+                        )
+                    )
+                )
+            )
+        }
 
         logger.info("Send proof request")
     }

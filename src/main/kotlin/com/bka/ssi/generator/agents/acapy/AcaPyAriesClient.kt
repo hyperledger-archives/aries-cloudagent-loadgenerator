@@ -122,7 +122,7 @@ class AcaPyAriesClient(
     }
 
     override fun sendProofRequestToConnection(connectionId: String, proofRequestDo: ProofRequestDo) {
-        acaPy.presentProofSendRequest(
+        val presentationExchangeRecord = acaPy.presentProofSendRequest(
             PresentProofRequest(
                 connectionId,
                 PresentProofRequest.ProofRequest.builder()
@@ -152,5 +152,55 @@ class AcaPyAriesClient(
                 "Proof Request"
             )
         )
+
+        if (presentationExchangeRecord.isEmpty) {
+            throw Exception("Failed to create and send proof request to connectionId.")
+        }
+    }
+
+    override fun createConnectionlessProofRequest(proofRequestDo: ProofRequestDo): ConnectionlessProofRequestDo {
+        val presentationExchangeRecord = acaPy.presentProofCreateRequest(
+            PresentProofRequest(
+                null,
+                PresentProofRequest.ProofRequest.builder()
+                    .name("Proof Request")
+                    .nonRevoked(
+                        PresentProofRequest.ProofRequest.ProofNonRevoked(
+                            proofRequestDo.nonRevokedFrom,
+                            proofRequestDo.nonRevokedTo
+                        )
+                    )
+                    .requestedAttributes(
+                        proofRequestDo.requestedCredentials.mapIndexed { index: Int, credentialRequestDo: CredentialRequestDo ->
+                            "${index}_credential" to PresentProofRequest.ProofRequest.ProofRequestedAttributes.builder()
+                                .names(credentialRequestDo.claims)
+                                .restriction(
+                                    Gson().fromJson(
+                                        "{\"cred_def_id\": \"${credentialRequestDo.credentialDefinitionId}\"}",
+                                        JsonObject::class.java
+                                    )
+                                )
+                                .build()
+                        }.toMap()
+                    )
+                    .version("1.0")
+                    .build(),
+                false,
+                "Proof Request"
+            )
+        )
+
+        if (presentationExchangeRecord.isEmpty) {
+            throw Exception("Failed to create connectionless proof request.")
+        }
+
+        return ConnectionlessProofRequestDo(
+            10,
+            10,
+            emptyList()
+        )
+    }
+
+    override fun receiveConnectionlessProofRequest(connectionlessProofRequestDo: ConnectionlessProofRequestDo) {
     }
 }
