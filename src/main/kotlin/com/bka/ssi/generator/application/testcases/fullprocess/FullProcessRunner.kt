@@ -40,8 +40,12 @@ abstract class FullProcessRunner(
     protected fun startIteration() {
         val connectionInvitation = issuerVerifierAriesClient.createConnectionInvitation("holder-acapy")
 
-        holderAriesClient.receiveConnectionInvitation(connectionInvitation)
-
+        try {
+            holderAriesClient.receiveConnectionInvitation(connectionInvitation)
+        } catch (exception: Exception) {
+            finishedIteration()
+            return
+        }
 
         FullProcessRunner.numberOfIterationsStarted++
 
