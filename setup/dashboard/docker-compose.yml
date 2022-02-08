@@ -56,8 +56,37 @@ services:
     image: prom/prometheus:v2.33.1
     ports:
       - 9090:9090
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
     volumes:
-      - ./prometheus:/etc/prometheus
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    depends_on:
+      - cadvisor
+    networks:
+      - dashboard-and-logging
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.39.3
+    container_name: cadvisor
+    command:
+      - '-port=9091'
+    ports:
+      - 9091:9091
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    depends_on:
+      - redis
+    networks:
+      - dashboard-and-logging
+
+  redis:
+    image: redis:6
+    container_name: redis
+    ports:
+      - 6379:6379
     networks:
       - dashboard-and-logging
 
