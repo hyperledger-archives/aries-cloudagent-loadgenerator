@@ -38,7 +38,7 @@ services:
         --invite-base-url didcomm://aries_connection_invitation \
         --admin-insecure-mode \
         --label issuer_verifier_acapy \
-        --wallet-type indy \
+        --wallet-type ${WALLET_TYPE} \
         --wallet-name ${POSTGRES_DB} \
         --wallet-key key \
         --wallet-storage-type postgres_storage \
@@ -109,7 +109,7 @@ services:
         --ledger-pool-name ${LEDGER_POOL_NAME} \
         --admin-insecure-mode \
         --label holder_acapy \
-        --wallet-type indy \
+        --wallet-type ${WALLET_TYPE} \
         --wallet-name ${POSTGRES_DB} \
         --wallet-key key \
         --wallet-storage-type postgres_storage \

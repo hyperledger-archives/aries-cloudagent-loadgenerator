@@ -42,8 +42,8 @@ class FullProcessConstantLoadRunner(
         scheduledFuture = executor.scheduleAtFixedRate(
             Runnable { startIteration() },
             0,
-            60L / numberOfIterationsPerMinute,
-            TimeUnit.SECONDS
+            60000L / numberOfIterationsPerMinute,
+            TimeUnit.MILLISECONDS
         )
     }
 
