@@ -98,7 +98,7 @@ start)
   docker-compose -f docker-compose.yml up -d
 
   echo "Starting all AcaPy related docker containers ..."
-  docker-compose -f docker-compose.yml up -d --scale issuer-verifier-acapy=2
+  docker-compose -f docker-compose.yml up -d --scale issuer-verifier-acapy=10 --scale holder-acapy=20
   ;;
 stop)
   echo "Stopping the VON Network ..."
