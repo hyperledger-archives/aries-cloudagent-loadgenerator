@@ -36,11 +36,11 @@ test-runners:
 
 test-flows:
     full-flow:
-        active: true
+        active: false
         use-connectionless-proof-requests: false
         use-connectionless-credential-issuance: false
     issuer-flow:
-        active: false
+        active: true
         use-connectionless-credential-issuance: false
     connection-request-flow:
         active: false
