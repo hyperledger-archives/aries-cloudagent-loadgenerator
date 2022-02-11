@@ -1,28 +1,35 @@
-package com.bka.ssi.generator.application.testcases.fullprocess
+package com.bka.ssi.generator.application.testflows.fullflow
 
-import com.bka.ssi.generator.application.testcases.TestRunner
+import com.bka.ssi.generator.application.testrunners.TestRunner
 import com.bka.ssi.generator.domain.objects.*
 import com.bka.ssi.generator.domain.services.IAriesClient
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
+import org.springframework.stereotype.Service
 import java.time.Instant
 
 
-abstract class FullProcessRunner(
-    private val issuerVerifierAriesClient: IAriesClient,
-    private val holderAriesClient: IAriesClient,
-    private val numberOfTotalIterations: Int,
-    private val useConnectionLessProofRequests: Boolean
-) : TestRunner() {
+@Service
+@ConditionalOnProperty(
+    name = ["test-flows.full-flow.active"],
+    matchIfMissing = false
+)
+class FullFlow(
+    @Qualifier("IssuerVerifier") private val issuerVerifierAriesClient: IAriesClient,
+    @Qualifier("Holder") private val holderAriesClient: IAriesClient,
+    @Value("\${test-flows.full-flow.use-connectionless-proof-requests}") private val useConnectionlessProofRequests: Boolean
+) : TestFlow() {
 
     protected companion object {
         var credentialDefinitionId = ""
-        var numberOfIterationsStarted = 0
+        var testRunner: TestRunner? = null
     }
 
-    var logger: Logger = LoggerFactory.getLogger(FullProcessRunner::class.java)
+    override fun initialize(testRunner: TestRunner) {
+        logger.info("Initializing test flow...")
+        FullFlow.testRunner = testRunner
 
-    protected fun setUp() {
         val credentialDefinition = issuerVerifierAriesClient.createSchemaAndCredentialDefinition(
             SchemaDo(
                 listOf("first name", "last name"),
@@ -31,29 +38,21 @@ abstract class FullProcessRunner(
             )
         )
 
+        credentialDefinitionId = credentialDefinition.id
 
-        FullProcessRunner.credentialDefinitionId = credentialDefinition.id
-
-        logger.info("Setup completed")
+        logger.info("Initialization completed.")
     }
 
-    protected fun startIteration() {
+    override fun startIteration() {
         val connectionInvitation = issuerVerifierAriesClient.createConnectionInvitation("holder-acapy")
 
         try {
             holderAriesClient.receiveConnectionInvitation(connectionInvitation)
         } catch (exception: Exception) {
-            finishedIteration()
+            logger.error("${exception.message} (Connection Invitation: ${connectionInvitation.toString()})")
+            testRunner?.finishedIteration()
             return
         }
-
-        FullProcessRunner.numberOfIterationsStarted++
-
-        logger.info("Started ${FullProcessRunner.numberOfIterationsStarted} of $numberOfTotalIterations iteration")
-    }
-
-    protected fun terminateRunner(): Boolean {
-        return FullProcessRunner.numberOfIterationsStarted >= numberOfTotalIterations
     }
 
     override fun handleConnectionRecord(connectionRecord: ConnectionRecordDo) {
@@ -80,7 +79,7 @@ abstract class FullProcessRunner(
             return
         }
 
-        if (useConnectionLessProofRequests) {
+        if (useConnectionlessProofRequests) {
             val connectionLessProofRequest = issuerVerifierAriesClient.createConnectionlessProofRequest(
                 ProofRequestDo(
                     Instant.now().toEpochMilli(),
@@ -121,8 +120,6 @@ abstract class FullProcessRunner(
 
         logger.info("Received valid proof presentation")
 
-        finishedIteration()
+        testRunner?.finishedIteration()
     }
-
-    abstract fun finishedIteration()
 }

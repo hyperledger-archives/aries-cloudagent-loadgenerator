@@ -112,7 +112,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time(\n  {app=\"aries-load-generator\"}\n    |= \"Started\"\n    |= \"of\"\n    |= \"iteration\"\n[1m])",
+          "expr": "count_over_time(\n  {app=\"aries-load-generator\"}\n    |= \"Finished\"\n    |= \"of\"\n    |= \"iterations\"\n[1m])",
           "refId": "A"
         }
       ],
@@ -172,7 +172,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -226,7 +226,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -280,7 +280,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -338,7 +338,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -396,7 +396,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -454,7 +454,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -1635,7 +1635,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -1693,7 +1693,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -1980,14 +1980,14 @@
     }
   ],
   "refresh": false,
-  "schemaVersion": 35,
+  "schemaVersion": 34,
   "style": "dark",
   "tags": [],
   "templating": {
     "list": []
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {},
