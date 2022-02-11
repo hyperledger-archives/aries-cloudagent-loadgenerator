@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service
 class IssuerFlow(
     @Qualifier("IssuerVerifier") private val issuerVerifierAriesClient: IAriesClient,
     @Qualifier("Holder") private val holderAriesClient: IAriesClient,
-    @Value("\${test-flows.full-flow.use-connectionless-credential-issuance}") private val useConnectionlessCredentialIssuance: Boolean
+    @Value("\${test-flows.full-flow.use-oob-credential-issuance}") private val useOobCredentialIssuance: Boolean
 ) : TestFlow() {
 
     protected companion object {

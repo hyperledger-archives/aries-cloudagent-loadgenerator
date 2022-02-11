@@ -47,19 +47,19 @@ test-runners:
 test-flows:
     full-flow:
         active: true
-        use-connectionless-proof-requests: false
-        use-connectionless-credential-issuance: false
+        use-oob-proof-requests: false
+        use-oob-credential-issuance: false
     issuer-flow:
         active: false
-        use-connectionless-credential-issuance: false
+        use-oob-credential-issuance: false
     connection-request-flow:
         active: false
     credential-issuance-flow:
         active: false
-        use-connectionless-credential-issuance: false
+        use-oob-credential-issuance: false
     proof-request-flow:
         active: false
-        use-connectionless-proof-requests: false
+        use-oob-proof-requests: false
 ```
 
 Only one test case should be set to `active: true` at a time. This test case will **automatically be executed** once the
