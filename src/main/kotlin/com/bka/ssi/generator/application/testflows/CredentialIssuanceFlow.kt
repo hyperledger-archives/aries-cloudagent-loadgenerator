@@ -11,19 +11,20 @@ import org.springframework.stereotype.Service
 
 @Service
 @ConditionalOnProperty(
-    name = ["test-flows.issuer-flow.active"],
+    name = ["test-flows.credential-issuance-flow.active"],
     matchIfMissing = false
 )
-class IssuerFlow(
+class CredentialIssuanceFlow(
     @Qualifier("IssuerVerifier") private val issuerVerifierAriesClient: IAriesClient,
     @Qualifier("Holder") private val holderAriesClient: IAriesClient,
-    @Value("\${test-flows.issuer-flow.use-revocable-credentials}") private val useRevocableCredentials: Boolean,
-    @Value("\${test-flows.issuer-flow.revocation-registry-size}") private val revocationRegistrySize: Int,
-    @Value("\${test-flows.issuer-flow.use-oob-credential-issuance}") private val useOobCredentialIssuance: Boolean,
+    @Value("\${test-flows.credential-issuance-flow.use-revocable-credentials}") private val useRevocableCredentials: Boolean,
+    @Value("\${test-flows.credential-issuance-flow.revocation-registry-size}") private val revocationRegistrySize: Int,
+    @Value("\${test-flows.credential-issuance-flow.use-oob-credential-issuance}") private val useOobCredentialIssuance: Boolean,
 ) : TestFlow() {
 
     protected companion object {
         var credentialDefinitionId = ""
+        var connectionId = ""
         var testRunner: TestRunner? = null
     }
 
@@ -43,7 +44,11 @@ class IssuerFlow(
         )
         credentialDefinitionId = credentialDefinition.id
 
-        testRunner.finishedInitialization()
+        if (useOobCredentialIssuance) {
+            testRunner.finishedInitialization()
+        } else {
+            initiateConnection()
+        }
     }
 
     override fun startIteration() {
@@ -52,7 +57,16 @@ class IssuerFlow(
             return
         }
 
-        initiateConnection()
+        issuerVerifierAriesClient.issueCredentialToConnection(
+            connectionId,
+            CredentialDo(
+                credentialDefinitionId,
+                mapOf(
+                    "first name" to "Holder",
+                    "last name" to "Mustermann"
+                )
+            )
+        )
     }
 
     private fun issueCredentialOob() {
@@ -74,10 +88,11 @@ class IssuerFlow(
 
         try {
             holderAriesClient.receiveConnectionInvitation(connectionInvitation)
+
         } catch (exception: Exception) {
             logger.error("${exception.message} (Connection Invitation: ${connectionInvitation.toString()})")
             testRunner?.finishedIteration()
-            return
+            throw Exception("Unable to establish connection with holder.")
         }
     }
 
@@ -88,17 +103,9 @@ class IssuerFlow(
 
         logger.info("Established new connection")
 
-        issuerVerifierAriesClient.issueCredentialToConnection(
-            connectionRecord.connectionId,
-            CredentialDo(
-                credentialDefinitionId,
-                mapOf(
-                    "first name" to "Holder",
-                    "last name" to "Mustermann"
-                )
-            )
-        )
+        connectionId = connectionRecord.connectionId
 
+        testRunner?.finishedInitialization()
     }
 
     override fun handleCredentialExchangeRecord(credentialExchangeRecord: CredentialExchangeRecordDo) {
