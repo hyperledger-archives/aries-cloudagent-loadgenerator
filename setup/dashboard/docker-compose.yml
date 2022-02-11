@@ -15,6 +15,10 @@ services:
       - ./grafana/grafana-provisioning:/etc/grafana/provisioning
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
       - ./grafana/dashboards:/var/lib/grafana/dashboards
+    depends_on:
+      - grafana-image-renderer
+      - grafana-pdf-exporter
+      - loki
     networks:
       - dashboard-and-logging
 
