@@ -1,4 +1,4 @@
-package com.bka.ssi.generator.application.testflows.fullflow
+package com.bka.ssi.generator.application.testflows
 
 import com.bka.ssi.generator.application.testrunners.TestRunner
 import com.bka.ssi.generator.domain.services.IAriesObserver
