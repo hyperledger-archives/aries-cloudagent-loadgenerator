@@ -23,16 +23,30 @@ holder:
         url: 'http://localhost:10010'
         http-timeout: 60
 
-test-cases:
-    full-process:
-        max-parallel-iterations-runner:
-            active: true
-            number-of-total-iterations: 100
-            number-of-parallel-iterations: 5
-            use-connectionless-proof-requests: false
-        constant-load-runner:
-            active: false
-            number-of-total-iterations: 100
-            number-of-iterations-per-minute: 30
-            core-thread-pool-size: 4
-            use-connectionless-proof-requests: false
+test-runners:
+    max-parallel-iterations-runner:
+        active: false
+        number-of-total-iterations: 100
+        number-of-parallel-iterations: 5
+    constant-load-runner:
+        active: true
+        number-of-total-iterations: 100
+        number-of-iterations-per-minute: 30
+        core-thread-pool-size: 4
+
+test-flows:
+    full-flow:
+        active: true
+        use-connectionless-proof-requests: false
+        use-connectionless-credential-issuance: false
+    issuer-flow:
+        active: false
+        use-connectionless-credential-issuance: false
+    connection-request-flow:
+        active: false
+    credential-issuance-flow:
+        active: false
+        use-connectionless-credential-issuance: false
+    proof-request-flow:
+        active: false
+        use-connectionless-proof-requests: false
