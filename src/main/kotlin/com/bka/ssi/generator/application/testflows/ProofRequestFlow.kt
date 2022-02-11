@@ -7,19 +7,20 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Service
+import java.time.Instant
 
 
 @Service
 @ConditionalOnProperty(
-    name = ["test-flows.credential-issuance-flow.active"],
+    name = ["test-flows.proof-request-flow.active"],
     matchIfMissing = false
 )
-class CredentialIssuanceFlow(
+class ProofRequestFlow(
     @Qualifier("IssuerVerifier") private val issuerVerifierAriesClient: IAriesClient,
     @Qualifier("Holder") private val holderAriesClient: IAriesClient,
-    @Value("\${test-flows.credential-issuance-flow.use-revocable-credentials}") private val useRevocableCredentials: Boolean,
-    @Value("\${test-flows.credential-issuance-flow.revocation-registry-size}") private val revocationRegistrySize: Int,
-    @Value("\${test-flows.credential-issuance-flow.use-oob-credential-issuance}") private val useOobCredentialIssuance: Boolean,
+    @Value("\${test-flows.proof-request-flow.revocation-registry-size}") private val revocationRegistrySize: Int,
+    @Value("\${test-flows.proof-request-flow.check-non-revoked}") private val checkNonRevoked: Boolean,
+    @Value("\${test-flows.proof-request-flow.use-oob-proof-requests}") private val useOobProofRequests: Boolean,
 ) : TestFlow() {
 
     protected companion object {
@@ -39,53 +40,57 @@ class CredentialIssuanceFlow(
                 "name",
                 "1.0"
             ),
-            useRevocableCredentials,
+            checkNonRevoked,
             revocationRegistrySize
         )
         credentialDefinitionId = credentialDefinition.id
 
-        if (useOobCredentialIssuance) {
-            testRunner.finishedInitialization()
-        } else {
-            initiateConnection()
-        }
+        initiateConnection()
     }
 
     override fun startIteration() {
-        if (useOobCredentialIssuance) {
-            issueCredentialOob()
+        if (useOobProofRequests) {
+            sendProofRequestOob()
         } else {
-            issueCredentialToConnection()
+            sendProofRequestToConnection()
         }
 
-        logger.info("Sent Credential Offer")
+        logger.info("Sent proof request")
     }
 
-    private fun issueCredentialToConnection() {
-        issuerVerifierAriesClient.issueCredentialToConnection(
+    private fun sendProofRequestToConnection() {
+        issuerVerifierAriesClient.sendProofRequestToConnection(
             connectionId,
-            CredentialDo(
-                credentialDefinitionId,
-                mapOf(
-                    "first name" to "Holder",
-                    "last name" to "Mustermann"
+            ProofRequestDo(
+                Instant.now().toEpochMilli(),
+                Instant.now().toEpochMilli(),
+                listOf(
+                    CredentialRequestDo(
+                        listOf("first name", "last name"),
+                        credentialDefinitionId
+                    )
                 )
-            )
+            ),
+            checkNonRevoked
         )
     }
 
-    private fun issueCredentialOob() {
-        val oobCredentialOffer = issuerVerifierAriesClient.createOobCredentialOffer(
-            CredentialDo(
-                credentialDefinitionId,
-                mapOf(
-                    "first name" to "Holder",
-                    "last name" to "Mustermann"
+    private fun sendProofRequestOob() {
+        val oobProofRequest = issuerVerifierAriesClient.createOobProofRequest(
+            ProofRequestDo(
+                Instant.now().toEpochMilli(),
+                Instant.now().toEpochMilli(),
+                listOf(
+                    CredentialRequestDo(
+                        listOf("first name", "last name"),
+                        credentialDefinitionId
+                    )
                 )
-            )
+            ),
+            checkNonRevoked
         )
 
-        holderAriesClient.receiveOobCredentialOffer(oobCredentialOffer)
+        holderAriesClient.receiveOobProofRequest(oobProofRequest)
     }
 
     private fun initiateConnection() {
@@ -93,11 +98,10 @@ class CredentialIssuanceFlow(
 
         try {
             holderAriesClient.receiveConnectionInvitation(connectionInvitation)
-
         } catch (exception: Exception) {
             logger.error("${exception.message} (Connection Invitation: ${connectionInvitation.toString()})")
             testRunner?.finishedIteration()
-            throw Exception("Unable to establish connection with holder.")
+            return
         }
     }
 
@@ -107,10 +111,18 @@ class CredentialIssuanceFlow(
         }
 
         logger.info("Established new connection")
-
         connectionId = connectionRecord.connectionId
 
-        testRunner?.finishedInitialization()
+        issuerVerifierAriesClient.issueCredentialToConnection(
+            connectionRecord.connectionId,
+            CredentialDo(
+                credentialDefinitionId,
+                mapOf(
+                    "first name" to "Holder",
+                    "last name" to "Mustermann"
+                )
+            )
+        )
     }
 
     override fun handleCredentialExchangeRecord(credentialExchangeRecord: CredentialExchangeRecordDo) {
@@ -118,12 +130,16 @@ class CredentialIssuanceFlow(
             return
         }
 
-        logger.info("Issued credential")
-
-        testRunner?.finishedIteration()
+        testRunner?.finishedInitialization()
     }
 
     override fun handleProofRequestRecord(proofExchangeRecord: ProofExchangeRecordDo) {
-        throw NotImplementedError("The issuer flow does not handle proof exchange records.")
+        if (!proofExchangeRecord.verifiedAndValid) {
+            return
+        }
+
+        logger.info("Received valid proof presentation")
+
+        testRunner?.finishedIteration()
     }
 }
