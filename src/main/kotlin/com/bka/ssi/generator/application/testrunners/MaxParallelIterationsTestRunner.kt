@@ -22,11 +22,13 @@ class MaxParallelIterationsTestRunner(
     }
 
     override fun run() {
+        testFlow.initialize(this)
+    }
+
+    override fun finishedInitialization() {
         logger.info("Starting MaxParallelIterationsTestRunner...")
         logger.info("Number of Iterations: $numberOfTotalIterations")
         logger.info("Number of Parallel Iterations: $numberOfParallelIterations")
-
-        testFlow.initialize(this)
 
         for (i in 0 until numberOfParallelIterations) {
             testFlow.startIteration()

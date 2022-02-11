@@ -8,5 +8,6 @@ abstract class TestRunner {
     protected var logger: Logger = LoggerFactory.getLogger(TestRunner::class.java)
 
     abstract fun run()
+    abstract fun finishedInitialization()
     abstract fun finishedIteration()
 }

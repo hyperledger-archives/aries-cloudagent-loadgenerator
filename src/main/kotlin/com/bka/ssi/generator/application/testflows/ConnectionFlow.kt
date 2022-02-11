@@ -26,9 +26,10 @@ class ConnectionFlow(
 
     override fun initialize(testRunner: TestRunner) {
         logger.info("Initializing test flow...")
+
         Companion.testRunner = testRunner
 
-        logger.info("Initialization completed.")
+        testRunner.finishedInitialization()
     }
 
     override fun startIteration() {

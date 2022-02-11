@@ -29,11 +29,13 @@ class ConstantLoadTestRunner(
     }
 
     override fun run() {
+        testFlow.initialize(this)
+    }
+
+    override fun finishedInitialization() {
         logger.info("Starting ConstantLoadTestRunner...")
         logger.info("Number of Iterations: $numberOfTotalIterations")
         logger.info("Number of Iterations per Minute: $numberOfIterationsPerMinute")
-
-        testFlow.initialize(this)
 
         val executor = Executors.newScheduledThreadPool(coreThreadPoolSize)
         scheduledFuture = executor.scheduleAtFixedRate(
