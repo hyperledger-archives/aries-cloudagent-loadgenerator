@@ -108,39 +108,47 @@ class FullFlow(
         }
 
         if (useOobInsteadOfConnection) {
-            val oobProofRequest = issuerVerifierAriesClient.createOobProofRequest(
-                ProofRequestDo(
-                    Instant.now().toEpochMilli(),
-                    Instant.now().toEpochMilli(),
-                    listOf(
-                        CredentialRequestDo(
-                            listOf("first name", "last name"),
-                            credentialDefinitionId
-                        )
-                    )
-                ),
-                checkNonRevoked
-            )
-
-            holderAriesClient.receiveOobProofRequest(oobProofRequest)
+            sendProofRequestOob()
         } else {
-            issuerVerifierAriesClient.sendProofRequestToConnection(
-                credentialExchangeRecord.connectionId,
-                ProofRequestDo(
-                    Instant.now().toEpochMilli(),
-                    Instant.now().toEpochMilli(),
-                    listOf(
-                        CredentialRequestDo(
-                            listOf("first name", "last name"),
-                            credentialDefinitionId
-                        )
-                    )
-                ),
-                checkNonRevoked
-            )
+            sendProofRequestToConnection(credentialExchangeRecord.connectionId)
         }
 
-        logger.info("Send proof request")
+        logger.info("Sent proof request")
+    }
+
+    private fun sendProofRequestToConnection(connectionId: String) {
+        issuerVerifierAriesClient.sendProofRequestToConnection(
+            connectionId,
+            ProofRequestDo(
+                Instant.now().toEpochMilli(),
+                Instant.now().toEpochMilli(),
+                listOf(
+                    CredentialRequestDo(
+                        listOf("first name", "last name"),
+                        credentialDefinitionId
+                    )
+                )
+            ),
+            checkNonRevoked
+        )
+    }
+
+    private fun sendProofRequestOob() {
+        val oobProofRequest = issuerVerifierAriesClient.createOobProofRequest(
+            ProofRequestDo(
+                Instant.now().toEpochMilli(),
+                Instant.now().toEpochMilli(),
+                listOf(
+                    CredentialRequestDo(
+                        listOf("first name", "last name"),
+                        credentialDefinitionId
+                    )
+                )
+            ),
+            checkNonRevoked
+        )
+
+        holderAriesClient.receiveOobProofRequest(oobProofRequest)
     }
 
     override fun handleProofRequestRecord(proofExchangeRecord: ProofExchangeRecordDo) {
