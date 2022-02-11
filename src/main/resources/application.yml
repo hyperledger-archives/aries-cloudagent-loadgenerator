@@ -37,16 +37,21 @@ test-runners:
 test-flows:
     full-flow:
         active: false
-        use-connectionless-proof-requests: false
-        use-connectionless-credential-issuance: false
+        use-oob-proof-requests: false
+        use-oob-credential-issuance: false
+        use-revocable-credentials: false
+        check-for-revocation: false
     issuer-flow:
         active: true
-        use-connectionless-credential-issuance: false
+        use-oob-credential-issuance: false
+        use-revocable-credentials: false
     connection-request-flow:
         active: false
     credential-issuance-flow:
         active: false
-        use-connectionless-credential-issuance: false
+        use-oob-credential-issuance: false
+        use-revocable-credentials: false
     proof-request-flow:
         active: false
-        use-connectionless-proof-requests: false
+        use-oob-proof-requests: false
+        check-for-revocation: false

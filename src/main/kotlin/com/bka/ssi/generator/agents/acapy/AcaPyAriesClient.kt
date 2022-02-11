@@ -158,7 +158,7 @@ class AcaPyAriesClient(
         }
     }
 
-    override fun createConnectionlessProofRequest(proofRequestDo: ProofRequestDo): ConnectionlessProofRequestDo {
+    override fun createOobProofRequest(proofRequestDo: ProofRequestDo): OobProofRequestDo {
         val presentationExchangeRecord = acaPy.presentProofCreateRequest(
             PresentProofRequest(
                 null,
@@ -191,16 +191,16 @@ class AcaPyAriesClient(
         )
 
         if (presentationExchangeRecord.isEmpty) {
-            throw Exception("Failed to create connectionless proof request.")
+            throw Exception("Failed to create oob proof request.")
         }
 
-        return ConnectionlessProofRequestDo(
+        return OobProofRequestDo(
             10,
             10,
             emptyList()
         )
     }
 
-    override fun receiveConnectionlessProofRequest(connectionlessProofRequestDo: ConnectionlessProofRequestDo) {
+    override fun receiveOobProofRequest(oobProofRequestDo: OobProofRequestDo) {
     }
 }

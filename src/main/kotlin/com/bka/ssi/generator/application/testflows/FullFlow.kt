@@ -36,7 +36,7 @@ import java.time.Instant
 class FullFlow(
     @Qualifier("IssuerVerifier") private val issuerVerifierAriesClient: IAriesClient,
     @Qualifier("Holder") private val holderAriesClient: IAriesClient,
-    @Value("\${test-flows.full-flow.use-connectionless-proof-requests}") private val useConnectionlessProofRequests: Boolean
+    @Value("\${test-flows.full-flow.use-oob-proof-requests}") private val useOobProofRequests: Boolean
 ) : TestFlow() {
 
     protected companion object {
@@ -97,8 +97,8 @@ class FullFlow(
             return
         }
 
-        if (useConnectionlessProofRequests) {
-            val connectionLessProofRequest = issuerVerifierAriesClient.createConnectionlessProofRequest(
+        if (useOobProofRequests) {
+            val connectionLessProofRequest = issuerVerifierAriesClient.createOobProofRequest(
                 ProofRequestDo(
                     Instant.now().toEpochMilli(),
                     Instant.now().toEpochMilli(),
@@ -111,7 +111,7 @@ class FullFlow(
                 )
             )
 
-            holderAriesClient.receiveConnectionlessProofRequest(connectionLessProofRequest)
+            holderAriesClient.receiveOobProofRequest(connectionLessProofRequest)
         } else {
             issuerVerifierAriesClient.sendProofRequestToConnection(
                 credentialExchangeRecord.connectionId,
