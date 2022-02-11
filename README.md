@@ -67,8 +67,8 @@ test-flows:
         check-for-revocation: false
 ```
 
-Only one test case should be set to `active: true` at a time. This test case will **automatically be executed** once the
-application is started.
+Only one Test Runner and one Test Flow should be set to `active: true` at a time. The Test Flow will **automatically be
+executed** by the Test Runner once the application is started.
 
 ### Local setup
 
