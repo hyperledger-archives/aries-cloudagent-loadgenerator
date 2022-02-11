@@ -18,10 +18,10 @@ import java.time.Instant
 class FullFlow(
     @Qualifier("IssuerVerifier") private val issuerVerifierAriesClient: IAriesClient,
     @Qualifier("Holder") private val holderAriesClient: IAriesClient,
-    @Value("\${test-flows.full-flow.use-oob-proof-requests}") private val useOobProofRequests: Boolean,
     @Value("\${test-flows.full-flow.use-revocable-credentials}") private val useRevocableCredentials: Boolean,
     @Value("\${test-flows.full-flow.revocation-registry-size}") private val revocationRegistrySize: Int,
-    @Value("\${test-flows.full-flow.check-non-revoked}") private val checkNonRevoked: Boolean
+    @Value("\${test-flows.full-flow.check-non-revoked}") private val checkNonRevoked: Boolean,
+    @Value("\${test-flows.full-flow.use-oob-instead-of-connection}") private val useOobInsteadOfConnection: Boolean,
 ) : TestFlow() {
 
     protected companion object {
@@ -49,6 +49,29 @@ class FullFlow(
     }
 
     override fun startIteration() {
+        if (useOobInsteadOfConnection) {
+            issueCredentialOob()
+            return
+        }
+
+        initiateConnection()
+    }
+
+    private fun issueCredentialOob() {
+        val oobCredentialOffer = issuerVerifierAriesClient.createOobCredentialOffer(
+            CredentialDo(
+                credentialDefinitionId,
+                mapOf(
+                    "first name" to "Holder",
+                    "last name" to "Mustermann"
+                )
+            )
+        )
+
+        holderAriesClient.receiveOobCredentialOffer(oobCredentialOffer)
+    }
+
+    private fun initiateConnection() {
         val connectionInvitation = issuerVerifierAriesClient.createConnectionInvitation("holder-acapy")
 
         try {
@@ -84,8 +107,8 @@ class FullFlow(
             return
         }
 
-        if (useOobProofRequests) {
-            val connectionLessProofRequest = issuerVerifierAriesClient.createOobProofRequest(
+        if (useOobInsteadOfConnection) {
+            val oobProofRequest = issuerVerifierAriesClient.createOobProofRequest(
                 ProofRequestDo(
                     Instant.now().toEpochMilli(),
                     Instant.now().toEpochMilli(),
@@ -99,7 +122,7 @@ class FullFlow(
                 checkNonRevoked
             )
 
-            holderAriesClient.receiveOobProofRequest(connectionLessProofRequest)
+            holderAriesClient.receiveOobProofRequest(oobProofRequest)
         } else {
             issuerVerifierAriesClient.sendProofRequestToConnection(
                 credentialExchangeRecord.connectionId,

@@ -17,9 +17,9 @@ import org.springframework.stereotype.Service
 class IssuerFlow(
     @Qualifier("IssuerVerifier") private val issuerVerifierAriesClient: IAriesClient,
     @Qualifier("Holder") private val holderAriesClient: IAriesClient,
-    @Value("\${test-flows.issuer-flow.use-oob-credential-issuance}") private val useOobCredentialIssuance: Boolean,
     @Value("\${test-flows.issuer-flow.use-revocable-credentials}") private val useRevocableCredentials: Boolean,
-    @Value("\${test-flows.issuer-flow.revocation-registry-size}") private val revocationRegistrySize: Int
+    @Value("\${test-flows.issuer-flow.revocation-registry-size}") private val revocationRegistrySize: Int,
+    @Value("\${test-flows.issuer-flow.use-oob-credential-issuance}") private val useOobCredentialIssuance: Boolean,
 ) : TestFlow() {
 
     protected companion object {
@@ -47,6 +47,29 @@ class IssuerFlow(
     }
 
     override fun startIteration() {
+        if (useOobCredentialIssuance) {
+            issueCredentialOob()
+            return
+        }
+
+        initiateConnection()
+    }
+
+    private fun issueCredentialOob() {
+        val oobCredentialOffer = issuerVerifierAriesClient.createOobCredentialOffer(
+            CredentialDo(
+                credentialDefinitionId,
+                mapOf(
+                    "first name" to "Holder",
+                    "last name" to "Mustermann"
+                )
+            )
+        )
+
+        holderAriesClient.receiveOobCredentialOffer(oobCredentialOffer)
+    }
+
+    private fun initiateConnection() {
         val connectionInvitation = issuerVerifierAriesClient.createConnectionInvitation("holder-acapy")
 
         try {
@@ -89,5 +112,6 @@ class IssuerFlow(
     }
 
     override fun handleProofRequestRecord(proofExchangeRecord: ProofExchangeRecordDo) {
+        throw NotImplementedError("The issuer flow does not handle proof exchange records.")
     }
 }

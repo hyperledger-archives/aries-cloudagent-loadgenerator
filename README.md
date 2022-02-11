@@ -50,8 +50,7 @@ test-flows:
         use-revocable-credentials: true
         revocation-registry-size: 500
         check-non-revoked: true
-        use-oob-proof-requests: false
-        use-oob-credential-issuance: false
+        use-oob-instead-of-connection: false
     issuer-flow:
         active: false
         use-revocable-credentials: true
@@ -61,12 +60,12 @@ test-flows:
         active: false
     credential-issuance-flow:
         active: false
-        use-revocable-credentials: false
+        use-revocable-credentials: true
         revocation-registry-size: 500
         use-oob-credential-issuance: false
     proof-request-flow:
         active: false
-        check-non-revoked: false
+        check-non-revoked: true
         use-oob-proof-requests: false
 ```
 
