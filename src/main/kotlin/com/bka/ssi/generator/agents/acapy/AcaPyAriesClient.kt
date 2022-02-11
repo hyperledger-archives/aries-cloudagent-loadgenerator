@@ -26,7 +26,11 @@ class AcaPyAriesClient(
         return did.did
     }
 
-    override fun createSchemaAndCredentialDefinition(schemaDo: SchemaDo): CredentialDefinitionDo {
+    override fun createSchemaAndCredentialDefinition(
+        schemaDo: SchemaDo,
+        revocable: Boolean,
+        revocationRegistrySize: Int
+    ): CredentialDefinitionDo {
         val schemaSendResponse = acaPy.schemas(
             SchemaSendRequest.builder()
                 .attributes(schemaDo.attributes)
@@ -42,8 +46,8 @@ class AcaPyAriesClient(
         val credentialDefinitionResponse = acaPy.credentialDefinitionsCreate(
             CredentialDefinition.CredentialDefinitionRequest.builder()
                 .schemaId(schemaSendResponse.get().schemaId)
-                .revocationRegistrySize(500)
-                .supportRevocation(true)
+                .supportRevocation(revocable)
+                .revocationRegistrySize(revocationRegistrySize)
                 .tag("1.0")
                 .build()
         )
@@ -121,33 +125,43 @@ class AcaPyAriesClient(
         }
     }
 
-    override fun sendProofRequestToConnection(connectionId: String, proofRequestDo: ProofRequestDo) {
+    override fun sendProofRequestToConnection(
+        connectionId: String,
+        proofRequestDo: ProofRequestDo,
+        checkNonRevoked: Boolean
+    ) {
+        val proofRequestBuilder = PresentProofRequest.ProofRequest.builder()
+            .name("Proof Request")
+            .requestedAttributes(
+                proofRequestDo.requestedCredentials.mapIndexed { index: Int, credentialRequestDo: CredentialRequestDo ->
+                    "${index}_credential" to PresentProofRequest.ProofRequest.ProofRequestedAttributes.builder()
+                        .names(credentialRequestDo.claims)
+                        .restriction(
+                            Gson().fromJson(
+                                "{\"cred_def_id\": \"${credentialRequestDo.credentialDefinitionId}\"}",
+                                JsonObject::class.java
+                            )
+                        )
+                        .build()
+                }.toMap()
+            )
+            .version("1.0")
+
+        if (checkNonRevoked) {
+            proofRequestBuilder.nonRevoked(
+                PresentProofRequest.ProofRequest.ProofNonRevoked(
+                    proofRequestDo.nonRevokedFrom,
+                    proofRequestDo.nonRevokedTo
+                )
+            )
+        }
+
+        val proofRequest = proofRequestBuilder.build()
+
         val presentationExchangeRecord = acaPy.presentProofSendRequest(
             PresentProofRequest(
                 connectionId,
-                PresentProofRequest.ProofRequest.builder()
-                    .name("Proof Request")
-                    .nonRevoked(
-                        PresentProofRequest.ProofRequest.ProofNonRevoked(
-                            proofRequestDo.nonRevokedFrom,
-                            proofRequestDo.nonRevokedTo
-                        )
-                    )
-                    .requestedAttributes(
-                        proofRequestDo.requestedCredentials.mapIndexed { index: Int, credentialRequestDo: CredentialRequestDo ->
-                            "${index}_credential" to PresentProofRequest.ProofRequest.ProofRequestedAttributes.builder()
-                                .names(credentialRequestDo.claims)
-                                .restriction(
-                                    Gson().fromJson(
-                                        "{\"cred_def_id\": \"${credentialRequestDo.credentialDefinitionId}\"}",
-                                        JsonObject::class.java
-                                    )
-                                )
-                                .build()
-                        }.toMap()
-                    )
-                    .version("1.0")
-                    .build(),
+                proofRequest,
                 false,
                 "Proof Request"
             )
@@ -158,49 +172,11 @@ class AcaPyAriesClient(
         }
     }
 
-    override fun createOobProofRequest(proofRequestDo: ProofRequestDo): OobProofRequestDo {
-        val presentationExchangeRecord = acaPy.presentProofCreateRequest(
-            PresentProofRequest(
-                null,
-                PresentProofRequest.ProofRequest.builder()
-                    .name("Proof Request")
-                    .nonRevoked(
-                        PresentProofRequest.ProofRequest.ProofNonRevoked(
-                            proofRequestDo.nonRevokedFrom,
-                            proofRequestDo.nonRevokedTo
-                        )
-                    )
-                    .requestedAttributes(
-                        proofRequestDo.requestedCredentials.mapIndexed { index: Int, credentialRequestDo: CredentialRequestDo ->
-                            "${index}_credential" to PresentProofRequest.ProofRequest.ProofRequestedAttributes.builder()
-                                .names(credentialRequestDo.claims)
-                                .restriction(
-                                    Gson().fromJson(
-                                        "{\"cred_def_id\": \"${credentialRequestDo.credentialDefinitionId}\"}",
-                                        JsonObject::class.java
-                                    )
-                                )
-                                .build()
-                        }.toMap()
-                    )
-                    .version("1.0")
-                    .build(),
-                false,
-                "Proof Request"
-            )
-        )
-
-        if (presentationExchangeRecord.isEmpty) {
-            throw Exception("Failed to create oob proof request.")
-        }
-
-        return OobProofRequestDo(
-            10,
-            10,
-            emptyList()
-        )
+    override fun createOobProofRequest(proofRequestDo: ProofRequestDo, checkNonRevoked: Boolean): OobProofRequestDo {
+        throw NotImplementedError("Creating an OOB Proof Request is not implemented yet.")
     }
 
     override fun receiveOobProofRequest(oobProofRequestDo: OobProofRequestDo) {
+        throw NotImplementedError("Receiving an OOB Proof Request is not implemented yet.")
     }
 }

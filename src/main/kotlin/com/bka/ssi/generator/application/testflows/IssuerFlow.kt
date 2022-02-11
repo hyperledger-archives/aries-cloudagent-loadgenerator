@@ -17,7 +17,9 @@ import org.springframework.stereotype.Service
 class IssuerFlow(
     @Qualifier("IssuerVerifier") private val issuerVerifierAriesClient: IAriesClient,
     @Qualifier("Holder") private val holderAriesClient: IAriesClient,
-    @Value("\${test-flows.full-flow.use-oob-credential-issuance}") private val useOobCredentialIssuance: Boolean
+    @Value("\${test-flows.issuer-flow.use-oob-credential-issuance}") private val useOobCredentialIssuance: Boolean,
+    @Value("\${test-flows.issuer-flow.use-revocable-credentials}") private val useRevocableCredentials: Boolean,
+    @Value("\${test-flows.issuer-flow.revocation-registry-size}") private val revocationRegistrySize: Int
 ) : TestFlow() {
 
     protected companion object {
@@ -34,7 +36,9 @@ class IssuerFlow(
                 listOf("first name", "last name"),
                 "name",
                 "1.0"
-            )
+            ),
+            useRevocableCredentials,
+            revocationRegistrySize
         )
 
         credentialDefinitionId = credentialDefinition.id
