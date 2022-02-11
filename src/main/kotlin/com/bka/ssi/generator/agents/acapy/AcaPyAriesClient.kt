@@ -125,6 +125,14 @@ class AcaPyAriesClient(
         }
     }
 
+    override fun createOobCredentialOffer(credentialDo: CredentialDo): OobCredentialOfferDo {
+        throw NotImplementedError("Creating an OOB Credential Offer is not implemented yet.")
+    }
+
+    override fun receiveOobCredentialOffer(oobCredentialOfferDo: OobCredentialOfferDo) {
+        throw NotImplementedError("Receiving an OOB Credential Offer is not implemented yet.")
+    }
+
     override fun sendProofRequestToConnection(
         connectionId: String,
         proofRequestDo: ProofRequestDo,
