@@ -17,7 +17,6 @@ services:
       - ./grafana/dashboards:/var/lib/grafana/dashboards
     depends_on:
       - grafana-image-renderer
-      - grafana-pdf-exporter
       - loki
     networks:
       - dashboard-and-logging
@@ -38,6 +37,9 @@ services:
     entrypoint: "/usr/local/bin/grafana-reporter -ip grafana:3000 -grid-layout=1"
     ports:
       - 8686:8686
+    depends_on:
+      - grafana
+      - grafana-image-renderer
     networks:
       - dashboard-and-logging
 
