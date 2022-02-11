@@ -46,20 +46,25 @@ test-runners:
 
 test-flows:
     full-flow:
-        active: true
+        active: false
         use-oob-proof-requests: false
         use-oob-credential-issuance: false
+        use-revocable-credentials: false
+        check-for-revocation: false
     issuer-flow:
-        active: false
+        active: true
         use-oob-credential-issuance: false
+        use-revocable-credentials: false
     connection-request-flow:
         active: false
     credential-issuance-flow:
         active: false
         use-oob-credential-issuance: false
+        use-revocable-credentials: false
     proof-request-flow:
         active: false
         use-oob-proof-requests: false
+        check-for-revocation: false
 ```
 
 Only one test case should be set to `active: true` at a time. This test case will **automatically be executed** once the
