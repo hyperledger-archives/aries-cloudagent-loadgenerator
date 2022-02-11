@@ -52,8 +52,6 @@ services:
     volumes:
       - loki-volume:/data/loki
       - ./loki/local-config.yaml:/etc/loki/local-config.yaml
-    depends_on:
-      - grafana
     networks:
       - dashboard-and-logging
 
