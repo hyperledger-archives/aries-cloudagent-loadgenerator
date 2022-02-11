@@ -31,6 +31,7 @@ class FullFlow(
 
     override fun initialize(testRunner: TestRunner) {
         logger.info("Initializing test flow...")
+
         Companion.testRunner = testRunner
 
         val credentialDefinition = issuerVerifierAriesClient.createSchemaAndCredentialDefinition(
@@ -42,10 +43,9 @@ class FullFlow(
             useRevocableCredentials,
             revocationRegistrySize
         )
-
         credentialDefinitionId = credentialDefinition.id
 
-        logger.info("Initialization completed.")
+        testRunner.finishedInitialization()
     }
 
     override fun startIteration() {

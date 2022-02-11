@@ -25,11 +25,11 @@ holder:
 
 test-runners:
     max-parallel-iterations-runner:
-        active: false
+        active: true
         number-of-total-iterations: 100
         number-of-parallel-iterations: 5
     constant-load-runner:
-        active: true
+        active: false
         number-of-total-iterations: 100
         number-of-iterations-per-minute: 30
         core-thread-pool-size: 4
@@ -46,7 +46,7 @@ test-flows:
         use-revocable-credentials: true
         revocation-registry-size: 500
         use-oob-credential-issuance: false
-    connection-request-flow:
+    connection-flow:
         active: false
     credential-issuance-flow:
         active: false
