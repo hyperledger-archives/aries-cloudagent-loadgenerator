@@ -1,6 +1,6 @@
 package com.bka.ssi.generator.application.testrunners
 
-import com.bka.ssi.generator.application.testflows.fullflow.TestFlow
+import com.bka.ssi.generator.application.testflows.TestFlow
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Service
