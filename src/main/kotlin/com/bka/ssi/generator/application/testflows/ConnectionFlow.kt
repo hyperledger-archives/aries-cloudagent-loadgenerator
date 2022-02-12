@@ -17,8 +17,8 @@ import org.springframework.stereotype.Service
 )
 class ConnectionFlow(
     @Qualifier("IssuerVerifier") private val issuerVerifierAriesClient: IAriesClient,
-    @Qualifier("Holder") private val holderAriesClient: IAriesClient,
-) : TestFlow() {
+    @Qualifier("Holder") holderAriesClients: List<IAriesClient>,
+) : TestFlow(holderAriesClients) {
 
     protected companion object {
         var testRunner: TestRunner? = null
@@ -35,7 +35,7 @@ class ConnectionFlow(
     override fun startIteration() {
         val connectionInvitation = issuerVerifierAriesClient.createConnectionInvitation("holder-acapy")
 
-        holderAriesClient.receiveConnectionInvitation(connectionInvitation)
+        nextHolderClient().receiveConnectionInvitation(connectionInvitation)
     }
 
     override fun handleConnectionRecord(connectionRecord: ConnectionRecordDo) {
