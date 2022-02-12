@@ -27,6 +27,9 @@ usage() {
       start - Creates the application containers from the built images
               and starts the services based on the docker-compose.yml file.
 
+      startWithoutLoadGenerator - Starts all containers but the load generator.
+                                  Can be used for running the load generator via the IDE.
+
       stop - Stops and remove the services.
              The volumes are not deleted so they will be reused the next time you run start.
 
@@ -79,26 +82,45 @@ function logs() {
   fi
 }
 
-case "${COMMAND}" in
-start)
+function startVonNetworkDashboardLogging() {
   echo "Starting the VON Network ..."
   git submodule update --init --recursive
   ./von-network/manage build
   ./von-network/manage start
-  echo "Waiting for the ledger to start... (takes 45 seconds)"
-  sleep 45
+  echo "Waiting for the ledger to start... (sleeping 30 seconds)"
+  sleep 30
 
   echo "Registering issuer DID..."
   curl -d "{\"role\": \"ENDORSER\", \"seed\":\"$ISSUER_DID_SEED\"}" -H "Content-Type: application/json" -X POST $LEDGER_REGISTER_DID_ENDPOINT
 
   echo "Starting dashboard and logging containers ..."
   docker-compose -f ./dashboard/docker-compose.yml up -d
+}
+
+case "${COMMAND}" in
+start)
+  startVonNetworkDashboardLogging
+
+  echo "Provisioning AcaPys and Wallet DBs ..."
+  docker-compose -f docker-compose.yml --profile all up -d --build
+
+  echo "Waiting for the Wallet DB to be provisioned... (sleeping 5 seconds)"
+  sleep 10
+
+  echo "Starting all AcaPy related docker containers ..."
+  docker-compose -f docker-compose.yml --profile all up -d --scale issuer-verifier-acapy=2
+  ;;
+startwithoutloadgenerator)
+  startVonNetworkDashboardLogging
 
   echo "Provisioning AcaPys and Wallet DBs ..."
   docker-compose -f docker-compose.yml up -d
 
+  echo "Waiting for the Wallet DB to be provisioned... (sleeping 5 seconds)"
+  sleep 10
+
   echo "Starting all AcaPy related docker containers ..."
-  docker-compose -f docker-compose.yml up -d --scale issuer-verifier-acapy=10 --scale holder-acapy=20
+  docker-compose -f docker-compose.yml up -d --scale issuer-verifier-acapy=2
   ;;
 stop)
   echo "Stopping the VON Network ..."
