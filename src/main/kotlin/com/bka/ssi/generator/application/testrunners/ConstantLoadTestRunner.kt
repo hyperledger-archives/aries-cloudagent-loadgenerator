@@ -36,6 +36,8 @@ class ConstantLoadTestRunner(
         logger.info("Starting ConstantLoadTestRunner...")
         logger.info("Number of Iterations: $numberOfTotalIterations")
         logger.info("Number of Iterations per Minute: $numberOfIterationsPerMinute")
+        logger.info("Core thread pool size: $coreThreadPoolSize")
+        logger.info("Expected running duration in minutes: ${numberOfTotalIterations / numberOfIterationsPerMinute}")
 
         val executor = Executors.newScheduledThreadPool(coreThreadPoolSize)
         scheduledFuture = executor.scheduleAtFixedRate(
