@@ -35,13 +35,7 @@ class ConnectionFlow(
     override fun startIteration() {
         val connectionInvitation = issuerVerifierAriesClient.createConnectionInvitation("holder-acapy")
 
-        try {
-            holderAriesClient.receiveConnectionInvitation(connectionInvitation)
-        } catch (exception: Exception) {
-            logger.error("${exception.message} (Connection Invitation: ${connectionInvitation.toString()})")
-            testRunner?.finishedIteration()
-            return
-        }
+        holderAriesClient.receiveConnectionInvitation(connectionInvitation)
     }
 
     override fun handleConnectionRecord(connectionRecord: ConnectionRecordDo) {
