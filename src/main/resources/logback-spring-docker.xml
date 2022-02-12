@@ -1,0 +1,29 @@
+<configuration>
+
+    <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
+        <http>
+            <url>http://${LOCALHOST}:3100/loki/api/v1/push</url>
+        </http>
+        <format>
+            <label>
+                <pattern>app=aries-load-generator,level=%level</pattern>
+            </label>
+            <message>
+                <pattern>class=%logger{20} thread=%thread | %msg %ex</pattern>
+            </message>
+            <sortByTime>true</sortByTime>
+        </format>
+    </appender>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%-5relative %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="LOKI"/>
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+</configuration>

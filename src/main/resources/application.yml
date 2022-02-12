@@ -35,11 +35,11 @@ test-runners:
         core-thread-pool-size: 4
     increasing-load-runner:
         active: true
-        peak-duration-in-minutes: 1
+        peak-duration-in-minutes: 2
         sleep-between-peaks-in-minutes: 1
-        initial-number-of-iterations-per-minute: 30
-        final-number-of-iterations-per-minute: 50
-        step-size-of-iterations-per-minute: 5
+        initial-number-of-iterations-per-minute: 150
+        final-number-of-iterations-per-minute: 500
+        step-size-of-iterations-per-minute: 25
         core-thread-pool-size: 4
 
 test-flows:
