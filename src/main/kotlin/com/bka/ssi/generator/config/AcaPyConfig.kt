@@ -20,6 +20,7 @@ package com.bka.ssi.generator.config
 
 import com.bka.ssi.generator.agents.acapy.AcaPyAriesClient
 import com.bka.ssi.generator.agents.acapy.OkHttpPublisher
+import com.bka.ssi.generator.application.logger.ErrorLogger
 import com.bka.ssi.generator.domain.services.IAriesClient
 import okhttp3.OkHttpClient
 import org.hyperledger.aries.AriesClient
@@ -32,6 +33,7 @@ import java.util.concurrent.TimeUnit
 
 @Configuration
 class AcaPyConfig(
+    private val errorLogger: ErrorLogger,
     @Value("\${issuer-verifier.acapy.api-key}") private val issuerVerifierAcaPyApiKey: String?,
     @Value("\${issuer-verifier.acapy.url}") private val issuerVerifierAcaPyUrl: String?,
     @Value("\${issuer-verifier.acapy.http-timeout}") private val issuerVerifierAcaPyHttpTimeout: Long,
@@ -56,7 +58,7 @@ class AcaPyConfig(
                 issuerVerifierAcaPyHttpTimeout
             )
 
-        return AcaPyAriesClient(issuerVerifierAcaPyClient)
+        return AcaPyAriesClient(issuerVerifierAcaPyClient, errorLogger)
     }
 
     @Bean(name = ["Holder"])
@@ -69,7 +71,7 @@ class AcaPyConfig(
         val holderAcaPyClient =
             buildAcaPyAriesClient(okHttpPublisher, holderAcaPyUrl, holderAcaPyApiKey, holderAcapyHttpTimeout)
 
-        return AcaPyAriesClient(holderAcaPyClient)
+        return AcaPyAriesClient(holderAcaPyClient, errorLogger)
     }
 
     private fun buildAcaPyAriesClient(

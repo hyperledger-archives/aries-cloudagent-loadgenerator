@@ -55,6 +55,23 @@ services:
     networks:
       - dashboard-and-logging
 
+  dozzle:
+    container_name: dozzle
+    image: amir20/dozzle:latest
+    environment:
+      - DOZZLE_BASE=/dozzle
+      - DOZZLE_LEVEL=DEBUG
+      - DOZZLE_USERNAME=view
+      - DOZZLE_PASSWORD=8R1uVAwRn3eyjKPj1A4iZggWTay9IOa5kEYFyaoM
+      - DOZZLE_KEY=7zocTTANMOOH3eZVXmD5DShm4ja1vQmfoHqZRh3a
+      - DOZZLE_NO_ANALYTICS=true
+    networks:
+      - dashboard-and-logging
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 9999:8080
+
 networks:
   dashboard-and-logging:
     name: dashboard-and-logging

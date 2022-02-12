@@ -1,0 +1,14 @@
+spring:
+    datasource:
+        url: jdbc:postgresql://issuer-verifier-wallet-db:5432/
+
+logging:
+    config: classpath:logback-spring-docker.xml
+
+issuer-verifier:
+    acapy:
+        url: 'http://issuer-verifier-nginx:10000'
+
+holder:
+    acapy:
+        url: 'http://holder-acapy:10010'
