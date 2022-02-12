@@ -42,7 +42,7 @@ services:
         --wallet-type ${WALLET_TYPE} \
         --wallet-name ${POSTGRES_DB} \
         --wallet-key key \
-        --wallet-storage-type postgres_storage \
+        --wallet-storage-type ${ISSUER_VERIFIER_WALLET_STORAGE_TYPE} \
         --wallet-storage-config '{\"url\":\"issuer-verifier-wallet-db:5432\",\"max_connections\":${MAX_WALLET_CONNECTIONS}}' \
         --wallet-storage-creds '{\"account\":\"${POSTGRES_USER}\",\"password\":\"${POSTGRES_PASSWORD}\",\"admin_account\":\"${POSTGRES_USER}\",\"admin_password\":\"${POSTGRES_PASSWORD}\"}' \
         --auto-ping-connection \
@@ -114,7 +114,7 @@ services:
         --wallet-type ${WALLET_TYPE} \
         --wallet-name ${POSTGRES_DB} \
         --wallet-key key \
-        --wallet-storage-type postgres_storage \
+        --wallet-storage-type ${HOLDER_WALLET_STORAGE_TYPE} \
         --wallet-storage-config '{\"url\":\"holder-wallet-db:5432\",\"max_connections\":${MAX_WALLET_CONNECTIONS}}' \
         --wallet-storage-creds '{\"account\":\"${POSTGRES_USER}\",\"password\":\"${POSTGRES_PASSWORD}\",\"admin_account\":\"${POSTGRES_USER}\",\"admin_password\":\"${POSTGRES_PASSWORD}\"}' \
         --auto-accept-invites \
@@ -138,6 +138,11 @@ services:
       - tails-server
     networks:
       - aries-load-test
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "50m"
     restart: always
 
   holder-nginx:
