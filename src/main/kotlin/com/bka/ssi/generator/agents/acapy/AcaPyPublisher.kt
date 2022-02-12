@@ -1,5 +1,6 @@
 package com.bka.ssi.generator.agents.acapy
 
+import com.bka.ssi.generator.application.logger.ErrorLogger
 import com.bka.ssi.generator.domain.objects.ConnectionRecordDo
 import com.bka.ssi.generator.domain.objects.CredentialExchangeRecordDo
 import com.bka.ssi.generator.domain.objects.ProofExchangeRecordDo
@@ -15,7 +16,8 @@ import java.text.SimpleDateFormat
 
 @Service
 class AcaPyPublisher(
-    private val handlers: List<IAriesObserver>
+    private val handlers: List<IAriesObserver>,
+    private val errorLogger: ErrorLogger
 ) : EventHandler() {
 
     private fun dateStringToMilliseconds(date: String): Long {
@@ -24,6 +26,11 @@ class AcaPyPublisher(
     }
 
     override fun handleConnection(connection: ConnectionRecord) {
+        if (connection.errorMsg != null) {
+            errorLogger.reportError("AcaPyPublisher.handleConnection: ${connection.errorMsg}")
+            return
+        }
+
         handlers.forEach {
             it.handleConnectionRecord(
                 ConnectionRecordDo(
@@ -37,6 +44,11 @@ class AcaPyPublisher(
     }
 
     override fun handleProof(proof: PresentationExchangeRecord) {
+        if (proof.errorMsg != null) {
+            errorLogger.reportError("AcaPyPublisher.handleProof: ${proof.errorMsg}")
+            return
+        }
+
         handlers.forEach {
             it.handleProofRequestRecord(
                 ProofExchangeRecordDo(
@@ -51,6 +63,11 @@ class AcaPyPublisher(
     }
 
     override fun handleCredential(credential: V1CredentialExchange) {
+        if (credential.errorMsg != null) {
+            errorLogger.reportError("AcaPyPublisher.handleCredential: ${credential.errorMsg}")
+            return
+        }
+
         handlers.forEach {
             it.handleCredentialExchangeRecord(
                 CredentialExchangeRecordDo(

@@ -91,14 +91,7 @@ class CredentialIssuanceFlow(
     private fun initiateConnection() {
         val connectionInvitation = issuerVerifierAriesClient.createConnectionInvitation("holder-acapy")
 
-        try {
-            holderAriesClient.receiveConnectionInvitation(connectionInvitation)
-
-        } catch (exception: Exception) {
-            logger.error("${exception.message} (Connection Invitation: ${connectionInvitation.toString()})")
-            testRunner?.finishedIteration()
-            throw Exception("Unable to establish connection with holder.")
-        }
+        holderAriesClient.receiveConnectionInvitation(connectionInvitation)
     }
 
     override fun handleConnectionRecord(connectionRecord: ConnectionRecordDo) {
