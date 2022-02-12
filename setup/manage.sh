@@ -104,7 +104,7 @@ start)
   echo "Provisioning AcaPys and Wallet DBs ..."
   docker-compose -f docker-compose.yml --profile all up -d --build
 
-  echo "Waiting for the Wallet DB to be provisioned... (sleeping 5 seconds)"
+  echo "Waiting for the Wallet DB to be provisioned... (sleeping 10 seconds)"
   sleep 10
 
   echo "Starting all AcaPy related docker containers ..."
@@ -116,7 +116,7 @@ startwithoutloadgenerator)
   echo "Provisioning AcaPys and Wallet DBs ..."
   docker-compose -f docker-compose.yml up -d
 
-  echo "Waiting for the Wallet DB to be provisioned... (sleeping 5 seconds)"
+  echo "Waiting for the Wallet DB to be provisioned... (sleeping 10 seconds)"
   sleep 10
 
   echo "Starting all AcaPy related docker containers ..."

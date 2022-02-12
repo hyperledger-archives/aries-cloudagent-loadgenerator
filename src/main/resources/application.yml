@@ -20,7 +20,7 @@ issuer-verifier:
 holder:
     acapy:
         api-key:
-        url: 'http://localhost:10010'
+        urls: 'http://localhost:10110, http://localhost:10210'
         http-timeout: 60
 
 test-runners:
