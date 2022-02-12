@@ -17,12 +17,14 @@ import java.time.Instant
 )
 class FullFlow(
     @Qualifier("IssuerVerifier") private val issuerVerifierAriesClient: IAriesClient,
-    @Qualifier("Holder") private val holderAriesClient: IAriesClient,
+    @Qualifier("Holder") holderAriesClients: List<IAriesClient>,
     @Value("\${test-flows.full-flow.use-revocable-credentials}") private val useRevocableCredentials: Boolean,
     @Value("\${test-flows.full-flow.revocation-registry-size}") private val revocationRegistrySize: Int,
     @Value("\${test-flows.full-flow.check-non-revoked}") private val checkNonRevoked: Boolean,
     @Value("\${test-flows.full-flow.use-oob-instead-of-connection}") private val useOobInsteadOfConnection: Boolean,
-) : TestFlow() {
+) : TestFlow(
+    holderAriesClients
+) {
 
     protected companion object {
         var credentialDefinitionId = ""
@@ -68,13 +70,13 @@ class FullFlow(
             )
         )
 
-        holderAriesClient.receiveOobCredentialOffer(oobCredentialOffer)
+        nextHolderClient().receiveOobCredentialOffer(oobCredentialOffer)
     }
 
     private fun initiateConnection() {
         val connectionInvitation = issuerVerifierAriesClient.createConnectionInvitation("holder-acapy")
 
-        holderAriesClient.receiveConnectionInvitation(connectionInvitation)
+        nextHolderClient().receiveConnectionInvitation(connectionInvitation)
     }
 
     override fun handleConnectionRecord(connectionRecord: ConnectionRecordDo) {
@@ -142,7 +144,7 @@ class FullFlow(
             checkNonRevoked
         )
 
-        holderAriesClient.receiveOobProofRequest(oobProofRequest)
+        nextHolderClient().receiveOobProofRequest(oobProofRequest)
     }
 
     override fun handleProofRequestRecord(proofExchangeRecord: ProofExchangeRecordDo) {

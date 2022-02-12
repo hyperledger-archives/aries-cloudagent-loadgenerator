@@ -6,7 +6,8 @@ services:
     build: ../
     depends_on:
       - issuer-verifier-acapy
-      - holder-acapy
+      - holder-acapy-1
+      - holder-acapy-2
     environment:
       - LOCALHOST=${LOCALHOST}
     ports:
@@ -99,8 +100,8 @@ services:
     networks:
       - aries-load-test
 
-  holder-acapy:
-    container_name: holder-acapy
+  holder-acapy-1:
+    container_name: holder-acapy-1
     image: ${ACAPY_IMAGE}
     entrypoint: /bin/bash
     command: [
@@ -111,14 +112,14 @@ services:
         --inbound-transport http 0.0.0.0 10011 \
         --outbound-transport http \
         --admin 0.0.0.0 10010 \
-        --endpoint http://holder-acapy:10011 \
+        --endpoint http://holder-acapy-1:10011 \
         --genesis-url ${LEDGER_GENESIS} \
         --ledger-pool-name $LEDGER_POOL_NAME \
         --ledger-pool-name ${LEDGER_POOL_NAME} \
         --admin-insecure-mode \
         --label holder_acapy \
         --wallet-type ${WALLET_TYPE} \
-        --wallet-name ${POSTGRES_DB} \
+        --wallet-name wallet_db \
         --wallet-key key \
         --wallet-storage-type default \
         --auto-accept-invites \
@@ -140,7 +141,60 @@ services:
     depends_on:
       - tails-server
     ports:
-      - 10010:10010
+      - 10110:10010
+      - 10111:10011
+    networks:
+      - aries-load-test
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "50m"
+    restart: always
+
+  holder-acapy-2:
+    container_name: holder-acapy-2
+    image: ${ACAPY_IMAGE}
+    entrypoint: /bin/bash
+    command: [
+        "-c",
+        "sleep 10;
+        aca-py start \
+        --auto-provision \
+        --inbound-transport http 0.0.0.0 10011 \
+        --outbound-transport http \
+        --admin 0.0.0.0 10010 \
+        --endpoint http://holder-acapy-2:10011 \
+        --genesis-url ${LEDGER_GENESIS} \
+        --ledger-pool-name $LEDGER_POOL_NAME \
+        --ledger-pool-name ${LEDGER_POOL_NAME} \
+        --admin-insecure-mode \
+        --label holder_acapy \
+        --wallet-type ${WALLET_TYPE} \
+        --wallet-name wallet_db \
+        --wallet-key key \
+        --wallet-storage-type default \
+        --auto-accept-invites \
+        --invite-public \
+        --public-invites \
+        --auto-accept-requests \
+        --auto-ping-connection \
+        --auto-respond-credential-offer \
+        --auto-respond-credential-proposal \
+        --auto-respond-credential-request \
+        --auto-respond-messages \
+        --auto-store-credential \
+        --auto-respond-presentation-request \
+        --auto-respond-presentation-proposal \
+        --auto-verify-presentation \
+        --log-level ${ACAPY_LOG_LEVEL} \
+        ${ACAPY_DEBUG_OPTIONS}"
+    ]
+    depends_on:
+      - tails-server
+    ports:
+      - 10210:10010
+      - 10211:10011
     networks:
       - aries-load-test
     logging:

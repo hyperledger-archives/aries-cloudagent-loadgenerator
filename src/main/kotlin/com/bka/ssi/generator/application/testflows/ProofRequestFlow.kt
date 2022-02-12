@@ -17,11 +17,11 @@ import java.time.Instant
 )
 class ProofRequestFlow(
     @Qualifier("IssuerVerifier") private val issuerVerifierAriesClient: IAriesClient,
-    @Qualifier("Holder") private val holderAriesClient: IAriesClient,
+    @Qualifier("Holder") holderAriesClients: List<IAriesClient>,
     @Value("\${test-flows.proof-request-flow.revocation-registry-size}") private val revocationRegistrySize: Int,
     @Value("\${test-flows.proof-request-flow.check-non-revoked}") private val checkNonRevoked: Boolean,
     @Value("\${test-flows.proof-request-flow.use-oob-proof-requests}") private val useOobProofRequests: Boolean,
-) : TestFlow() {
+) : TestFlow(holderAriesClients) {
 
     protected companion object {
         var credentialDefinitionId = ""
@@ -90,13 +90,13 @@ class ProofRequestFlow(
             checkNonRevoked
         )
 
-        holderAriesClient.receiveOobProofRequest(oobProofRequest)
+        nextHolderClient().receiveOobProofRequest(oobProofRequest)
     }
 
     private fun initiateConnection() {
         val connectionInvitation = issuerVerifierAriesClient.createConnectionInvitation("holder-acapy")
 
-        holderAriesClient.receiveConnectionInvitation(connectionInvitation)
+        nextHolderClient().receiveConnectionInvitation(connectionInvitation)
     }
 
     override fun handleConnectionRecord(connectionRecord: ConnectionRecordDo) {

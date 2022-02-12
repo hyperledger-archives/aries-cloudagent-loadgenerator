@@ -16,11 +16,11 @@ import org.springframework.stereotype.Service
 )
 class CredentialIssuanceFlow(
     @Qualifier("IssuerVerifier") private val issuerVerifierAriesClient: IAriesClient,
-    @Qualifier("Holder") private val holderAriesClient: IAriesClient,
+    @Qualifier("Holder") holderAriesClients: List<IAriesClient>,
     @Value("\${test-flows.credential-issuance-flow.use-revocable-credentials}") private val useRevocableCredentials: Boolean,
     @Value("\${test-flows.credential-issuance-flow.revocation-registry-size}") private val revocationRegistrySize: Int,
     @Value("\${test-flows.credential-issuance-flow.use-oob-credential-issuance}") private val useOobCredentialIssuance: Boolean,
-) : TestFlow() {
+) : TestFlow(holderAriesClients) {
 
     protected companion object {
         var credentialDefinitionId = ""
@@ -85,13 +85,13 @@ class CredentialIssuanceFlow(
             )
         )
 
-        holderAriesClient.receiveOobCredentialOffer(oobCredentialOffer)
+        nextHolderClient().receiveOobCredentialOffer(oobCredentialOffer)
     }
 
     private fun initiateConnection() {
         val connectionInvitation = issuerVerifierAriesClient.createConnectionInvitation("holder-acapy")
 
-        holderAriesClient.receiveConnectionInvitation(connectionInvitation)
+        nextHolderClient().receiveConnectionInvitation(connectionInvitation)
     }
 
     override fun handleConnectionRecord(connectionRecord: ConnectionRecordDo) {
