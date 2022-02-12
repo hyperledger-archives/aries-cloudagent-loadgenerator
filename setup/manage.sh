@@ -108,7 +108,7 @@ start)
   sleep 10
 
   echo "Starting all AcaPy related docker containers ..."
-  docker-compose -f docker-compose.yml --profile all up -d --scale issuer-verifier-acapy=2
+  docker-compose -f docker-compose.yml --profile all up -d --scale issuer-verifier-acapy=10
   ;;
 startwithoutloadgenerator)
   startVonNetworkDashboardLogging
@@ -120,7 +120,7 @@ startwithoutloadgenerator)
   sleep 10
 
   echo "Starting all AcaPy related docker containers ..."
-  docker-compose -f docker-compose.yml up -d --scale issuer-verifier-acapy=2
+  docker-compose -f docker-compose.yml up -d --scale issuer-verifier-acapy=10
   ;;
 stop)
   echo "Stopping the VON Network ..."
