@@ -82,6 +82,7 @@ class IncreasingLoadTestRunner(
         val currentNumberOfIterationsPerMinute =
             initialNumberOfIterationsPerMinute + stepSizeOfIterationsPerMinute * totalNumberOfPeaksStarted
 
+        numberOfIterationsFinishedInCurrentPeak = 0L
         expectedNumberOfIterationsInCurrentPeak = currentNumberOfIterationsPerMinute * peakDurationInMinutes
 
         val loadExecutor = Executors.newScheduledThreadPool(coreThreadPoolSize)
@@ -101,8 +102,6 @@ class IncreasingLoadTestRunner(
 
     private fun killCurrentPeakLoad() {
         loadScheduler?.cancel(false)
-
-        numberOfIterationsFinishedInCurrentPeak = 0L
 
         if (totalNumberOfPeaksStarted >= totalNumberOfPeaks) {
             killScheduler?.cancel(false)
