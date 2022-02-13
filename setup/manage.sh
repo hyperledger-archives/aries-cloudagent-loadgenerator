@@ -82,7 +82,7 @@ function logs() {
   fi
 }
 
-function startVonNetworkDashboardLogging() {
+function startAllWithoutLoadGenerator() {
   echo "Starting the VON Network ..."
   git submodule update --init --recursive
   ./von-network/manage build
@@ -95,32 +95,30 @@ function startVonNetworkDashboardLogging() {
 
   echo "Starting dashboard and logging containers ..."
   docker-compose -f ./dashboard/docker-compose.yml up -d
+
+  echo "Provisioning AcaPys and Wallet DBs ..."
+  docker-compose -f docker-compose.yml --profile issuer-verifier-provisioning up -d --build
+
+  echo "Waiting for the Wallet DB to be provisioned... (sleeping 10 seconds)"
+  sleep 10
+
+  echo "Starting all AcaPy related docker containers ..."
+  docker-compose -f docker-compose.yml --profile all-but-load-generator up -d --scale issuer-verifier-acapy=10
+
 }
 
 case "${COMMAND}" in
 start)
-  startVonNetworkDashboardLogging
+  startAllWithoutLoadGenerator
 
-  echo "Provisioning AcaPys and Wallet DBs ..."
-  docker-compose -f docker-compose.yml --profile all up -d --build
+  echo "Waiting for system to start... (sleeping 15 seconds)"
+  sleep 15
 
-  echo "Waiting for the Wallet DB to be provisioned... (sleeping 10 seconds)"
-  sleep 10
-
-  echo "Starting all AcaPy related docker containers ..."
+  echo "Starting Load Generator ..."
   docker-compose -f docker-compose.yml --profile all up -d --scale issuer-verifier-acapy=10
   ;;
 startwithoutloadgenerator)
-  startVonNetworkDashboardLogging
-
-  echo "Provisioning AcaPys and Wallet DBs ..."
-  docker-compose -f docker-compose.yml up -d
-
-  echo "Waiting for the Wallet DB to be provisioned... (sleeping 10 seconds)"
-  sleep 10
-
-  echo "Starting all AcaPy related docker containers ..."
-  docker-compose -f docker-compose.yml up -d --scale issuer-verifier-acapy=10
+  startAllWithoutLoadGenerator
   ;;
 stop)
   echo "Stopping the VON Network ..."
