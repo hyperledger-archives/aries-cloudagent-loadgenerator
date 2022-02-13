@@ -172,7 +172,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.0-beta1",
       "targets": [
         {
           "datasource": {
@@ -226,7 +226,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.0-beta1",
       "targets": [
         {
           "datasource": {
@@ -280,7 +280,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.0-beta1",
       "targets": [
         {
           "datasource": {
@@ -338,7 +338,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.0-beta1",
       "targets": [
         {
           "datasource": {
@@ -396,7 +396,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.0-beta1",
       "targets": [
         {
           "datasource": {
@@ -454,7 +454,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.0-beta1",
       "targets": [
         {
           "datasource": {
@@ -1635,7 +1635,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.0-beta1",
       "targets": [
         {
           "datasource": {
@@ -1693,7 +1693,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.0-beta1",
       "targets": [
         {
           "datasource": {
@@ -2056,7 +2056,8 @@
           "placement": "bottom"
         },
         "tooltip": {
-          "mode": "single"
+          "mode": "single",
+          "sort": "none"
         }
       },
       "pluginVersion": "8.3.4",
@@ -2069,6 +2070,16 @@
           "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=error\"\n    |= \"AcaPyPublisher.handleCredential: Revocation registry metadata not found.\"\n[10d])",
           "legendFormat": "AcaPyPublisher.handleCredential: Revocation registry metadata not found.",
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=error\"\n    |= \"AcaPyPublisher.handleCredential: Record not found.\"\n[10d])",
+          "hide": false,
+          "legendFormat": "AcaPyPublisher.handleCredential: Record not found.",
+          "refId": "B"
         }
       ],
       "title": "Number of known Errors",
@@ -2145,14 +2156,14 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.0-beta1",
       "targets": [
         {
           "datasource": {
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": " {app=\"aries-load-generator\"}\n    |= \"type=error\"\n    != \"AcaPyPublisher.handleCredential: Revocation registry metadata not found.\"",
+          "expr": " {app=\"aries-load-generator\"}\n    |= \"type=error\"\n    != \"AcaPyPublisher.handleCredential: Revocation registry metadata not found.\"\n    != \"AcaPyPublisher.handleCredential: Record not found.\"",
           "refId": "A"
         }
       ],
@@ -2161,20 +2172,20 @@
     }
   ],
   "refresh": false,
-  "schemaVersion": 34,
+  "schemaVersion": 35,
   "style": "dark",
   "tags": [],
   "templating": {
     "list": []
   },
   "time": {
-    "from": "now-30m",
-    "to": "now"
+    "from": "2022-02-13T13:22:45.297Z",
+    "to": "2022-02-13T15:09:26.083Z"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Test Results",
   "uid": "0Pe9llbnz",
-  "version": 3,
+  "version": 1,
   "weekStart": ""
 }
