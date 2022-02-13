@@ -30,6 +30,8 @@ usage() {
       startWithoutLoadGenerator - Starts all containers but the load generator.
                                   Can be used for running the load generator via the IDE.
 
+      restart - First, "down" is executed. Then, "start" is run.
+
       stop - Stops and remove the services.
              The volumes are not deleted so they will be reused the next time you run start.
 
@@ -82,6 +84,27 @@ function logs() {
   fi
 }
 
+function startAll() {
+  startAllWithoutLoadGenerator
+
+    echo "Waiting for system to start... (sleeping 15 seconds)"
+    sleep 15
+
+    echo "Starting Load Generator ..."
+    docker-compose -f docker-compose.yml --profile all up -d --scale issuer-verifier-acapy=10
+}
+
+function downAll() {
+  echo "Stopping the VON Network and deleting ledger data ..."
+  ./von-network/manage down
+
+  echo "Stopping and removing dashboard and logging containers as well as volumes ..."
+  docker-compose -f ./dashboard/docker-compose.yml down -v
+
+  echo "Stopping and removing any running AcaPy containers as well as volumes ..."
+  docker-compose -f docker-compose.yml down -v
+}
+
 function startAllWithoutLoadGenerator() {
   echo "Starting the VON Network ..."
   git submodule update --init --recursive
@@ -109,16 +132,14 @@ function startAllWithoutLoadGenerator() {
 
 case "${COMMAND}" in
 start)
-  startAllWithoutLoadGenerator
-
-  echo "Waiting for system to start... (sleeping 15 seconds)"
-  sleep 15
-
-  echo "Starting Load Generator ..."
-  docker-compose -f docker-compose.yml --profile all up -d --scale issuer-verifier-acapy=10
+  startAll
   ;;
 startwithoutloadgenerator)
   startAllWithoutLoadGenerator
+  ;;
+restart)
+  downAll
+  startAll
   ;;
 stop)
   echo "Stopping the VON Network ..."
@@ -131,14 +152,7 @@ stop)
   docker-compose -f docker-compose.yml rm -f -s
   ;;
 down)
-  echo "Stopping the VON Network and deleting ledger data ..."
-  ./von-network/manage down
-
-  echo "Stopping and removing dashboard and logging containers as well as volumes ..."
-  docker-compose -f ./dashboard/docker-compose.yml down -v
-
-  echo "Stopping and removing any running AcaPy containers as well as volumes ..."
-  docker-compose -f docker-compose.yml down -v
+  downAll
   ;;
 logs)
   initEnv "$@"
