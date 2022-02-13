@@ -79,7 +79,6 @@ services:
     ]
     depends_on:
       - issuer-verifier-wallet-db
-      - tails-server
     networks:
       - aries-load-test
     logging:
