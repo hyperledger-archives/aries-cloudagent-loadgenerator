@@ -41,7 +41,7 @@ services:
     ports:
       - 5432:5432
     restart: always
-    profiles: [ "all", "all-but-load-generator" ]
+    profiles: [ "all", "all-but-load-generator", "issuer-verifier-provisioning" ]
 
   issuer-verifier-acapy:
     image: ${ACAPY_IMAGE}
