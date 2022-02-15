@@ -86,14 +86,6 @@ services:
     networks:
       - dashboard-and-logging
 
-  redis:
-    image: redis:6
-    container_name: redis
-    ports:
-      - 6379:6379
-    networks:
-      - dashboard-and-logging
-
   dozzle:
     container_name: dozzle
     image: amir20/dozzle:latest
