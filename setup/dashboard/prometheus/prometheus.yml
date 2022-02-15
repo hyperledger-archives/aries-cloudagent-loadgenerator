@@ -20,6 +20,10 @@ scrape_configs:
     static_configs:
       - targets: ['cadvisor:9091']
 
+  - job_name: 'node-export'
+    static_configs:
+      - targets: ['docker.for.mac.host.internal:9100']
+
   - job_name: 'prometheus'
     scrape_interval: 5s
     static_configs:
