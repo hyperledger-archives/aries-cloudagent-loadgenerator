@@ -18,4 +18,4 @@ COPY --from=MAVEN_BUILD /build/target/generator-0.0.1-SNAPSHOT.jar /app/
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-Dlog4j2.formatMsgNoLookups=true","-jar", "generator-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-Dspring.profiles.active=docker","-jar", "generator-0.0.1-SNAPSHOT.jar"]

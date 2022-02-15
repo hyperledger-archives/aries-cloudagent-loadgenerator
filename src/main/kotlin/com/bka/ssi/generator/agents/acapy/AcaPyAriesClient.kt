@@ -1,5 +1,6 @@
 package com.bka.ssi.generator.agents.acapy
 
+import com.bka.ssi.generator.application.logger.ErrorLogger
 import com.bka.ssi.generator.domain.objects.*
 import com.bka.ssi.generator.domain.services.IAriesClient
 import com.google.gson.Gson
@@ -17,7 +18,8 @@ import org.hyperledger.aries.api.schema.SchemaSendRequest
 
 
 class AcaPyAriesClient(
-    private val acaPy: AriesClient
+    private val acaPy: AriesClient,
+    private val errorLogger: ErrorLogger
 ) : IAriesClient {
 
     override fun getPublicDid(): String? {
@@ -26,7 +28,11 @@ class AcaPyAriesClient(
         return did.did
     }
 
-    override fun createSchemaAndCredentialDefinition(schemaDo: SchemaDo): CredentialDefinitionDo {
+    override fun createSchemaAndCredentialDefinition(
+        schemaDo: SchemaDo,
+        revocable: Boolean,
+        revocationRegistrySize: Int
+    ): CredentialDefinitionDo {
         val schemaSendResponse = acaPy.schemas(
             SchemaSendRequest.builder()
                 .attributes(schemaDo.attributes)
@@ -36,20 +42,20 @@ class AcaPyAriesClient(
         )
 
         if (schemaSendResponse.isEmpty) {
-            throw Exception("Failed to create schema.")
+            errorLogger.reportError("AcaPyAriesClient.createSchemaAndCredentialDefinition: Failed to create schema.")
         }
 
         val credentialDefinitionResponse = acaPy.credentialDefinitionsCreate(
             CredentialDefinition.CredentialDefinitionRequest.builder()
                 .schemaId(schemaSendResponse.get().schemaId)
-                .revocationRegistrySize(500)
-                .supportRevocation(true)
+                .supportRevocation(revocable)
+                .revocationRegistrySize(revocationRegistrySize)
                 .tag("1.0")
                 .build()
         )
 
         if (credentialDefinitionResponse.isEmpty) {
-            throw Exception("Failed to create credential definition.")
+            errorLogger.reportError("AcaPyAriesClient.createSchemaAndCredentialDefinition: Failed to create credential definition.")
         }
 
         return CredentialDefinitionDo(credentialDefinitionResponse.get().credentialDefinitionId)
@@ -67,7 +73,7 @@ class AcaPyAriesClient(
         )
 
         if (createInvitationRequest.isEmpty) {
-            throw Exception("Failed to create connection invitation.")
+            errorLogger.reportError("AcaPyAriesClient.createConnectionInvitation: Failed to create connection invitation.")
         }
 
         return ConnectionInvitationDo(
@@ -92,7 +98,7 @@ class AcaPyAriesClient(
         )
 
         if (connectionRecord.isEmpty) {
-            throw Exception("Failed to receive connection invitation.")
+            errorLogger.reportError("AcaPyAriesClient.receiveConnectionInvitation: Failed to receive connection invitation.")
         }
     }
 
@@ -117,90 +123,74 @@ class AcaPyAriesClient(
         )
 
         if (credentialExchange.isEmpty) {
-            throw Exception("Failed to issue credential.")
+            errorLogger.reportError("AcaPyAriesClient.issueCredentialToConnection: Failed to issue credential.")
         }
     }
 
-    override fun sendProofRequestToConnection(connectionId: String, proofRequestDo: ProofRequestDo) {
+    override fun createOobCredentialOffer(credentialDo: CredentialDo): OobCredentialOfferDo {
+        errorLogger.reportError("AcaPyAriesClient.createOobCredentialOffer: Creating an OOB Credential Offer is not implemented yet.")
+        throw NotImplementedError("Creating an OOB Credential Offer is not implemented yet.")
+    }
+
+    override fun receiveOobCredentialOffer(oobCredentialOfferDo: OobCredentialOfferDo) {
+        errorLogger.reportError("AcaPyAriesClient.receiveOobCredentialOffer: Receiving an OOB Credential Offer is not implemented yet.")
+        throw NotImplementedError("Receiving an OOB Credential Offer is not implemented yet.")
+    }
+
+    override fun sendProofRequestToConnection(
+        connectionId: String,
+        proofRequestDo: ProofRequestDo,
+        checkNonRevoked: Boolean
+    ) {
+        val proofRequestBuilder = PresentProofRequest.ProofRequest.builder()
+            .name("Proof Request")
+            .requestedAttributes(
+                proofRequestDo.requestedCredentials.mapIndexed { index: Int, credentialRequestDo: CredentialRequestDo ->
+                    "${index}_credential" to PresentProofRequest.ProofRequest.ProofRequestedAttributes.builder()
+                        .names(credentialRequestDo.claims)
+                        .restriction(
+                            Gson().fromJson(
+                                "{\"cred_def_id\": \"${credentialRequestDo.credentialDefinitionId}\"}",
+                                JsonObject::class.java
+                            )
+                        )
+                        .build()
+                }.toMap()
+            )
+            .version("1.0")
+
+        if (checkNonRevoked) {
+            proofRequestBuilder.nonRevoked(
+                PresentProofRequest.ProofRequest.ProofNonRevoked(
+                    proofRequestDo.nonRevokedFrom,
+                    proofRequestDo.nonRevokedTo
+                )
+            )
+        }
+
+        val proofRequest = proofRequestBuilder.build()
+
         val presentationExchangeRecord = acaPy.presentProofSendRequest(
             PresentProofRequest(
                 connectionId,
-                PresentProofRequest.ProofRequest.builder()
-                    .name("Proof Request")
-                    .nonRevoked(
-                        PresentProofRequest.ProofRequest.ProofNonRevoked(
-                            proofRequestDo.nonRevokedFrom,
-                            proofRequestDo.nonRevokedTo
-                        )
-                    )
-                    .requestedAttributes(
-                        proofRequestDo.requestedCredentials.mapIndexed { index: Int, credentialRequestDo: CredentialRequestDo ->
-                            "${index}_credential" to PresentProofRequest.ProofRequest.ProofRequestedAttributes.builder()
-                                .names(credentialRequestDo.claims)
-                                .restriction(
-                                    Gson().fromJson(
-                                        "{\"cred_def_id\": \"${credentialRequestDo.credentialDefinitionId}\"}",
-                                        JsonObject::class.java
-                                    )
-                                )
-                                .build()
-                        }.toMap()
-                    )
-                    .version("1.0")
-                    .build(),
+                proofRequest,
                 false,
                 "Proof Request"
             )
         )
 
         if (presentationExchangeRecord.isEmpty) {
-            throw Exception("Failed to create and send proof request to connectionId.")
+            errorLogger.reportError("AcaPyAriesClient.sendProofRequestToConnection: Failed to create and send proof request to connectionId.")
         }
     }
 
-    override fun createConnectionlessProofRequest(proofRequestDo: ProofRequestDo): ConnectionlessProofRequestDo {
-        val presentationExchangeRecord = acaPy.presentProofCreateRequest(
-            PresentProofRequest(
-                null,
-                PresentProofRequest.ProofRequest.builder()
-                    .name("Proof Request")
-                    .nonRevoked(
-                        PresentProofRequest.ProofRequest.ProofNonRevoked(
-                            proofRequestDo.nonRevokedFrom,
-                            proofRequestDo.nonRevokedTo
-                        )
-                    )
-                    .requestedAttributes(
-                        proofRequestDo.requestedCredentials.mapIndexed { index: Int, credentialRequestDo: CredentialRequestDo ->
-                            "${index}_credential" to PresentProofRequest.ProofRequest.ProofRequestedAttributes.builder()
-                                .names(credentialRequestDo.claims)
-                                .restriction(
-                                    Gson().fromJson(
-                                        "{\"cred_def_id\": \"${credentialRequestDo.credentialDefinitionId}\"}",
-                                        JsonObject::class.java
-                                    )
-                                )
-                                .build()
-                        }.toMap()
-                    )
-                    .version("1.0")
-                    .build(),
-                false,
-                "Proof Request"
-            )
-        )
-
-        if (presentationExchangeRecord.isEmpty) {
-            throw Exception("Failed to create connectionless proof request.")
-        }
-
-        return ConnectionlessProofRequestDo(
-            10,
-            10,
-            emptyList()
-        )
+    override fun createOobProofRequest(proofRequestDo: ProofRequestDo, checkNonRevoked: Boolean): OobProofRequestDo {
+        errorLogger.reportError("AcaPyAriesClient.createOobProofRequest: Creating an OOB Proof Request is not implemented yet.")
+        throw NotImplementedError("Creating an OOB Proof Request is not implemented yet.")
     }
 
-    override fun receiveConnectionlessProofRequest(connectionlessProofRequestDo: ConnectionlessProofRequestDo) {
+    override fun receiveOobProofRequest(oobProofRequestDo: OobProofRequestDo) {
+        errorLogger.reportError("AcaPyAriesClient.receiveOobProofRequest: Receiving an OOB Proof Request is not implemented yet.")
+        throw NotImplementedError("Receiving an OOB Proof Request is not implemented yet.")
     }
 }

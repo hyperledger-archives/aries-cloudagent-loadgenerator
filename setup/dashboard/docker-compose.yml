@@ -15,6 +15,9 @@ services:
       - ./grafana/grafana-provisioning:/etc/grafana/provisioning
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
       - ./grafana/dashboards:/var/lib/grafana/dashboards
+    depends_on:
+      - grafana-image-renderer
+      - loki
     networks:
       - dashboard-and-logging
 
@@ -34,6 +37,9 @@ services:
     entrypoint: "/usr/local/bin/grafana-reporter -ip grafana:3000 -grid-layout=1"
     ports:
       - 8686:8686
+    depends_on:
+      - grafana
+      - grafana-image-renderer
     networks:
       - dashboard-and-logging
 
@@ -46,8 +52,6 @@ services:
     volumes:
       - loki-volume:/data/loki
       - ./loki/local-config.yaml:/etc/loki/local-config.yaml
-    depends_on:
-      - grafana
     networks:
       - dashboard-and-logging
 
@@ -89,6 +93,23 @@ services:
       - 6379:6379
     networks:
       - dashboard-and-logging
+
+  dozzle:
+    container_name: dozzle
+    image: amir20/dozzle:latest
+    environment:
+      - DOZZLE_BASE=/dozzle
+      - DOZZLE_LEVEL=DEBUG
+      - DOZZLE_USERNAME=view
+      - DOZZLE_PASSWORD=8R1uVAwRn3eyjKPj1A4iZggWTay9IOa5kEYFyaoM
+      - DOZZLE_KEY=7zocTTANMOOH3eZVXmD5DShm4ja1vQmfoHqZRh3a
+      - DOZZLE_NO_ANALYTICS=true
+    networks:
+      - dashboard-and-logging
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 9999:8080
 
 networks:
   dashboard-and-logging:

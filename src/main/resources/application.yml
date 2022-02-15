@@ -20,19 +20,49 @@ issuer-verifier:
 holder:
     acapy:
         api-key:
-        url: 'http://localhost:10010'
+        urls: 'http://localhost:10110, http://localhost:10210, http://localhost:10310, http://localhost:10410, http://localhost:10510, http://localhost:10610, http://localhost:10710, http://localhost:10810, http://localhost:10910, http://localhost:11010'
         http-timeout: 60
 
-test-cases:
-    full-process:
-        max-parallel-iterations-runner:
-            active: true
-            number-of-total-iterations: 100
-            number-of-parallel-iterations: 5
-            use-connectionless-proof-requests: false
-        constant-load-runner:
-            active: false
-            number-of-total-iterations: 100
-            number-of-iterations-per-minute: 30
-            core-thread-pool-size: 4
-            use-connectionless-proof-requests: false
+test-runners:
+    max-parallel-iterations-runner:
+        active: false
+        number-of-total-iterations: 100
+        number-of-parallel-iterations: 5
+    constant-load-runner:
+        active: false
+        number-of-total-iterations: 100
+        number-of-iterations-per-minute: 30
+        core-thread-pool-size: 4
+    increasing-load-runner:
+        active: true
+        peak-duration-in-minutes: 2
+        sleep-between-peaks-in-minutes: 1
+        initial-number-of-iterations-per-minute: 150
+        final-number-of-iterations-per-minute: 500
+        step-size-of-iterations-per-minute: 25
+        core-thread-pool-size: 4
+
+test-flows:
+    full-flow:
+        active: true
+        use-revocable-credentials: true
+        revocation-registry-size: 500
+        check-non-revoked: true
+        use-oob-instead-of-connection: false
+    issuer-flow:
+        active: false
+        use-revocable-credentials: true
+        revocation-registry-size: 500
+        use-oob-credential-issuance: false
+    connection-flow:
+        active: false
+    credential-issuance-flow:
+        active: false
+        use-revocable-credentials: true
+        revocation-registry-size: 500
+        use-oob-credential-issuance: false
+    proof-request-flow:
+        active: false
+        check-non-revoked: true
+        revocation-registry-size: 500
+        use-oob-proof-requests: false

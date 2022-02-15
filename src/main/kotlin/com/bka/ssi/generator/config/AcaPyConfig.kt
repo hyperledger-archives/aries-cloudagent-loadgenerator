@@ -20,6 +20,7 @@ package com.bka.ssi.generator.config
 
 import com.bka.ssi.generator.agents.acapy.AcaPyAriesClient
 import com.bka.ssi.generator.agents.acapy.OkHttpPublisher
+import com.bka.ssi.generator.application.logger.ErrorLogger
 import com.bka.ssi.generator.domain.services.IAriesClient
 import okhttp3.OkHttpClient
 import org.hyperledger.aries.AriesClient
@@ -32,11 +33,12 @@ import java.util.concurrent.TimeUnit
 
 @Configuration
 class AcaPyConfig(
+    private val errorLogger: ErrorLogger,
     @Value("\${issuer-verifier.acapy.api-key}") private val issuerVerifierAcaPyApiKey: String?,
     @Value("\${issuer-verifier.acapy.url}") private val issuerVerifierAcaPyUrl: String?,
     @Value("\${issuer-verifier.acapy.http-timeout}") private val issuerVerifierAcaPyHttpTimeout: Long,
     @Value("\${holder.acapy.api-key}") private val holderAcaPyApiKey: String?,
-    @Value("\${holder.acapy.url}") private val holderAcaPyUrl: String?,
+    @Value("\${holder.acapy.urls}") private val holderAcaPyUrls: Array<String>,
     @Value("\${holder.acapy.http-timeout}") private val holderAcapyHttpTimeout: Long
 ) {
     var logger: Logger = LoggerFactory.getLogger(AcaPyConfig::class.java)
@@ -56,20 +58,28 @@ class AcaPyConfig(
                 issuerVerifierAcaPyHttpTimeout
             )
 
-        return AcaPyAriesClient(issuerVerifierAcaPyClient)
+        return AcaPyAriesClient(issuerVerifierAcaPyClient, errorLogger)
     }
 
     @Bean(name = ["Holder"])
-    fun holderAriesClient(okHttpPublisher: OkHttpPublisher): IAriesClient? {
-        if (holderAcaPyUrl == null) {
+    fun holderAriesClient(okHttpPublisher: OkHttpPublisher): List<IAriesClient> {
+        val holderAcaPyClients = mutableListOf<IAriesClient>()
+
+        if (holderAcaPyUrls.isEmpty()) {
             logger.error("Unable to establish connection to Holder AcaPy. Holder AcaPy URL not configured.")
-            return null
+            return holderAcaPyClients
         }
 
-        val holderAcaPyClient =
-            buildAcaPyAriesClient(okHttpPublisher, holderAcaPyUrl, holderAcaPyApiKey, holderAcapyHttpTimeout)
+        holderAcaPyUrls.forEach {
+            val holderAcaPyClient =
+                buildAcaPyAriesClient(okHttpPublisher, it, holderAcaPyApiKey, holderAcapyHttpTimeout)
 
-        return AcaPyAriesClient(holderAcaPyClient)
+            holderAcaPyClients.add(
+                AcaPyAriesClient(holderAcaPyClient, errorLogger)
+            )
+        }
+
+        return holderAcaPyClients
     }
 
     private fun buildAcaPyAriesClient(

@@ -27,6 +27,11 @@ usage() {
       start - Creates the application containers from the built images
               and starts the services based on the docker-compose.yml file.
 
+      startWithoutLoadGenerator - Starts all containers but the load generator.
+                                  Can be used for running the load generator via the IDE.
+
+      restart - First, "down" is executed. Then, "start" is run.
+
       stop - Stops and remove the services.
              The volumes are not deleted so they will be reused the next time you run start.
 
@@ -79,14 +84,34 @@ function logs() {
   fi
 }
 
-case "${COMMAND}" in
-start)
+function startAll() {
+  startAllWithoutLoadGenerator
+
+    echo "Waiting for system to start... (sleeping 15 seconds)"
+    sleep 15
+
+    echo "Starting Load Generator ..."
+    docker-compose -f docker-compose.yml --profile all up -d --scale issuer-verifier-acapy=10
+}
+
+function downAll() {
+  echo "Stopping the VON Network and deleting ledger data ..."
+  ./von-network/manage down
+
+  echo "Stopping and removing dashboard and logging containers as well as volumes ..."
+  docker-compose -f ./dashboard/docker-compose.yml down -v
+
+  echo "Stopping and removing any running AcaPy containers as well as volumes ..."
+  docker-compose -f docker-compose.yml down -v
+}
+
+function startAllWithoutLoadGenerator() {
   echo "Starting the VON Network ..."
   git submodule update --init --recursive
   ./von-network/manage build
   ./von-network/manage start
-  echo "Waiting for the ledger to start... (takes 45 seconds)"
-  sleep 45
+  echo "Waiting for the ledger to start... (sleeping 30 seconds)"
+  sleep 30
 
   echo "Registering issuer DID..."
   curl -d "{\"role\": \"ENDORSER\", \"seed\":\"$ISSUER_DID_SEED\"}" -H "Content-Type: application/json" -X POST $LEDGER_REGISTER_DID_ENDPOINT
@@ -95,10 +120,26 @@ start)
   docker-compose -f ./dashboard/docker-compose.yml up -d
 
   echo "Provisioning AcaPys and Wallet DBs ..."
-  docker-compose -f docker-compose.yml up -d
+  docker-compose -f docker-compose.yml --profile issuer-verifier-provisioning up -d --build
+
+  echo "Waiting for the Wallet DB to be provisioned... (sleeping 10 seconds)"
+  sleep 10
 
   echo "Starting all AcaPy related docker containers ..."
-  docker-compose -f docker-compose.yml up -d --scale issuer-verifier-acapy=10 --scale holder-acapy=20
+  docker-compose -f docker-compose.yml --profile all-but-load-generator up -d --scale issuer-verifier-acapy=10
+
+}
+
+case "${COMMAND}" in
+start)
+  startAll
+  ;;
+startwithoutloadgenerator)
+  startAllWithoutLoadGenerator
+  ;;
+restart)
+  downAll
+  startAll
   ;;
 stop)
   echo "Stopping the VON Network ..."
@@ -111,14 +152,7 @@ stop)
   docker-compose -f docker-compose.yml rm -f -s
   ;;
 down)
-  echo "Stopping the VON Network and deleting ledger data ..."
-  ./von-network/manage down
-
-  echo "Stopping and removing dashboard and logging containers as well as volumes ..."
-  docker-compose -f ./dashboard/docker-compose.yml down -v
-
-  echo "Stopping and removing any running AcaPy containers as well as volumes ..."
-  docker-compose -f docker-compose.yml down -v
+  downAll
   ;;
 logs)
   initEnv "$@"

@@ -24,19 +24,53 @@ For more details check this [README](./setup/README.md).
 
 ### Configuration
 
-The load generator as well as the test case to run is configured via the [application.yml](
-./src/main/resources/application.yml). Alternatively, you can set the same parameters using environment variables.
+The load generator is configured via the [application.yml](./src/main/resources/application.yml). Alternatively, you can
+set the same parameters using environment variables.
+
+Two things need to be chosen by setting `active: true`:
+
+1. **Test Runner** (each Test Runner generates the load differently)
+2. **Test Flow** (each Test Flow corresponds to a different test scenario)
 
 ```
-test-cases:
-  full-process:
-    active: true
-    number-of-total-iterations: 10
-    number-of-parallel-iterations: 2
+test-runners:
+    max-parallel-iterations-runner:
+        active: false
+        number-of-total-iterations: 100
+        number-of-parallel-iterations: 5
+    constant-load-runner:
+        active: true
+        number-of-total-iterations: 100
+        number-of-iterations-per-minute: 30
+        core-thread-pool-size: 4
+
+test-flows:
+    full-flow:
+        active: true
+        use-revocable-credentials: true
+        revocation-registry-size: 500
+        check-non-revoked: true
+        use-oob-instead-of-connection: false
+    issuer-flow:
+        active: false
+        use-revocable-credentials: true
+        revocation-registry-size: 500
+        use-oob-credential-issuance: false
+    connection-request-flow:
+        active: false
+    credential-issuance-flow:
+        active: false
+        use-revocable-credentials: true
+        revocation-registry-size: 500
+        use-oob-credential-issuance: false
+    proof-request-flow:
+        active: false
+        check-non-revoked: true
+        use-oob-proof-requests: false
 ```
 
-Only one test case should be set to `active: true` at a time. This test case will **automatically be executed** once the
-application is started.
+Only one Test Runner and one Test Flow should be set to `active: true` at a time. The Test Flow will **automatically be
+executed** by the Test Runner once the application is started.
 
 ### Local setup
 
@@ -98,8 +132,7 @@ automatically when starting the test environment.
 ### View Test Results in Grafana
 
 Grafana runs on http://localhost:3000. It comes preconfigured with dashboards to visualize the test results from the
-load tests. You can for example open http://localhost:3000/d/0Pe9llbnz/full-process to the test results for
-the `Full Process` test.
+load tests. You can for example open http://localhost:3000/d/0Pe9llbnz/test-results to the test results.
 
 To see any data on the dashboard, ensure to select the right time range in Grafana for which data has been collected.
 
