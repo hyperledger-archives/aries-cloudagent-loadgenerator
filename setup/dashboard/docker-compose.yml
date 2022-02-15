@@ -68,6 +68,9 @@ services:
       - cadvisor
     networks:
       - dashboard-and-logging
+    # https://stackoverflow.com/a/67158212/898
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:v0.39.3
