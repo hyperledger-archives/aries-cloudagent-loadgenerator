@@ -12,6 +12,8 @@ This repository comes with an automated testing setup consisting of:
 - VON Network
 - Analysis Tools ([see below](#analysis-tools))
 
+To configure it create a `./setup/.env` file similar to [./setup/.env.example](./setup/.env.example)
+
 To start it run:
 
 ```
