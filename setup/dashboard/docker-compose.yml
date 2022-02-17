@@ -5,7 +5,7 @@ services:
     container_name: grafana
     image: grafana/grafana:latest
     ports:
-      - "3000:3000"
+      - 3000:3000
     environment:
       GF_RENDERING_SERVER_URL: http://grafana-image-renderer:8081/render
       GF_RENDERING_CALLBACK_URL: http://grafana:3000/
@@ -52,6 +52,38 @@ services:
     volumes:
       - loki-volume:/data/loki
       - ./loki/local-config.yaml:/etc/loki/local-config.yaml
+    networks:
+      - dashboard-and-logging
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:v2.33.1
+    ports:
+      - 9090:9090
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    depends_on:
+      - cadvisor
+    networks:
+      - dashboard-and-logging
+    # https://stackoverflow.com/a/67158212/898
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.39.3
+    container_name: cadvisor
+    command:
+      - '-port=9091'
+    ports:
+      - 9091:9091
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
     networks:
       - dashboard-and-logging
 

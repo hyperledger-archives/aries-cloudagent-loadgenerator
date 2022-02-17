@@ -1,0 +1,26 @@
+global:
+  scrape_interval:     15s # By default, scrape targets every 15 seconds.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+  # Attach these labels to any time series or alerts when communicating with
+  # external systems (federation, remote storage, Alertmanager).
+  #  external_labels:
+  #    monitor: 'codelab-monitor'
+
+# A scrape configuration containing exactly one endpoint to scrape:
+scrape_configs:
+  - job_name: 'docker'
+    static_configs:
+      - targets: ['host.docker.internal:9323']
+
+  - job_name: 'cadvisor'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['cadvisor:9091']
+
+  - job_name: 'node-export'
+    static_configs:
+      - targets: ['host.docker.internal:9100']
+
+
