@@ -87,22 +87,11 @@ function logs() {
 function startAll() {
   startAllWithoutLoadGenerator
 
-    echo "Waiting for system to start... (sleeping 15 seconds)"
-    sleep 15
+  echo "Waiting for system to start... (sleeping 15 seconds)"
+  sleep 15
 
-    echo "Starting Load Generator ..."
-    docker-compose -f docker-compose.yml --profile all up -d --scale issuer-verifier-acapy=10
-}
-
-function downAll() {
-  echo "Stopping the VON Network and deleting ledger data ..."
-  ./von-network/manage down
-
-  echo "Stopping and removing dashboard and logging containers as well as volumes ..."
-  docker-compose -f ./dashboard/docker-compose.yml down -v
-
-  echo "Stopping and removing any running AcaPy containers as well as volumes ..."
-  docker-compose -f docker-compose.yml down -v
+  echo "Starting Load Generator ..."
+  docker-compose -f docker-compose.yml --profile all up -d --build --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES
 }
 
 function startAllWithoutLoadGenerator() {
@@ -120,14 +109,25 @@ function startAllWithoutLoadGenerator() {
   docker-compose -f ./dashboard/docker-compose.yml up -d
 
   echo "Provisioning AcaPys and Wallet DBs ..."
-  docker-compose -f docker-compose.yml --profile issuer-verifier-provisioning up -d --build
+  docker-compose -f docker-compose.yml --profile issuer-verifier-provisioning up -d
 
   echo "Waiting for the Wallet DB to be provisioned... (sleeping 10 seconds)"
   sleep 10
 
   echo "Starting all AcaPy related docker containers ..."
-  docker-compose -f docker-compose.yml --profile all-but-load-generator up -d --scale issuer-verifier-acapy=10
+  docker-compose -f docker-compose.yml --profile all-but-load-generator up -d --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES
 
+}
+
+function downAll() {
+  echo "Stopping the VON Network and deleting ledger data ..."
+  ./von-network/manage down
+
+  echo "Stopping and removing dashboard and logging containers as well as volumes ..."
+  docker-compose -f ./dashboard/docker-compose.yml down -v
+
+  echo "Stopping and removing any running AcaPy containers as well as volumes ..."
+  docker-compose -f docker-compose.yml down -v
 }
 
 case "${COMMAND}" in
