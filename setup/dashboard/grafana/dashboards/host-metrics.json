@@ -19,12 +19,13 @@
       }
     ]
   },
+  "description": "The dashboard visualizes host metrics collected by node_exporter. (based on: https://grafana.com/grafana/dashboards/1860)",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "gnetId": 1860,
   "graphTooltip": 0,
-  "id": 3,
-  "iteration": 1644927745556,
+  "id": 2,
+  "iteration": 1645117435834,
   "links": [
     {
       "icon": "external link",
@@ -13312,8 +13313,8 @@
       {
         "current": {
           "selected": false,
-          "text": "172.17.0.1:9100",
-          "value": "172.17.0.1:9100"
+          "text": "host.docker.internal:9100",
+          "value": "host.docker.internal:9100"
         },
         "datasource": {
           "type": "prometheus",
@@ -13392,8 +13393,8 @@
     ]
   },
   "timezone": "browser",
-  "title": "Node Exporter Full",
+  "title": "Host Metrics",
   "uid": "rYdddlPWk",
-  "version": 2,
+  "version": 1,
   "weekStart": ""
 }
