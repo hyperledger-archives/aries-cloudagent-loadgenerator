@@ -130,6 +130,16 @@ automatically when starting the test environment.
 - **Grafana PDF Exporter:** used to export a Grafana dashboard as a PDF (
   uses [IzakMarais/reporter](https://github.com/IzakMarais/reporter))
 - **Grafana Loki:** is used to collect logs from services like the Load Generator
+- **Prometheus:** is used to collect metrics from services like cAdvisor, node-exporter
+
+### Install node-exporter for collecting host metrics
+Prometheus *Node Exporter* exposes a wide variety of hardware- and kernel-related metrics.
+Follow the installation guide to install `node-exporter` as a native application: [Prometheus Node Exporter](https://prometheus.io/docs/guides/node-exporter/)
+
+You may consider running `node-exporter` on system startup, by adding it to `sudo crontab -e`
+```
+@reboot [INSTALLATION-DIR]/node_exporter > /dev/null 2>&1
+```
 
 ### View Test Results in Grafana
 
