@@ -23,8 +23,21 @@
   "fiscalYearStartMonth": 0,
   "gnetId": 6742,
   "graphTooltip": 0,
-  "iteration": 1645185182251,
-  "links": [],
+  "iteration": 1645189048790,
+  "links": [
+    {
+      "asDropdown": false,
+      "icon": "doc",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": true,
+      "title": "Download PDF Report",
+      "tooltip": "",
+      "type": "link",
+      "url": "http://localhost:8686/api/v5/report/5ZAfbNf7k"
+    }
+  ],
   "liveNow": false,
   "panels": [
     {
@@ -101,7 +114,7 @@
         },
         "textMode": "name"
       },
-      "pluginVersion": "8.3.5",
+      "pluginVersion": "8.4.0-beta1",
       "targets": [
         {
           "expr": "pg_static",
@@ -175,7 +188,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.5",
+      "pluginVersion": "8.4.0-beta1",
       "targets": [
         {
           "expr": "pg_settings_max_connections{instance=\"$instance\"}",
@@ -248,7 +261,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.5",
+      "pluginVersion": "8.4.0-beta1",
       "targets": [
         {
           "expr": "pg_settings_shared_buffers_bytes{instance=\"$instance\"}",
@@ -321,7 +334,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.5",
+      "pluginVersion": "8.4.0-beta1",
       "targets": [
         {
           "expr": "pg_settings_effective_cache_size_bytes{instance=\"$instance\"}",
@@ -394,7 +407,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.5",
+      "pluginVersion": "8.4.0-beta1",
       "targets": [
         {
           "expr": "pg_settings_maintenance_work_mem_bytes{instance=\"$instance\"}",
@@ -467,7 +480,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.5",
+      "pluginVersion": "8.4.0-beta1",
       "targets": [
         {
           "expr": "pg_settings_work_mem_bytes{instance=\"$instance\"}",
@@ -542,7 +555,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.5",
+      "pluginVersion": "8.4.0-beta1",
       "targets": [
         {
           "expr": "pg_settings_max_wal_size_bytes{instance=\"$instance\"}",
@@ -615,7 +628,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.5",
+      "pluginVersion": "8.4.0-beta1",
       "targets": [
         {
           "expr": "pg_settings_random_page_cost{instance=\"$instance\"}",
@@ -688,7 +701,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.5",
+      "pluginVersion": "8.4.0-beta1",
       "targets": [
         {
           "expr": "pg_settings_seq_page_cost",
@@ -761,7 +774,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.5",
+      "pluginVersion": "8.4.0-beta1",
       "targets": [
         {
           "expr": "pg_settings_max_worker_processes{instance=\"$instance\"}",
@@ -834,7 +847,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.5",
+      "pluginVersion": "8.4.0-beta1",
       "targets": [
         {
           "expr": "pg_settings_max_parallel_workers{instance=\"$instance\"}",
@@ -898,7 +911,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.3.5",
+      "pluginVersion": "8.4.0-beta1",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -982,7 +995,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.3.5",
+      "pluginVersion": "8.4.0-beta1",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1090,7 +1103,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.3.5",
+      "pluginVersion": "8.4.0-beta1",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1468,7 +1481,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.3.5",
+      "pluginVersion": "8.4.0-beta1",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1572,7 +1585,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.3.5",
+      "pluginVersion": "8.4.0-beta1",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1691,7 +1704,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.3.5",
+      "pluginVersion": "8.4.0-beta1",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1774,7 +1787,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.3.5",
+      "pluginVersion": "8.4.0-beta1",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1874,7 +1887,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.3.5",
+      "pluginVersion": "8.4.0-beta1",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2013,7 +2026,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.3.5",
+      "pluginVersion": "8.4.0-beta1",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2118,7 +2131,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.3.5",
+      "pluginVersion": "8.4.0-beta1",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2203,7 +2216,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.3.5",
+      "pluginVersion": "8.4.0-beta1",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2287,7 +2300,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.3.5",
+      "pluginVersion": "8.4.0-beta1",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2342,7 +2355,7 @@
       }
     }
   ],
-  "schemaVersion": 34,
+  "schemaVersion": 35,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -2441,6 +2454,6 @@
   "timezone": "",
   "title": "Issuer and Verifier Postgres Metrics",
   "uid": "5ZAfbNf7k",
-  "version": 1,
+  "version": 2,
   "weekStart": ""
 }
