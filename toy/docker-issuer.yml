@@ -1,0 +1,64 @@
+version: "3.7"
+
+services:
+  issuer-verifier-nginx:
+    container_name: issuer-verifier-nginx
+    image: nginx:latest
+    volumes:
+      - ./issuer-verifier-nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - issuer-verifier-acapy
+    ports:
+      - 10000:10000
+    networks:
+      - von_von
+
+  issuer-verifier-acapy:
+    image: ${ACAPY_IMAGE}
+    entrypoint: /bin/bash
+    command: [
+        "-c",
+        "sleep 10;
+          aca-py start \
+          --auto-provision
+          --admin 0.0.0.0 10000 \
+          --inbound-transport http 0.0.0.0 10001 \
+          --outbound-transport http \
+          --endpoint http://issuer-verifier-nginx:10001 \
+          --genesis-url ${LEDGER_GENESIS} \
+          --ledger-pool-name ${LEDGER_POOL_NAME} \
+          --invite-base-url didcomm://aries_connection_invitation \
+          --admin-insecure-mode \
+          --label issuer_verifier_acapy \
+          --wallet-type ${WALLET_TYPE} \
+          --wallet-name ${POSTGRES_DB} \
+          --wallet-key key \
+          --wallet-storage-type postgres_storage \
+          --wallet-storage-config '{\"url\":\"${POSTGRES_URL}\",\"max_connections\":${MAX_WALLET_CONNECTIONS}}' \
+          --wallet-storage-creds '{\"account\":\"${POSTGRES_USER}\",\"password\":\"${POSTGRES_PASSWORD}\",\"admin_account\":\"${POSTGRES_USER}\",\"admin_password\":\"${POSTGRES_PASSWORD}\"}' \
+          --auto-ping-connection \
+          --auto-verify-presentation \
+          --invite-public \
+          --public-invites \
+          --invite-multi-use \
+          --tails-server-base-url ${ACAPY_TAILS_SERVER_BASE_URL} \
+          --seed ${ISSUER_DID_SEED} \
+          --log-level ${ACAPY_LOG_LEVEL} \
+          --webhook-url ${LOAD_GENERATOR_WEBHOOK_ENDPOINT} \
+          ${ACAPY_DEBUG_OPTIONS}"
+    ]
+    networks:
+      - von_von
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "50m"
+    restart: always
+
+networks:
+  von_von:
+    name: von_von
+
+volumes:
+  issuer-verifier-wallet-db-volume:
