@@ -99,7 +99,7 @@ function startAll() {
 
 function startLoadGenerator() {
   echo "Starting Load Generator ..."
-  docker-compose -f docker-compose.yml --profile load-generator up -d --build --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES
+  docker-compose -f docker-load-generator.yml up -d --build
 }
 
 function startDashboard() {
@@ -121,13 +121,13 @@ function startAllWithoutLoadGenerator() {
   startDashboard
 
   echo "Provisioning AcaPys and Wallet DBs ..."
-  docker-compose -f docker-compose.yml --profile issuer-verifier-provisioning up -d
+  docker-compose -f docker-agents.yml --profile issuer-verifier-provisioning up -d
 
   echo "Waiting for the Wallet DB to be provisioned... (sleeping 10 seconds)"
   sleep 10
 
   echo "Starting all AcaPy related docker containers ..."
-  docker-compose -f docker-compose.yml --profile all-but-load-generator up -d --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES
+  docker-compose -f docker-agents.yml --profile all-but-load-generator up -d --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES
 }
 
 function downAll() {
@@ -137,8 +137,11 @@ function downAll() {
   echo "Stopping and removing dashboard and logging containers as well as volumes ..."
   docker-compose -f ./dashboard/docker-compose.yml down -v
 
+  echo "Stopping load generator ..."
+  docker-compose -f docker-load-generator.yml down -v
+
   echo "Stopping and removing any running AcaPy containers as well as volumes ..."
-  docker-compose -f docker-compose.yml down -v
+  docker-compose -f docker-agents.yml down -v
 }
 
 case "${COMMAND}" in
@@ -162,11 +165,14 @@ stop)
   echo "Stopping the VON Network ..."
   ./von-network/manage stop
 
+  echo "Stopping load generator"
+  docker-compose -f docker-load-generator rm -f -s
+
   echo "Stopping and removing dashboard and logging containers ..."
   docker-compose -f ./dashboard/docker-compose.yml rm -f -s
 
   echo "Stopping and removing any running AcaPy containers ..."
-  docker-compose -f docker-compose.yml rm -f -s
+  docker-compose -f docker-agents.yml rm -f -s
   ;;
 down)
   downAll
