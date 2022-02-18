@@ -36,10 +36,10 @@ class AcaPyConfig(
     private val errorLogger: ErrorLogger,
     @Value("\${issuer-verifier.acapy.api-key}") private val issuerVerifierAcaPyApiKey: String?,
     @Value("\${issuer-verifier.acapy.url}") private val issuerVerifierAcaPyUrl: String?,
-    @Value("\${issuer-verifier.acapy.http-timeout}") private val issuerVerifierAcaPyHttpTimeout: Long,
+    @Value("\${issuer-verifier.acapy.http-timeout-in-seconds}") private val issuerVerifierAcaPyHttpTimeoutInSeconds: Long,
     @Value("\${holder.acapy.api-key}") private val holderAcaPyApiKey: String?,
     @Value("\${holder.acapy.urls}") private val holderAcaPyUrls: Array<String>,
-    @Value("\${holder.acapy.http-timeout}") private val holderAcapyHttpTimeout: Long
+    @Value("\${holder.acapy.http-timeout-in-seconds}") private val holderAcapyHttpTimeoutInSeconds: Long
 ) {
     var logger: Logger = LoggerFactory.getLogger(AcaPyConfig::class.java)
 
@@ -55,7 +55,7 @@ class AcaPyConfig(
                 okHttpPublisher,
                 issuerVerifierAcaPyUrl,
                 issuerVerifierAcaPyApiKey,
-                issuerVerifierAcaPyHttpTimeout
+                issuerVerifierAcaPyHttpTimeoutInSeconds
             )
 
         return AcaPyAriesClient(issuerVerifierAcaPyClient, errorLogger)
@@ -72,7 +72,7 @@ class AcaPyConfig(
 
         holderAcaPyUrls.forEach {
             val holderAcaPyClient =
-                buildAcaPyAriesClient(okHttpPublisher, it, holderAcaPyApiKey, holderAcapyHttpTimeout)
+                buildAcaPyAriesClient(okHttpPublisher, it, holderAcaPyApiKey, holderAcapyHttpTimeoutInSeconds)
 
             holderAcaPyClients.add(
                 AcaPyAriesClient(holderAcaPyClient, errorLogger)
@@ -86,14 +86,14 @@ class AcaPyConfig(
         okHttpPublisher: OkHttpPublisher,
         acaPyUrl: String,
         acaPyApiKey: String?,
-        acaPyHttpTimeout: Long
+        acaPyHttpTimeoutInSeconds: Long
     ): AriesClient {
         val okHttpClient = OkHttpClient.Builder()
             .addInterceptor(okHttpPublisher)
-            .writeTimeout(acaPyHttpTimeout, TimeUnit.SECONDS)
-            .readTimeout(acaPyHttpTimeout, TimeUnit.SECONDS)
-            .connectTimeout(acaPyHttpTimeout, TimeUnit.SECONDS)
-            .callTimeout(acaPyHttpTimeout, TimeUnit.SECONDS)
+            .writeTimeout(acaPyHttpTimeoutInSeconds, TimeUnit.SECONDS)
+            .readTimeout(acaPyHttpTimeoutInSeconds, TimeUnit.SECONDS)
+            .connectTimeout(acaPyHttpTimeoutInSeconds, TimeUnit.SECONDS)
+            .callTimeout(acaPyHttpTimeoutInSeconds, TimeUnit.SECONDS)
             .build()
 
         return AriesClient.builder()

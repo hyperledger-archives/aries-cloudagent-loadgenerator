@@ -14,14 +14,14 @@ issuer-verifier:
     acapy:
         api-key:
         url: 'http://localhost:10000'
-        http-timeout: 60
+        http-timeout-in-seconds: 60
     wallet-db-name: wallet_db
 
 holder:
     acapy:
         api-key:
         urls: 'http://localhost:10110, http://localhost:10210, http://localhost:10310, http://localhost:10410, http://localhost:10510, http://localhost:10610, http://localhost:10710, http://localhost:10810, http://localhost:10910, http://localhost:11010'
-        http-timeout: 60
+        http-timeout-in-seconds: 60
 
 test-runners:
     max-parallel-iterations-runner:

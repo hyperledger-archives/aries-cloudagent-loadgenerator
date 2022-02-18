@@ -28,7 +28,10 @@ class IssuerFlow(
     }
 
     override fun initialize(testRunner: TestRunner) {
-        logger.info("Initializing test flow...")
+        logger.info("Initializing IssuerFlow...")
+        logger.info("use-revocable-credentials: $useRevocableCredentials")
+        logger.info("revocation-registry-size: $revocationRegistrySize")
+        logger.info("use-oob-credential-issuance: $useOobCredentialIssuance")
 
         Companion.testRunner = testRunner
 

@@ -30,7 +30,10 @@ class ProofRequestFlow(
     }
 
     override fun initialize(testRunner: TestRunner) {
-        logger.info("Initializing test flow...")
+        logger.info("Initializing ProofRequestFlow...")
+        logger.info("revocation-registry-size: $revocationRegistrySize")
+        logger.info("check-non-revoked: $checkNonRevoked")
+        logger.info("use-oob-proof-requests: $useOobProofRequests")
 
         Companion.testRunner = testRunner
 
