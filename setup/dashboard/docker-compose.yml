@@ -87,6 +87,23 @@ services:
     networks:
       - dashboard-and-logging
 
+  issuer-verifier-postgres-exporter:
+    container_name: issuer-verifier-postgres-exporter
+    image: quay.io/prometheuscommunity/postgres-exporter
+    environment:
+      - DATA_SOURCE_NAME=postgresql://postgres:postgres@host.docker.internal:5432/postgres?sslmode=disable
+    networks:
+      - dashboard-and-logging
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - 9187:9187
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "50m"
+
   dozzle:
     container_name: dozzle
     image: amir20/dozzle:latest
