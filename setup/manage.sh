@@ -30,6 +30,10 @@ usage() {
       startWithoutLoadGenerator - Starts all containers but the load generator.
                                   Can be used for running the load generator via the IDE.
 
+      startloadgenerator - Starts only Spring service to generate load on the network
+
+      startdashboard - Starts dashboard infrastructure to collect and present metrics
+
       restart - First, "down" is executed. Then, "start" is run.
 
       stop - Stops and remove the services.
@@ -90,8 +94,17 @@ function startAll() {
   echo "Waiting for system to start... (sleeping 15 seconds)"
   sleep 15
 
+  startLoadGenerator
+}
+
+function startLoadGenerator() {
   echo "Starting Load Generator ..."
-  docker-compose -f docker-compose.yml --profile all up -d --build --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES
+  docker-compose -f docker-compose.yml --profile load-generator up -d --build --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES
+}
+
+function startDashboard() {
+  echo "Starting dashboard and logging containers ..."
+  docker-compose -f ./dashboard/docker-compose.yml up -d
 }
 
 function startAllWithoutLoadGenerator() {
@@ -105,8 +118,7 @@ function startAllWithoutLoadGenerator() {
   echo "Registering issuer DID..."
   curl -d "{\"role\": \"ENDORSER\", \"seed\":\"$ISSUER_DID_SEED\"}" -H "Content-Type: application/json" -X POST $LEDGER_REGISTER_DID_ENDPOINT
 
-  echo "Starting dashboard and logging containers ..."
-  docker-compose -f ./dashboard/docker-compose.yml up -d
+  startDashboard
 
   echo "Provisioning AcaPys and Wallet DBs ..."
   docker-compose -f docker-compose.yml --profile issuer-verifier-provisioning up -d
@@ -116,7 +128,6 @@ function startAllWithoutLoadGenerator() {
 
   echo "Starting all AcaPy related docker containers ..."
   docker-compose -f docker-compose.yml --profile all-but-load-generator up -d --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES
-
 }
 
 function downAll() {
@@ -136,6 +147,12 @@ start)
   ;;
 startwithoutloadgenerator)
   startAllWithoutLoadGenerator
+  ;;
+startloadgenerator)
+  startLoadGenerator
+  ;;
+startdashboard)
+  startDashboard
   ;;
 restart)
   downAll

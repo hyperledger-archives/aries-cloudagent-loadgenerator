@@ -54,7 +54,7 @@ services:
       options:
         max-file: "5"
         max-size: "50m"
-    profiles: [ "all" ]
+    profiles: [ "all", "load-generator" ]
 
   issuer-verifier-wallet-db:
     container_name: issuer-verifier-wallet-db
