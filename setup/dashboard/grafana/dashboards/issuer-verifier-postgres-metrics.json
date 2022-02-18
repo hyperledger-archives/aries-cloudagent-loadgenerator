@@ -23,8 +23,7 @@
   "fiscalYearStartMonth": 0,
   "gnetId": 6742,
   "graphTooltip": 0,
-  "id": 7,
-  "iteration": 1645167910230,
+  "iteration": 1645185182251,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -102,7 +101,7 @@
         },
         "textMode": "name"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "expr": "pg_static",
@@ -176,7 +175,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "expr": "pg_settings_max_connections{instance=\"$instance\"}",
@@ -249,7 +248,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "expr": "pg_settings_shared_buffers_bytes{instance=\"$instance\"}",
@@ -322,7 +321,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "expr": "pg_settings_effective_cache_size_bytes{instance=\"$instance\"}",
@@ -395,7 +394,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "expr": "pg_settings_maintenance_work_mem_bytes{instance=\"$instance\"}",
@@ -468,7 +467,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "expr": "pg_settings_work_mem_bytes{instance=\"$instance\"}",
@@ -543,7 +542,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "expr": "pg_settings_max_wal_size_bytes{instance=\"$instance\"}",
@@ -616,7 +615,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "expr": "pg_settings_random_page_cost{instance=\"$instance\"}",
@@ -689,7 +688,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "expr": "pg_settings_seq_page_cost",
@@ -762,7 +761,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "expr": "pg_settings_max_worker_processes{instance=\"$instance\"}",
@@ -835,7 +834,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "expr": "pg_settings_max_parallel_workers{instance=\"$instance\"}",
@@ -899,7 +898,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -983,7 +982,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -993,15 +992,27 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(pg_stat_database_xact_commit{instance=\"$instance\", datname=\"$db\"}[5m])",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "irate(pg_stat_database_xact_commit{instance=\"$instance\", datname=\"$db\"}[1m])",
           "format": "time_series",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "commits",
           "refId": "A"
         },
         {
-          "expr": "irate(pg_stat_database_xact_rollback{instance=\"$instance\", datname=\"$db\"}[5m])",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "irate(pg_stat_database_xact_rollback{instance=\"$instance\", datname=\"$db\"}[1m])",
           "format": "time_series",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "rollbacks",
           "refId": "B"
@@ -1009,7 +1020,7 @@
       ],
       "thresholds": [],
       "timeRegions": [],
-      "title": "Transactions",
+      "title": "Transactions (per Minute)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1079,7 +1090,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1096,7 +1107,7 @@
           },
           "dsType": "prometheus",
           "exemplar": true,
-          "expr": "sum(irate(pg_stat_database_tup_fetched{datname=~\"$db\",instance=~\"$instance\"}[5m]))",
+          "expr": "sum(irate(pg_stat_database_tup_fetched{datname=~\"$db\",instance=~\"$instance\"}[1m]))",
           "format": "time_series",
           "groupBy": [
             {
@@ -1156,7 +1167,7 @@
           },
           "dsType": "prometheus",
           "exemplar": true,
-          "expr": "sum(irate(pg_stat_database_tup_returned{datname=~\"$db\",instance=~\"$instance\"}[5m]))",
+          "expr": "sum(irate(pg_stat_database_tup_returned{datname=~\"$db\",instance=~\"$instance\"}[1m]))",
           "format": "time_series",
           "groupBy": [
             {
@@ -1216,7 +1227,7 @@
           },
           "dsType": "prometheus",
           "exemplar": true,
-          "expr": "sum(irate(pg_stat_database_tup_inserted{datname=~\"$db\",instance=~\"$instance\"}[5m]))",
+          "expr": "sum(irate(pg_stat_database_tup_inserted{datname=~\"$db\",instance=~\"$instance\"}[1m]))",
           "format": "time_series",
           "groupBy": [
             {
@@ -1276,7 +1287,7 @@
           },
           "dsType": "prometheus",
           "exemplar": true,
-          "expr": "sum(irate(pg_stat_database_tup_updated{datname=~\"$db\",instance=~\"$instance\"}[5m]))",
+          "expr": "sum(irate(pg_stat_database_tup_updated{datname=~\"$db\",instance=~\"$instance\"}[1m]))",
           "format": "time_series",
           "groupBy": [
             {
@@ -1336,7 +1347,7 @@
           },
           "dsType": "prometheus",
           "exemplar": true,
-          "expr": "sum(irate(pg_stat_database_tup_deleted{datname=~\"$db\",instance=~\"$instance\"}[5m]))",
+          "expr": "sum(irate(pg_stat_database_tup_deleted{datname=~\"$db\",instance=~\"$instance\"}[1m]))",
           "format": "time_series",
           "groupBy": [
             {
@@ -1391,7 +1402,7 @@
       ],
       "thresholds": [],
       "timeRegions": [],
-      "title": "Rows",
+      "title": "Rows (per Minute)",
       "tooltip": {
         "msResolution": true,
         "shared": true,
@@ -1457,7 +1468,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1467,15 +1478,27 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(pg_stat_database_tup_fetched{instance=\"$instance\", datname=\"$db\"}[5m])",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "irate(pg_stat_database_tup_fetched{instance=\"$instance\", datname=\"$db\"}[1m])",
           "format": "time_series",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "SELECT (index scan)",
           "refId": "A"
         },
         {
-          "expr": "irate(pg_stat_database_tup_returned{instance=\"$instance\", datname=\"$db\"}[5m])",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "irate(pg_stat_database_tup_returned{instance=\"$instance\", datname=\"$db\"}[1m])",
           "format": "time_series",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "SELECT (table scan)",
           "refId": "B"
@@ -1483,7 +1506,7 @@
       ],
       "thresholds": [],
       "timeRegions": [],
-      "title": "Read Stats",
+      "title": "Read Stats (per Minute)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1549,7 +1572,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1559,22 +1582,40 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(pg_stat_database_tup_inserted{instance=\"$instance\", datname=\"$db\"}[5m])",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "irate(pg_stat_database_tup_inserted{instance=\"$instance\", datname=\"$db\"}[1m])",
           "format": "time_series",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "INSERT",
           "refId": "A"
         },
         {
-          "expr": "irate(pg_stat_database_tup_updated{instance=\"$instance\", datname=\"$db\"}[5m])",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "irate(pg_stat_database_tup_updated{instance=\"$instance\", datname=\"$db\"}[1m])",
           "format": "time_series",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "UPDATE",
           "refId": "B"
         },
         {
-          "expr": "irate(pg_stat_database_tup_deleted{instance=\"$instance\", datname=\"$db\"}[5m])",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "irate(pg_stat_database_tup_deleted{instance=\"$instance\", datname=\"$db\"}[1m])",
           "format": "time_series",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "DELETE",
           "refId": "C"
@@ -1582,7 +1623,7 @@
       ],
       "thresholds": [],
       "timeRegions": [],
-      "title": "Change Stats",
+      "title": "Change Stats (per Minute)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1650,7 +1691,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1733,7 +1774,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1833,7 +1874,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1843,34 +1884,62 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(pg_stat_bgwriter_buffers_backend{instance=\"$instance\"}[5m])",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "irate(pg_stat_bgwriter_buffers_backend{instance=\"$instance\"}[1m])",
           "format": "time_series",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "buffers_backend",
           "refId": "A"
         },
         {
-          "expr": "irate(pg_stat_bgwriter_buffers_alloc{instance=\"$instance\"}[5m])",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "irate(pg_stat_bgwriter_buffers_alloc{instance=\"$instance\"}[1m])",
           "format": "time_series",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "buffers_alloc",
           "refId": "B"
         },
         {
-          "expr": "irate(pg_stat_bgwriter_buffers_backend_fsync{instance=\"$instance\"}[5m])",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "irate(pg_stat_bgwriter_buffers_backend_fsync{instance=\"$instance\"}[1m])",
           "format": "time_series",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "backend_fsync",
           "refId": "C"
         },
         {
-          "expr": "irate(pg_stat_bgwriter_buffers_checkpoint{instance=\"$instance\"}[5m])",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "irate(pg_stat_bgwriter_buffers_checkpoint{instance=\"$instance\"}[1m])",
           "format": "time_series",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "buffers_checkpoint",
           "refId": "D"
         },
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
           "expr": "irate(pg_stat_bgwriter_buffers_clean{instance=\"$instance\"}[5m])",
           "format": "time_series",
           "intervalFactor": 1,
@@ -1880,7 +1949,7 @@
       ],
       "thresholds": [],
       "timeRegions": [],
-      "title": "Buffers (bgwriter)",
+      "title": "Buffers - bgwriter (per Minute)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1944,7 +2013,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1954,15 +2023,27 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(pg_stat_database_conflicts{instance=\"$instance\", datname=\"$db\"}[5m])",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "irate(pg_stat_database_conflicts{instance=\"$instance\", datname=\"$db\"}[1m])",
           "format": "time_series",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "conflicts",
           "refId": "B"
         },
         {
-          "expr": "irate(pg_stat_database_deadlocks{instance=\"$instance\", datname=\"$db\"}[5m])",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "irate(pg_stat_database_deadlocks{instance=\"$instance\", datname=\"$db\"}[1m])",
           "format": "time_series",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "deadlocks",
           "refId": "A"
@@ -1970,7 +2051,7 @@
       ],
       "thresholds": [],
       "timeRegions": [],
-      "title": "Conflicts/Deadlocks",
+      "title": "Conflicts/Deadlocks (per Minute)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -2037,7 +2118,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2122,7 +2203,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2206,7 +2287,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
