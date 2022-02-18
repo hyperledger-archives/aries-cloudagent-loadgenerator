@@ -8,12 +8,12 @@ services:
       - issuer-verifier-acapy
       - holder-acapy-1
       - holder-acapy-2
-    environment:
-      - LOCALHOST=${LOCALHOST}
     ports:
       - 8080:8080
     networks:
       - aries-load-test
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     logging:
       driver: "json-file"
       options:
@@ -47,8 +47,8 @@ services:
     image: ${ACAPY_IMAGE}
     entrypoint: /bin/bash
     command: [
-      "-c",
-      "sleep 10;
+        "-c",
+        "sleep 10;
         aca-py start \
         --auto-provision
         --admin 0.0.0.0 10000 \
@@ -81,6 +81,8 @@ services:
       - issuer-verifier-wallet-db
     networks:
       - aries-load-test
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     logging:
       driver: "json-file"
       options:
@@ -146,6 +148,8 @@ services:
       - 10111:10011
     networks:
       - aries-load-test
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     logging:
       driver: "json-file"
       options:
@@ -199,6 +203,8 @@ services:
       - 10211:10011
     networks:
       - aries-load-test
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     logging:
       driver: "json-file"
       options:
@@ -252,6 +258,8 @@ services:
       - 10311:10011
     networks:
       - aries-load-test
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     logging:
       driver: "json-file"
       options:
@@ -305,6 +313,8 @@ services:
       - 10411:10011
     networks:
       - aries-load-test
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     logging:
       driver: "json-file"
       options:
@@ -358,6 +368,8 @@ services:
       - 10511:10011
     networks:
       - aries-load-test
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     logging:
       driver: "json-file"
       options:
@@ -411,6 +423,8 @@ services:
       - 10611:10011
     networks:
       - aries-load-test
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     logging:
       driver: "json-file"
       options:
@@ -464,6 +478,8 @@ services:
       - 10711:10011
     networks:
       - aries-load-test
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     logging:
       driver: "json-file"
       options:
@@ -517,6 +533,8 @@ services:
       - 10811:10011
     networks:
       - aries-load-test
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     logging:
       driver: "json-file"
       options:
@@ -570,6 +588,8 @@ services:
       - 10911:10011
     networks:
       - aries-load-test
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     logging:
       driver: "json-file"
       options:
@@ -623,6 +643,8 @@ services:
       - 11011:10011
     networks:
       - aries-load-test
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     logging:
       driver: "json-file"
       options:
