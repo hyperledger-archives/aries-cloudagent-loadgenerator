@@ -25,7 +25,7 @@ class ConnectionFlow(
     }
 
     override fun initialize(testRunner: TestRunner) {
-        logger.info("Initializing test flow...")
+        logger.info("Initializing ConnectionFlow...")
 
         Companion.testRunner = testRunner
 

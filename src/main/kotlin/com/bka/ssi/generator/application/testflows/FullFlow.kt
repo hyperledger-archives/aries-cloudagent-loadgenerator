@@ -32,7 +32,11 @@ class FullFlow(
     }
 
     override fun initialize(testRunner: TestRunner) {
-        logger.info("Initializing test flow...")
+        logger.info("Initializing FullFlow...")
+        logger.info("use-revocable-credentials: $useRevocableCredentials")
+        logger.info("revocation-registry-size: $revocationRegistrySize")
+        logger.info("check-non-revoked: $checkNonRevoked")
+        logger.info("use-oob-instead-of-connection: $useOobInsteadOfConnection")
 
         Companion.testRunner = testRunner
 
