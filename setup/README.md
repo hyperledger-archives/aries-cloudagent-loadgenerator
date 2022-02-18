@@ -21,8 +21,6 @@ You need to have [Docker](https://docs.docker.com/get-docker/) installed and acc
 
 Environment variables can be set via the provided `.env` file. However, the existing values are sufficient for a functioning setup.
 
-> **NOTE**: Linux users may need to change all occurrences of `host.docker.internal` to `172.17.0.1`
-
 ### Manage Script
 
 From this directory run:
