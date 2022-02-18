@@ -116,7 +116,7 @@
           "refId": "A"
         }
       ],
-      "title": "Number of Iterations started per Minute",
+      "title": "Number of Iterations Finished (per Minute)",
       "type": "timeseries"
     },
     {
@@ -172,7 +172,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": {
@@ -226,7 +226,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": {
@@ -280,7 +280,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": {
@@ -338,7 +338,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": {
@@ -396,7 +396,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": {
@@ -454,7 +454,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": {
@@ -1359,7 +1359,7 @@
           "refId": "D"
         }
       ],
-      "title": "Connection Protocol Transition Times  (in Milliseconds)",
+      "title": "Connection Protocol Transition Times  (per Minute in Milliseconds)",
       "type": "timeseries"
     },
     {
@@ -1472,7 +1472,7 @@
           "refId": "D"
         }
       ],
-      "title": "Credential Issuance Protocol Transition Times  (in Milliseconds)",
+      "title": "Credential Issuance Protocol Transition Times  (per Minute in Milliseconds)",
       "type": "timeseries"
     },
     {
@@ -1575,7 +1575,7 @@
           "refId": "C"
         }
       ],
-      "title": "Proof Request Protocol Transition Times  (in Milliseconds)",
+      "title": "Proof Request Protocol Transition Times  (per minute in Milliseconds)",
       "type": "timeseries"
     },
     {
@@ -1635,7 +1635,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": {
@@ -1693,7 +1693,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": {
@@ -1782,7 +1782,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time(\n  {app=\"aries-load-generator\"}\n    |= \"type=http_request\"\n    |= \"httpCode=200\"\n[10d])",
+          "expr": "count_over_time(\n  {app=\"aries-load-generator\"}\n    |= \"type=http_request\"\n    |= \"httpCode=200\"\n[1m])",
           "hide": false,
           "legendFormat": "HTTP Code 200",
           "refId": "B"
@@ -1792,13 +1792,13 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time(\n  {app=\"aries-load-generator\"}\n    |= \"type=http_request\"\n    != \"httpCode=200\"\n[10d])",
+          "expr": "count_over_time(\n  {app=\"aries-load-generator\"}\n    |= \"type=http_request\"\n    != \"httpCode=200\"\n[1m])",
           "hide": false,
           "legendFormat": "HTTP Code != 200",
           "refId": "C"
         }
       ],
-      "title": "HTTP Response Codes",
+      "title": "HTTP Response Codes (per Minute)",
       "type": "timeseries"
     },
     {
@@ -1880,7 +1880,7 @@
           "refId": "A"
         }
       ],
-      "title": "HTTP Response Times (in Milliseconds)",
+      "title": "HTTP Response Times (per Minute in Milliseconds)",
       "type": "timeseries"
     },
     {
@@ -2067,7 +2067,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=error\"\n    |= \"AcaPyPublisher.handleCredential: Revocation registry metadata not found.\"\n[10d])",
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=error\"\n    |= \"AcaPyPublisher.handleCredential: Revocation registry metadata not found.\"\n[1m])",
           "legendFormat": "AcaPyPublisher.handleCredential: Revocation registry metadata not found.",
           "refId": "A"
         },
@@ -2076,13 +2076,13 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=error\"\n    |= \"AcaPyPublisher.handleCredential: Record not found.\"\n[10d])",
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=error\"\n    |= \"AcaPyPublisher.handleCredential: Record not found.\"\n[1m])",
           "hide": false,
           "legendFormat": "AcaPyPublisher.handleCredential: Record not found.",
           "refId": "B"
         }
       ],
-      "title": "Number of known Errors",
+      "title": "Number of known Errors (per Minute)",
       "type": "timeseries"
     },
     {
@@ -2156,7 +2156,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": {
@@ -2172,15 +2172,15 @@
     }
   ],
   "refresh": false,
-  "schemaVersion": 35,
+  "schemaVersion": 34,
   "style": "dark",
   "tags": [],
   "templating": {
     "list": []
   },
   "time": {
-    "from": "2022-02-13T13:22:45.297Z",
-    "to": "2022-02-13T15:09:26.083Z"
+    "from": "now-6h",
+    "to": "now"
   },
   "timepicker": {},
   "timezone": "",
