@@ -1,5 +1,6 @@
 package com.bka.ssi.generator.application.testrunners
 
+import com.bka.ssi.generator.application.logger.ErrorLogger
 import com.bka.ssi.generator.application.testflows.TestFlow
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
@@ -16,6 +17,7 @@ import java.util.concurrent.TimeUnit
 )
 class IncreasingLoadTestRunner(
     private val testFlow: TestFlow,
+    private val errorLogger: ErrorLogger,
     @Value("\${test-runners.increasing-load-runner.peak-duration-in-minutes}") val peakDurationInMinutes: Long,
     @Value("\${test-runners.increasing-load-runner.sleep-between-peaks-in-minutes}") val sleepBetweenPeaksInMinutes: Long,
     @Value("\${test-runners.increasing-load-runner.initial-number-of-iterations-per-minute}") val initialNumberOfIterationsPerMinute: Int,
@@ -60,7 +62,12 @@ class IncreasingLoadTestRunner(
         val startExecutor = Executors.newScheduledThreadPool(coreThreadPoolSize)
         startScheduler = startExecutor.scheduleWithFixedDelay(
             Runnable {
-                startNewPeakLoad()
+                try {
+                    startNewPeakLoad()
+                } catch (exception: Exception) {
+                    errorLogger.reportError("The 'startScheduler' of the 'IncreasingLoadTestRunner' caught an error: ${exception.message} [${exception.printStackTrace()}]")
+                    exception.printStackTrace();
+                }
             },
             0,
             peakDurationInMinutes + sleepBetweenPeaksInMinutes,
@@ -70,7 +77,12 @@ class IncreasingLoadTestRunner(
         val killExecutor = Executors.newScheduledThreadPool(coreThreadPoolSize)
         killScheduler = killExecutor.scheduleWithFixedDelay(
             Runnable {
-                killCurrentPeakLoad()
+                try {
+                    killCurrentPeakLoad()
+                } catch (exception: Exception) {
+                    errorLogger.reportError("The 'killScheduler' of the 'IncreasingLoadTestRunner' caught an error: ${exception.message} [${exception.printStackTrace()}]")
+                    exception.printStackTrace();
+                }
             },
             peakDurationInMinutes,
             peakDurationInMinutes + sleepBetweenPeaksInMinutes,
@@ -87,7 +99,14 @@ class IncreasingLoadTestRunner(
 
         val loadExecutor = Executors.newScheduledThreadPool(coreThreadPoolSize)
         loadScheduler = loadExecutor.scheduleAtFixedRate(
-            Runnable { testFlow.startIteration() },
+            Runnable {
+                try {
+                    testFlow.startIteration()
+                } catch (exception: Exception) {
+                    errorLogger.reportError("The 'loadScheduler' of the 'IncreasingLoadTestRunner' caught an error: ${exception.message} [${exception.printStackTrace()}]")
+                    exception.printStackTrace();
+                }
+            },
             0,
             60000L / currentNumberOfIterationsPerMinute,
             TimeUnit.MILLISECONDS
