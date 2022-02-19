@@ -4,3 +4,6 @@
 [submodule "setup/indy-tails-server"]
 	path = setup/indy-tails-server
 	url = https://github.com/bcgov/indy-tails-server
+[submodule "setup/dashboard/grafana-pdf-exporter"]
+	path = setup/dashboard/grafana-pdf-exporter
+	url = https://github.com/PaulWen/grafana-pdf-exporter
