@@ -3,6 +3,7 @@ apiVersion: 1
 providers:
   - name: Default
     folder: Load Generator
+    folderUid: R49fdDfnk
     type: file
     options:
       path: /var/lib/grafana/dashboards
