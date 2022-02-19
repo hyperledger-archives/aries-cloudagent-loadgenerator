@@ -44,7 +44,7 @@ test-runners:
         active: true
         number-of-total-iterations: 100
         number-of-iterations-per-minute: 30
-        core-thread-pool-size: 4
+        thread-pool-size: 4
 
 test-flows:
     full-flow:
