@@ -1,5 +1,6 @@
 package com.bka.ssi.generator.application.testrunners
 
+import com.bka.ssi.generator.application.logger.ErrorLogger
 import com.bka.ssi.generator.application.testflows.TestFlow
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
@@ -16,13 +17,14 @@ import java.util.concurrent.TimeUnit
 )
 class ConstantLoadTestRunner(
     private val testFlow: TestFlow,
+    private val errorLogger: ErrorLogger,
     @Value("\${test-runners.constant-load-runner.number-of-total-iterations}") val numberOfTotalIterations: Int,
     @Value("\${test-runners.constant-load-runner.number-of-iterations-per-minute}") val numberOfIterationsPerMinute: Int,
     @Value("\${test-runners.constant-load-runner.core-thread-pool-size}") val coreThreadPoolSize: Int
 ) : TestRunner(
 ) {
 
-    lateinit var scheduledFuture: ScheduledFuture<*>
+    lateinit var loadScheduler: ScheduledFuture<*>
 
     protected companion object {
         var numberOfIterationsFinished = 0
@@ -40,8 +42,15 @@ class ConstantLoadTestRunner(
         logger.info("Expected running duration in minutes: ${numberOfTotalIterations / numberOfIterationsPerMinute}")
 
         val executor = Executors.newScheduledThreadPool(coreThreadPoolSize)
-        scheduledFuture = executor.scheduleAtFixedRate(
-            Runnable { testFlow.startIteration() },
+        loadScheduler = executor.scheduleAtFixedRate(
+            Runnable {
+                try {
+                    testFlow.startIteration()
+                } catch (exception: Exception) {
+                    errorLogger.reportError("The 'loadScheduler' of the 'ConstantLoadTestRunner' caught an error: ${exception.message} [${exception.printStackTrace()}]")
+                    exception.printStackTrace();
+                }
+            },
             0,
             60000L / numberOfIterationsPerMinute,
             TimeUnit.MILLISECONDS
@@ -53,7 +62,7 @@ class ConstantLoadTestRunner(
         logger.info("Finished ${numberOfIterationsFinished} of $numberOfTotalIterations iterations")
 
         if (numberOfIterationsFinished >= numberOfTotalIterations) {
-            scheduledFuture.cancel(false)
+            loadScheduler.cancel(false)
         }
     }
 
