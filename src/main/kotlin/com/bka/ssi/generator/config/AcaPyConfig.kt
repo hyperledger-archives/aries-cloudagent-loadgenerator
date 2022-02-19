@@ -19,7 +19,7 @@
 package com.bka.ssi.generator.config
 
 import com.bka.ssi.generator.agents.acapy.AcaPyAriesClient
-import com.bka.ssi.generator.agents.acapy.OkHttpPublisher
+import com.bka.ssi.generator.agents.acapy.AcaPyOkHttpInterceptor
 import com.bka.ssi.generator.application.logger.ErrorLogger
 import com.bka.ssi.generator.domain.services.IAriesClient
 import okhttp3.OkHttpClient
@@ -44,7 +44,7 @@ class AcaPyConfig(
     var logger: Logger = LoggerFactory.getLogger(AcaPyConfig::class.java)
 
     @Bean(name = ["IssuerVerifier"])
-    fun issuerVerifierAriesClient(okHttpPublisher: OkHttpPublisher): IAriesClient? {
+    fun issuerVerifierAriesClient(okHttpPublisher: AcaPyOkHttpInterceptor): IAriesClient? {
         if (issuerVerifierAcaPyUrl == null) {
             logger.error("Unable to establish connection to Issuer/Verifier AcaPy. Issuer/Verifier AcaPy URL not configured.")
             return null
@@ -62,7 +62,7 @@ class AcaPyConfig(
     }
 
     @Bean(name = ["Holder"])
-    fun holderAriesClient(okHttpPublisher: OkHttpPublisher): List<IAriesClient> {
+    fun holderAriesClient(okHttpPublisher: AcaPyOkHttpInterceptor): List<IAriesClient> {
         val holderAcaPyClients = mutableListOf<IAriesClient>()
 
         if (holderAcaPyUrls.isEmpty()) {
@@ -83,13 +83,13 @@ class AcaPyConfig(
     }
 
     private fun buildAcaPyAriesClient(
-        okHttpPublisher: OkHttpPublisher,
+        acaPyOkHttpInterceptor: AcaPyOkHttpInterceptor,
         acaPyUrl: String,
         acaPyApiKey: String?,
         acaPyHttpTimeoutInSeconds: Long
     ): AriesClient {
         val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor(okHttpPublisher)
+            .addInterceptor(acaPyOkHttpInterceptor)
             .writeTimeout(acaPyHttpTimeoutInSeconds, TimeUnit.SECONDS)
             .readTimeout(acaPyHttpTimeoutInSeconds, TimeUnit.SECONDS)
             .connectTimeout(acaPyHttpTimeoutInSeconds, TimeUnit.SECONDS)
