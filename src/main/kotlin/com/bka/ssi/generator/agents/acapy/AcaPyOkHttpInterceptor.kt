@@ -7,7 +7,7 @@ import okhttp3.Response
 import org.springframework.stereotype.Service
 
 @Service
-class OkHttpPublisher(
+class AcaPyOkHttpInterceptor(
     private val handler: IHttpRequestObserver,
     private val errorLogger: ErrorLogger
 ) : Interceptor {
@@ -24,7 +24,7 @@ class OkHttpPublisher(
 
         if (response.code != 200 && response.code != 201) {
             errorLogger.reportAriesClientError(
-                "request:${request.method}${request.url.encodedPath} httpCode:${response.code} durationInMs:${durationInMs} message:${response.message} body:${response.body}"
+                "request:${request.method}${request.url.encodedPath} httpCode:${response.code} durationInMs:${durationInMs} body:${response.body?.string()}"
             )
         }
 
