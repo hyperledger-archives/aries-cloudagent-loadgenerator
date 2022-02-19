@@ -38,6 +38,75 @@
   "liveNow": false,
   "panels": [
     {
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 66,
+      "title": "Number of Iterations",
+      "type": "row"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 24,
+        "x": 0,
+        "y": 1
+      },
+      "id": 53,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n  {app=\"aries-load-generator\"}\n    |= \"Finished\"\n    |= \"of\"\n    |= \"iterations\"\n[10d])",
+          "refId": "A"
+        }
+      ],
+      "title": "Total Number of Iterations Finished",
+      "type": "stat"
+    },
+    {
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -92,7 +161,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 0
+        "y": 4
       },
       "id": 37,
       "options": {
@@ -125,11 +194,11 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 7
+        "y": 11
       },
       "id": 18,
       "panels": [],
-      "title": "Aries Event Logger - General",
+      "title": "Aries Event Logger",
       "type": "row"
     },
     {
@@ -155,7 +224,7 @@
         "h": 3,
         "w": 8,
         "x": 0,
-        "y": 8
+        "y": 12
       },
       "id": 27,
       "options": {
@@ -172,7 +241,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -209,7 +278,7 @@
         "h": 3,
         "w": 8,
         "x": 8,
-        "y": 8
+        "y": 12
       },
       "id": 28,
       "options": {
@@ -226,7 +295,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -263,7 +332,7 @@
         "h": 3,
         "w": 8,
         "x": 16,
-        "y": 8
+        "y": 12
       },
       "id": 8,
       "options": {
@@ -280,7 +349,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -321,7 +390,7 @@
         "h": 3,
         "w": 8,
         "x": 0,
-        "y": 11
+        "y": 15
       },
       "id": 6,
       "options": {
@@ -338,7 +407,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -379,7 +448,7 @@
         "h": 3,
         "w": 8,
         "x": 8,
-        "y": 11
+        "y": 15
       },
       "id": 10,
       "options": {
@@ -396,7 +465,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -437,7 +506,7 @@
         "h": 3,
         "w": 8,
         "x": 16,
-        "y": 11
+        "y": 15
       },
       "id": 29,
       "options": {
@@ -454,7 +523,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -554,7 +623,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 14
+        "y": 18
       },
       "id": 4,
       "options": {
@@ -698,7 +767,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 14
+        "y": 18
       },
       "id": 9,
       "options": {
@@ -859,7 +928,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 14
+        "y": 18
       },
       "id": 7,
       "options": {
@@ -963,7 +1032,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 22
+        "y": 26
       },
       "id": 24,
       "options": {
@@ -1078,7 +1147,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 22
+        "y": 26
       },
       "id": 25,
       "options": {
@@ -1208,7 +1277,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 22
+        "y": 26
       },
       "id": 26,
       "options": {
@@ -1235,19 +1304,6 @@
       ],
       "title": " Proof Request Verification Rate (per Second)",
       "type": "timeseries"
-    },
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 30
-      },
-      "id": 31,
-      "panels": [],
-      "title": "Aries Event Logger - State Changes",
-      "type": "row"
     },
     {
       "fieldConfig": {
@@ -1304,7 +1360,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 31
+        "y": 34
       },
       "id": 33,
       "options": {
@@ -1417,7 +1473,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 31
+        "y": 34
       },
       "id": 34,
       "options": {
@@ -1530,7 +1586,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 31
+        "y": 34
       },
       "id": 35,
       "options": {
@@ -1584,164 +1640,12 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 39
+        "y": 42
       },
-      "id": 22,
+      "id": 51,
       "panels": [],
-      "title": "HTTP Logger",
+      "title": "Aries Admin API",
       "type": "row"
-    },
-    {
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 1
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 24,
-        "x": 0,
-        "y": 40
-      },
-      "id": 14,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.4.0-beta1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "expr": "count_over_time(\n  {app=\"aries-load-generator\"}\n    |= \"type=http_request\"\n    != \"httpCode=200\"\n[10d])",
-          "refId": "A"
-        }
-      ],
-      "title": "Number of HTTP Request without HTTP Code 200",
-      "type": "stat"
-    },
-    {
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 12,
-        "x": 0,
-        "y": 43
-      },
-      "id": 12,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "expr": "count_over_time(\n  {app=\"aries-load-generator\"}\n    |= \"type=http_request\"\n    |= \"httpCode=200\"\n[1m])",
-          "hide": false,
-          "legendFormat": "HTTP Code 200",
-          "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "expr": "count_over_time(\n  {app=\"aries-load-generator\"}\n    |= \"type=http_request\"\n    != \"httpCode=200\"\n[1m])",
-          "hide": false,
-          "legendFormat": "HTTP Code != 200",
-          "refId": "C"
-        }
-      ],
-      "title": "HTTP Response Codes (per Minute)",
-      "type": "timeseries"
     },
     {
       "fieldConfig": {
@@ -1795,9 +1699,9 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
-        "w": 12,
-        "x": 12,
+        "h": 10,
+        "w": 24,
+        "x": 0,
         "y": 43
       },
       "id": 16,
@@ -1826,191 +1730,12 @@
       "type": "timeseries"
     },
     {
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 1
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 24,
-        "x": 0,
-        "y": 52
-      },
-      "id": 46,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "8.3.4",
-      "targets": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n  |= \"type=http_request\"\n  |= \"request=POST/connections/create-invitation httpCode=400\"\n[1m])",
-          "legendFormat": "POST/connections/create-invitation [HTTP 400]",
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=http_request\"\n    |= \"POST/connections/receive-invitation\"\n    != \"httpCode=200\"\n[1m])",
-          "hide": false,
-          "legendFormat": "POST/connections/receive-invitation",
-          "refId": "B"
-        }
-      ],
-      "title": "Number of known AcaPy HTTP Errors (per Minute)",
-      "type": "timeseries"
-    },
-    {
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "align": "auto",
-            "displayMode": "auto",
-            "filterable": true
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "line {app=\"aries-load-generator\", level=\"ERROR\"}"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 852
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "id"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 67
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 15,
-        "w": 24,
-        "x": 0,
-        "y": 62
-      },
-      "id": 42,
-      "options": {
-        "footer": {
-          "fields": "",
-          "reducer": [
-            "sum"
-          ],
-          "show": false
-        },
-        "showHeader": true,
-        "sortBy": []
-      },
-      "pluginVersion": "8.4.0-beta1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "expr": " {app=\"aries-load-generator\"}\n    |= \"type=http_request\"\n    != \"httpCode=200\"\n    != \"request=POST/connections/create-invitation httpCode=400\"\n    != \"POST/connections/receive-invitation\"",
-          "refId": "A"
-        }
-      ],
-      "title": "New AcaPy HTTP Errors",
-      "type": "table"
-    },
-    {
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 77
+        "y": 53
       },
       "id": 20,
       "panels": [],
@@ -2072,7 +1797,7 @@
         "h": 11,
         "w": 24,
         "x": 0,
-        "y": 78
+        "y": 54
       },
       "id": 2,
       "options": {
@@ -2105,46 +1830,18 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 89
+        "y": 65
       },
-      "id": 44,
+      "id": 22,
       "panels": [],
-      "title": "Logged Errors",
+      "title": "Errors Raised by Aries HTTP Requests - (Issuer/Verifier and Holder)",
       "type": "row"
     },
     {
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
+            "mode": "thresholds"
           },
           "mappings": [],
           "thresholds": {
@@ -2164,22 +1861,25 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 14,
+        "h": 3,
         "w": 24,
         "x": 0,
-        "y": 90
+        "y": 66
       },
-      "id": 48,
+      "id": 67,
       "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
         },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
+        "textMode": "auto"
       },
       "pluginVersion": "8.3.4",
       "targets": [
@@ -2188,34 +1888,22 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=error\"\n    |= \"AcaPyPublisher.handleCredential: Revocation registry metadata not found.\"\n[1m])",
-          "legendFormat": "AcaPyPublisher.handleCredential: Revocation registry metadata not found.",
+          "expr": "count_over_time(\n  {app=\"aries-load-generator\"}\n    |= \"type=aries_client_error\"\n[10d])",
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=error\"\n    |= \"AcaPyPublisher.handleCredential: Record not found.\"\n[1m])",
-          "hide": false,
-          "legendFormat": "AcaPyPublisher.handleCredential: Record not found.",
-          "refId": "B"
         }
       ],
-      "title": "Number of known Errors (per Minute)",
-      "type": "timeseries"
+      "title": "Total Number of Failed HTTP Requests",
+      "type": "stat"
     },
     {
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "continuous-GrYlRd"
           },
           "custom": {
-            "align": "auto",
-            "displayMode": "auto",
-            "filterable": true
+            "fillOpacity": 70,
+            "lineWidth": 0
           },
           "mappings": [],
           "thresholds": {
@@ -2232,81 +1920,331 @@
             ]
           }
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "line {app=\"aries-load-generator\", level=\"ERROR\"}"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 852
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "id"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 67
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
-        "h": 15,
+        "h": 5,
         "w": 24,
         "x": 0,
-        "y": 104
+        "y": 69
       },
-      "id": 49,
+      "id": 55,
       "options": {
-        "footer": {
-          "fields": "",
-          "reducer": [
-            "sum"
-          ],
-          "show": false
+        "alignValue": "left",
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
         },
-        "showHeader": true,
-        "sortBy": []
+        "mergeValues": true,
+        "rowHeight": 0.9,
+        "showValue": "auto",
+        "tooltip": {
+          "mode": "single"
+        }
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": {
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": " {app=\"aries-load-generator\"}\n    |= \"type=error\"\n    != \"AcaPyPublisher.handleCredential: Revocation registry metadata not found.\"\n    != \"AcaPyPublisher.handleCredential: Record not found.\"",
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n  |= \"type=aries_client_error\"\n  |= \"request:POST/connections/create-invitation httpCode:400\"\n[1m])",
+          "legendFormat": "POST/connections/create-invitation [HTTP 400]",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_client_error\"\n    |= \"request:POST/connections/receive-invitation httpCode:400\"\n[1m])",
+          "hide": false,
+          "legendFormat": "POST/connections/receive-invitation [HTTP 400]",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n  |= \"type=http_request\"\n  |= \"request:POST/issue-credential/send httpCode:400\"\n[1m])",
+          "hide": false,
+          "legendFormat": "POST/issue-credential/send [HTTP 400]",
+          "refId": "C"
+        }
+      ],
+      "title": "Failed HTTP Requests (per Minute)",
+      "type": "state-timeline"
+    },
+    {
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 74
+      },
+      "id": 57,
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": false,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "showTime": false,
+        "sortOrder": "Descending",
+        "wrapLogMessage": false
+      },
+      "pluginVersion": "8.3.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": " {app=\"aries-load-generator\"}\n    |= \"type=aries_client_error\"\n    != \"request:POST/connections/create-invitation httpCode:400\"\n    != \"request:POST/issue-credential/send httpCode:400\"\n    != \"request:POST/connections/receive-invitation httpCode:400\"",
           "refId": "A"
         }
       ],
-      "title": "New Errors Logged by the Load Generator",
-      "type": "table"
+      "title": "Untracked HTTP Request Errors",
+      "type": "logs"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 83
+      },
+      "id": 59,
+      "panels": [],
+      "title": "Errors Raised through Aries Events - (Issuer/Verifier)",
+      "type": "row"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 24,
+        "x": 0,
+        "y": 84
+      },
+      "id": 60,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n  {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n[10d])",
+          "refId": "A"
+        }
+      ],
+      "title": "Total Number of Errors Reported through Events",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "custom": {
+            "fillOpacity": 70,
+            "lineWidth": 0
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 24,
+        "x": 0,
+        "y": 87
+      },
+      "id": 62,
+      "options": {
+        "alignValue": "left",
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "mergeValues": true,
+        "rowHeight": 0.9,
+        "showValue": "auto",
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "8.3.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"AcaPyPublisher.handleCredential: Revocation registry metadata not found.\"\n[1m])",
+          "legendFormat": "AcaPyPublisher.handleCredential: Revocation registry metadata not found.",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"AcaPyPublisher.handleCredential: Record not found.\"\n[1m])",
+          "hide": false,
+          "legendFormat": "AcaPyPublisher.handleCredential: Record not found.",
+          "refId": "B"
+        }
+      ],
+      "title": "Errors Reported through Events (per Minute)",
+      "type": "state-timeline"
+    },
+    {
+      "gridPos": {
+        "h": 4,
+        "w": 24,
+        "x": 0,
+        "y": 92
+      },
+      "id": 64,
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": false,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "showTime": false,
+        "sortOrder": "Descending",
+        "wrapLogMessage": false
+      },
+      "pluginVersion": "8.3.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": " {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    != \"AcaPyPublisher.handleCredential: Revocation registry metadata not found.\"\n    != \"AcaPyPublisher.handleCredential: Record not found.\"",
+          "refId": "A"
+        }
+      ],
+      "title": "Untracked Errors Reported through Events",
+      "type": "logs"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 96
+      },
+      "id": 44,
+      "panels": [],
+      "title": "Errors Caught by Test Runner ",
+      "type": "row"
+    },
+    {
+      "gridPos": {
+        "h": 15,
+        "w": 24,
+        "x": 0,
+        "y": 97
+      },
+      "id": 49,
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": false,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "showTime": false,
+        "sortOrder": "Descending",
+        "wrapLogMessage": false
+      },
+      "pluginVersion": "8.3.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": " {app=\"aries-load-generator\"}\n    |= \"type=test_runner_error\"",
+          "refId": "A"
+        }
+      ],
+      "title": "Error Caught by Test Runner",
+      "type": "logs"
     }
   ],
   "refresh": false,
-  "schemaVersion": 35,
+  "schemaVersion": 34,
   "style": "dark",
   "tags": [],
   "templating": {
     "list": []
   },
   "time": {
-    "from": "2022-02-18T14:41:28.494Z",
-    "to": "2022-02-18T15:13:05.921Z"
+    "from": "now-15m",
+    "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Test Results",
   "uid": "0Pe9llbnz",
-  "version": 1,
+  "version": 3,
   "weekStart": ""
 }
