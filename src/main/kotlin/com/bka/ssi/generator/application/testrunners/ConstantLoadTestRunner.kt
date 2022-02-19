@@ -47,7 +47,7 @@ class ConstantLoadTestRunner(
                 try {
                     testFlow.startIteration()
                 } catch (exception: Exception) {
-                    errorLogger.reportError("The 'loadScheduler' of the 'ConstantLoadTestRunner' caught an error: ${exception.message} [${exception.printStackTrace()}]")
+                    errorLogger.reportTestRunnerError("The 'loadScheduler' of the 'ConstantLoadTestRunner' caught an error: ${exception.message} [${exception.printStackTrace()}]")
                     exception.printStackTrace();
                 }
             },

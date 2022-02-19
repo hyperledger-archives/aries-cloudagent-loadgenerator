@@ -1,5 +1,6 @@
 package com.bka.ssi.generator.agents.acapy
 
+import com.bka.ssi.generator.application.logger.ErrorLogger
 import com.bka.ssi.generator.domain.services.IHttpRequestObserver
 import okhttp3.Interceptor
 import okhttp3.Response
@@ -7,7 +8,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class OkHttpPublisher(
-    private val handler: IHttpRequestObserver
+    private val handler: IHttpRequestObserver,
+    private val errorLogger: ErrorLogger
 ) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -18,7 +20,13 @@ class OkHttpPublisher(
 
         val durationInMs = (t2 - t1) / 1e6
 
-        handler.handleHttpRequest(request.method, request.url.encodedPath, response.code, durationInMs)
+        handler.logHttpRequest(request.method, request.url.encodedPath, response.code, durationInMs)
+
+        if (response.code != 200 && response.code != 201) {
+            errorLogger.reportAriesClientError(
+                "request:${request.method}${request.url.encodedPath} httpCode:${response.code} durationInMs:${durationInMs} message:${response.message} body:${response.body}"
+            )
+        }
 
         return response
     }
