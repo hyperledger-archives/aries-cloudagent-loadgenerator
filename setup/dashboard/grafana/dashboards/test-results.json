@@ -61,10 +61,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 1
               }
             ]
           }
@@ -73,7 +69,7 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 24,
+        "w": 6,
         "x": 0,
         "y": 1
       },
@@ -99,11 +95,181 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
+          "expr": "count_over_time(\n  {app=\"aries-load-generator\"}\n    |= \"Started\"\n    |= \"of\"\n    |= \"iterations\"\n[10d])",
+          "refId": "A"
+        }
+      ],
+      "title": "Number of Iterations Started",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 6,
+        "y": 1
+      },
+      "id": 68,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "sum(count_over_time(\n  {app=\"aries-load-generator\"}\n    |= \"Started\"\n    |= \"of\"\n    |= \"iterations\"\n[10d])) -\nsum(count_over_time(\n  {app=\"aries-load-generator\"}\n    |= \"Finished\"\n    |= \"of\"\n    |= \"iterations\"\n[10d])) -\nsum(count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"AcaPyPublisher.handleCredential: Revocation registry metadata not found.\"\n[10d]))",
+          "refId": "A"
+        }
+      ],
+      "title": "Number of Iterations in Progress",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 12,
+        "y": 1
+      },
+      "id": 69,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
           "expr": "count_over_time(\n  {app=\"aries-load-generator\"}\n    |= \"Finished\"\n    |= \"of\"\n    |= \"iterations\"\n[10d])",
           "refId": "A"
         }
       ],
-      "title": "Total Number of Iterations Finished",
+      "title": "Number of Iterations Finished",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 18,
+        "y": 1
+      },
+      "id": 70,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"AcaPyPublisher.handleCredential: Revocation registry metadata not found.\"\n[10d])",
+          "refId": "A"
+        }
+      ],
+      "title": "Number of Iterations Failed due to an Error",
       "type": "stat"
     },
     {
@@ -158,7 +324,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
+        "h": 8,
         "w": 24,
         "x": 0,
         "y": 4
@@ -181,8 +347,19 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time(\n  {app=\"aries-load-generator\"}\n    |= \"Finished\"\n    |= \"of\"\n    |= \"iterations\"\n[1m])",
+          "expr": "count_over_time(\n  {app=\"aries-load-generator\"}\n    |= \"Started\"\n    |= \"of\"\n    |= \"iterations\"\n[1m])",
+          "legendFormat": "Started",
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n  {app=\"aries-load-generator\"}\n    |= \"Finished\"\n    |= \"of\"\n    |= \"iterations\"\n[1m])",
+          "hide": false,
+          "legendFormat": "Finished",
+          "refId": "B"
         }
       ],
       "title": "Number of Iterations Finished (per Minute)",
@@ -194,7 +371,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 11
+        "y": 12
       },
       "id": 18,
       "panels": [],
@@ -224,7 +401,7 @@
         "h": 3,
         "w": 8,
         "x": 0,
-        "y": 12
+        "y": 13
       },
       "id": 27,
       "options": {
@@ -278,7 +455,7 @@
         "h": 3,
         "w": 8,
         "x": 8,
-        "y": 12
+        "y": 13
       },
       "id": 28,
       "options": {
@@ -332,7 +509,7 @@
         "h": 3,
         "w": 8,
         "x": 16,
-        "y": 12
+        "y": 13
       },
       "id": 8,
       "options": {
@@ -378,7 +555,7 @@
                 "value": null
               },
               {
-                "color": "red",
+                "color": "orange",
                 "value": 1
               }
             ]
@@ -390,7 +567,7 @@
         "h": 3,
         "w": 8,
         "x": 0,
-        "y": 15
+        "y": 16
       },
       "id": 6,
       "options": {
@@ -436,7 +613,7 @@
                 "value": null
               },
               {
-                "color": "red",
+                "color": "orange",
                 "value": 1
               }
             ]
@@ -448,7 +625,7 @@
         "h": 3,
         "w": 8,
         "x": 8,
-        "y": 15
+        "y": 16
       },
       "id": 10,
       "options": {
@@ -472,11 +649,185 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=credentialRecord\"\n  |= \"state=OFFER_SENT\" [10d]) -\n  \ncount_over_time({app=\"aries-load-generator\"}\n  |= \"type=credentialRecord\"\n  |= \"state=CREDENTIAL_ACKED\" [10d])",
+          "expr": "sum(count_over_time({app=\"aries-load-generator\"}\n  |= \"type=credentialRecord\"\n  |= \"state=OFFER_SENT\" [10d])) -\n  \nsum(count_over_time({app=\"aries-load-generator\"}\n  |= \"type=credentialRecord\"\n  |= \"state=CREDENTIAL_ACKED\" [10d])) -\n  \nsum(count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"AcaPyPublisher.handleCredential: Revocation registry metadata not found.\"\n[10d]))",
           "refId": "A"
         }
       ],
       "title": "Number of Pending Credential Offers",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 8,
+        "x": 16,
+        "y": 16
+      },
+      "id": 29,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=REQUEST_SENT\" [10d]) -\n  \ncount_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=VERIFIED\" [10d])",
+          "refId": "A"
+        }
+      ],
+      "title": "Number of Pending Proof Requests",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 8,
+        "x": 0,
+        "y": 19
+      },
+      "id": 71,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "0",
+          "refId": "A"
+        }
+      ],
+      "title": "Number of Failed Connection Invitations",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 8,
+        "x": 8,
+        "y": 19
+      },
+      "id": 72,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "sum(count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"AcaPyPublisher.handleCredential: Revocation registry metadata not found.\"\n[10d]))",
+          "refId": "A"
+        }
+      ],
+      "title": "Number of Failed Credential Offers",
       "type": "stat"
     },
     {
@@ -506,9 +857,9 @@
         "h": 3,
         "w": 8,
         "x": 16,
-        "y": 15
+        "y": 19
       },
-      "id": 29,
+      "id": 73,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
@@ -530,11 +881,11 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=REQUEST_SENT\" [10d]) -\n  \ncount_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=VERIFIED\" [10d])",
+          "expr": "0",
           "refId": "A"
         }
       ],
-      "title": "Number of Pending Proof Requests",
+      "title": "Number of Failed Proof Requests",
       "type": "stat"
     },
     {
@@ -623,7 +974,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 18
+        "y": 22
       },
       "id": 4,
       "options": {
@@ -767,7 +1118,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 18
+        "y": 22
       },
       "id": 9,
       "options": {
@@ -928,7 +1279,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 18
+        "y": 22
       },
       "id": 7,
       "options": {
@@ -1032,7 +1383,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 26
+        "y": 30
       },
       "id": 24,
       "options": {
@@ -1147,7 +1498,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 26
+        "y": 30
       },
       "id": 25,
       "options": {
@@ -1277,7 +1628,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 26
+        "y": 30
       },
       "id": 26,
       "options": {
@@ -1360,7 +1711,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 34
+        "y": 38
       },
       "id": 33,
       "options": {
@@ -1473,7 +1824,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 34
+        "y": 38
       },
       "id": 34,
       "options": {
@@ -1586,7 +1937,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 34
+        "y": 38
       },
       "id": 35,
       "options": {
@@ -1640,7 +1991,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 42
+        "y": 46
       },
       "id": 51,
       "panels": [],
@@ -1702,7 +2053,7 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 43
+        "y": 47
       },
       "id": 16,
       "options": {
@@ -1735,7 +2086,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 53
+        "y": 57
       },
       "id": 20,
       "panels": [],
@@ -1797,7 +2148,7 @@
         "h": 11,
         "w": 24,
         "x": 0,
-        "y": 54
+        "y": 58
       },
       "id": 2,
       "options": {
@@ -1830,7 +2181,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 65
+        "y": 69
       },
       "id": 22,
       "panels": [],
@@ -1864,7 +2215,7 @@
         "h": 3,
         "w": 24,
         "x": 0,
-        "y": 66
+        "y": 70
       },
       "id": 67,
       "options": {
@@ -1926,7 +2277,7 @@
         "h": 5,
         "w": 24,
         "x": 0,
-        "y": 69
+        "y": 73
       },
       "id": 55,
       "options": {
@@ -1982,7 +2333,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 74
+        "y": 78
       },
       "id": 57,
       "options": {
@@ -2015,7 +2366,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 83
+        "y": 87
       },
       "id": 59,
       "panels": [],
@@ -2049,7 +2400,7 @@
         "h": 3,
         "w": 24,
         "x": 0,
-        "y": 84
+        "y": 88
       },
       "id": 60,
       "options": {
@@ -2111,7 +2462,7 @@
         "h": 5,
         "w": 24,
         "x": 0,
-        "y": 87
+        "y": 91
       },
       "id": 62,
       "options": {
@@ -2157,7 +2508,7 @@
         "h": 4,
         "w": 24,
         "x": 0,
-        "y": 92
+        "y": 96
       },
       "id": 64,
       "options": {
@@ -2190,7 +2541,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 96
+        "y": 100
       },
       "id": 44,
       "panels": [],
@@ -2202,7 +2553,7 @@
         "h": 15,
         "w": 24,
         "x": 0,
-        "y": 97
+        "y": 101
       },
       "id": 49,
       "options": {
@@ -2230,7 +2581,7 @@
       "type": "logs"
     }
   ],
-  "refresh": false,
+  "refresh": "1m",
   "schemaVersion": 34,
   "style": "dark",
   "tags": [],
@@ -2245,6 +2596,6 @@
   "timezone": "",
   "title": "Test Results",
   "uid": "0Pe9llbnz",
-  "version": 3,
+  "version": 1,
   "weekStart": ""
 }

@@ -27,6 +27,7 @@ class ConstantLoadTestRunner(
     lateinit var loadScheduler: ScheduledFuture<*>
 
     protected companion object {
+        var numberOfIterationsStarted = 0
         var numberOfIterationsFinished = 0
     }
 
@@ -45,6 +46,8 @@ class ConstantLoadTestRunner(
         loadScheduler = executor.scheduleAtFixedRate(
             Runnable {
                 try {
+                    numberOfIterationsStarted++
+                    logger.info("Started $numberOfIterationsStarted of $numberOfTotalIterations iterations")
                     testFlow.startIteration()
                 } catch (exception: Exception) {
                     errorLogger.reportTestRunnerError("The 'loadScheduler' of the 'ConstantLoadTestRunner' caught an error: ${exception.message} [${exception.printStackTrace()}]")
