@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 class HttpRequestLogger : IHttpRequestObserver {
     var logger: Logger = LoggerFactory.getLogger(HttpRequestLogger::class.java)
 
-    override fun handleHttpRequest(
+    override fun logHttpRequest(
         httpMethod: String,
         urlPath: String,
         httpResponseCode: Int,

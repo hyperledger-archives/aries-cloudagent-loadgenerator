@@ -27,7 +27,7 @@ class AcaPyPublisher(
 
     override fun handleConnection(connection: ConnectionRecord) {
         if (connection.errorMsg != null) {
-            errorLogger.reportError("AcaPyPublisher.handleConnection: ${connection.errorMsg}")
+            errorLogger.reportAriesEventError("AcaPyPublisher.handleConnection: ${connection.errorMsg}")
             return
         }
 
@@ -45,7 +45,7 @@ class AcaPyPublisher(
 
     override fun handleProof(proof: PresentationExchangeRecord) {
         if (proof.errorMsg != null) {
-            errorLogger.reportError("AcaPyPublisher.handleProof: ${proof.errorMsg}")
+            errorLogger.reportAriesEventError("AcaPyPublisher.handleProof: ${proof.errorMsg}")
             return
         }
 
@@ -64,7 +64,7 @@ class AcaPyPublisher(
 
     override fun handleCredential(credential: V1CredentialExchange) {
         if (credential.errorMsg != null) {
-            errorLogger.reportError("AcaPyPublisher.handleCredential: ${credential.errorMsg}")
+            errorLogger.reportAriesEventError("AcaPyPublisher.handleCredential: ${credential.errorMsg}")
             return
         }
 
