@@ -362,7 +362,7 @@
           "refId": "B"
         }
       ],
-      "title": "Number of Iterations Finished (per Minute)",
+      "title": "Number of Iterations (per Minute)",
       "type": "timeseries"
     },
     {
@@ -2581,7 +2581,7 @@
       "type": "logs"
     }
   ],
-  "refresh": "1m",
+  "refresh": "",
   "schemaVersion": 34,
   "style": "dark",
   "tags": [],
