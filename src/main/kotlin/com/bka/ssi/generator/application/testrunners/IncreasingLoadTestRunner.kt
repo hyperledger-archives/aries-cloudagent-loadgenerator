@@ -5,6 +5,7 @@ import com.bka.ssi.generator.application.testflows.TestFlow
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Service
+import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
@@ -23,10 +24,14 @@ class IncreasingLoadTestRunner(
     @Value("\${test-runners.increasing-load-runner.initial-number-of-iterations-per-minute}") val initialNumberOfIterationsPerMinute: Int,
     @Value("\${test-runners.increasing-load-runner.final-number-of-iterations-per-minute}") val finalNumberOfIterationsPerMinute: Int,
     @Value("\${test-runners.increasing-load-runner.step-size-of-iterations-per-minute}") val stepSizeOfIterationsPerMinute: Int,
-    @Value("\${test-runners.increasing-load-runner.core-thread-pool-size}") val coreThreadPoolSize: Int
+    @Value("\${test-runners.increasing-load-runner.thread-pool-size}") val threadPoolSize: Int
 ) : TestRunner(
 ) {
 
+    lateinit var loadScheduler: ScheduledFuture<*>
+    lateinit var startScheduler: ScheduledFuture<*>
+    lateinit var killScheduler: ScheduledFuture<*>
+    lateinit var fixedThreadPoolExecutor: ExecutorService
 
     protected companion object {
         var numberOfIterationsStartedInCurrentPeak = 0
@@ -34,9 +39,6 @@ class IncreasingLoadTestRunner(
         var expectedNumberOfIterationsInCurrentPeak = 0L
         var totalNumberOfPeaks = 0
         var totalNumberOfPeaksStarted = 0
-        var startScheduler: ScheduledFuture<*>? = null
-        var killScheduler: ScheduledFuture<*>? = null
-        var loadScheduler: ScheduledFuture<*>? = null
     }
 
     override fun run() {
@@ -50,7 +52,7 @@ class IncreasingLoadTestRunner(
         logger.info("Initial number of iterations per minute: $initialNumberOfIterationsPerMinute")
         logger.info("Final number of iterations per minute: $finalNumberOfIterationsPerMinute")
         logger.info("Step size of iterations per minute: $stepSizeOfIterationsPerMinute")
-        logger.info("Core thread pool size: $coreThreadPoolSize")
+        logger.info("Thread pool size: $threadPoolSize")
 
         totalNumberOfPeaks =
             ((finalNumberOfIterationsPerMinute - initialNumberOfIterationsPerMinute) / stepSizeOfIterationsPerMinute) + 1
@@ -60,7 +62,9 @@ class IncreasingLoadTestRunner(
         val numberOfMinutesExecutingLoad = totalNumberOfPeaks * peakDurationInMinutes
         logger.info("Test will finish in ${numberOfMinutesSleepingBetweenPeaks + numberOfMinutesExecutingLoad} minutes")
 
-        val startExecutor = Executors.newScheduledThreadPool(coreThreadPoolSize)
+        fixedThreadPoolExecutor = Executors.newFixedThreadPool(threadPoolSize)
+
+        val startExecutor = Executors.newScheduledThreadPool(4)
         startScheduler = startExecutor.scheduleWithFixedDelay(
             Runnable {
                 try {
@@ -75,7 +79,7 @@ class IncreasingLoadTestRunner(
             TimeUnit.MINUTES
         )
 
-        val killExecutor = Executors.newScheduledThreadPool(coreThreadPoolSize)
+        val killExecutor = Executors.newScheduledThreadPool(4)
         killScheduler = killExecutor.scheduleWithFixedDelay(
             Runnable {
                 try {
@@ -99,13 +103,11 @@ class IncreasingLoadTestRunner(
         numberOfIterationsFinishedInCurrentPeak = 0
         expectedNumberOfIterationsInCurrentPeak = currentNumberOfIterationsPerMinute * peakDurationInMinutes
 
-        val loadExecutor = Executors.newScheduledThreadPool(coreThreadPoolSize)
+        val loadExecutor = Executors.newScheduledThreadPool(4)
         loadScheduler = loadExecutor.scheduleAtFixedRate(
             Runnable {
                 try {
-                    numberOfIterationsStartedInCurrentPeak++
-                    logger.info("Started $numberOfIterationsStartedInCurrentPeak of $expectedNumberOfIterationsInCurrentPeak iterations")
-                    testFlow.startIteration()
+                    fixedThreadPoolExecutor.submit { startNewIteration() }
                 } catch (exception: Exception) {
                     errorLogger.reportTestRunnerError("The 'loadScheduler' of the 'IncreasingLoadTestRunner' caught an error: ${exception.message} [${exception.printStackTrace()}]")
                     exception.printStackTrace();
@@ -119,16 +121,23 @@ class IncreasingLoadTestRunner(
         totalNumberOfPeaksStarted++
 
         if (totalNumberOfPeaksStarted >= totalNumberOfPeaks) {
-            startScheduler?.cancel(false)
+            startScheduler.cancel(false)
         }
     }
 
     private fun killCurrentPeakLoad() {
-        loadScheduler?.cancel(false)
+        loadScheduler.cancel(false)
 
         if (totalNumberOfPeaksStarted >= totalNumberOfPeaks) {
-            killScheduler?.cancel(false)
+            killScheduler.cancel(false)
+            fixedThreadPoolExecutor.shutdown()
         }
+    }
+
+    private fun startNewIteration() {
+        numberOfIterationsStartedInCurrentPeak++
+        logger.info("Started $numberOfIterationsStartedInCurrentPeak of $expectedNumberOfIterationsInCurrentPeak iterations")
+        testFlow.startIteration()
     }
 
     override fun finishedIteration() {
