@@ -18,6 +18,7 @@ class MaxParallelIterationsTestRunner(
 ) {
 
     protected companion object {
+        var numberOfIterationsStarted = 0
         var numberOfIterationsFinished = 0
     }
 
@@ -31,6 +32,8 @@ class MaxParallelIterationsTestRunner(
         logger.info("Number of Parallel Iterations: $numberOfParallelIterations")
 
         for (i in 0 until numberOfParallelIterations) {
+            numberOfIterationsStarted++
+            logger.info("Started $numberOfIterationsStarted of $numberOfTotalIterations iterations")
             testFlow.startIteration()
         }
     }

@@ -29,7 +29,8 @@ class IncreasingLoadTestRunner(
 
 
     protected companion object {
-        var numberOfIterationsFinishedInCurrentPeak = 0L
+        var numberOfIterationsStartedInCurrentPeak = 0
+        var numberOfIterationsFinishedInCurrentPeak = 0
         var expectedNumberOfIterationsInCurrentPeak = 0L
         var totalNumberOfPeaks = 0
         var totalNumberOfPeaksStarted = 0
@@ -94,13 +95,16 @@ class IncreasingLoadTestRunner(
         val currentNumberOfIterationsPerMinute =
             initialNumberOfIterationsPerMinute + stepSizeOfIterationsPerMinute * totalNumberOfPeaksStarted
 
-        numberOfIterationsFinishedInCurrentPeak = 0L
+        numberOfIterationsStartedInCurrentPeak = 0
+        numberOfIterationsFinishedInCurrentPeak = 0
         expectedNumberOfIterationsInCurrentPeak = currentNumberOfIterationsPerMinute * peakDurationInMinutes
 
         val loadExecutor = Executors.newScheduledThreadPool(coreThreadPoolSize)
         loadScheduler = loadExecutor.scheduleAtFixedRate(
             Runnable {
                 try {
+                    numberOfIterationsStartedInCurrentPeak++
+                    logger.info("Started $numberOfIterationsStartedInCurrentPeak of $expectedNumberOfIterationsInCurrentPeak iterations")
                     testFlow.startIteration()
                 } catch (exception: Exception) {
                     errorLogger.reportTestRunnerError("The 'loadScheduler' of the 'IncreasingLoadTestRunner' caught an error: ${exception.message} [${exception.printStackTrace()}]")
