@@ -65,7 +65,7 @@ class IncreasingLoadTestRunner(
                 try {
                     startNewPeakLoad()
                 } catch (exception: Exception) {
-                    errorLogger.reportError("The 'startScheduler' of the 'IncreasingLoadTestRunner' caught an error: ${exception.message} [${exception.printStackTrace()}]")
+                    errorLogger.reportTestRunnerError("The 'startScheduler' of the 'IncreasingLoadTestRunner' caught an error: ${exception.message} [${exception.printStackTrace()}]")
                     exception.printStackTrace();
                 }
             },
@@ -80,7 +80,7 @@ class IncreasingLoadTestRunner(
                 try {
                     killCurrentPeakLoad()
                 } catch (exception: Exception) {
-                    errorLogger.reportError("The 'killScheduler' of the 'IncreasingLoadTestRunner' caught an error: ${exception.message} [${exception.printStackTrace()}]")
+                    errorLogger.reportTestRunnerError("The 'killScheduler' of the 'IncreasingLoadTestRunner' caught an error: ${exception.message} [${exception.printStackTrace()}]")
                     exception.printStackTrace();
                 }
             },
@@ -103,7 +103,7 @@ class IncreasingLoadTestRunner(
                 try {
                     testFlow.startIteration()
                 } catch (exception: Exception) {
-                    errorLogger.reportError("The 'loadScheduler' of the 'IncreasingLoadTestRunner' caught an error: ${exception.message} [${exception.printStackTrace()}]")
+                    errorLogger.reportTestRunnerError("The 'loadScheduler' of the 'IncreasingLoadTestRunner' caught an error: ${exception.message} [${exception.printStackTrace()}]")
                     exception.printStackTrace();
                 }
             },

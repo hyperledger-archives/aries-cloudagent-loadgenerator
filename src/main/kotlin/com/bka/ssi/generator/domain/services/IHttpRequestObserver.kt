@@ -1,5 +1,5 @@
 package com.bka.ssi.generator.domain.services
 
 interface IHttpRequestObserver {
-    fun handleHttpRequest(httpMethod: String, urlPath: String, httpResponseCode: Int, durationInMs: Double)
+    fun logHttpRequest(httpMethod: String, urlPath: String, httpResponseCode: Int, durationInMs: Double)
 }

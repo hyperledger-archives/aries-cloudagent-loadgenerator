@@ -42,7 +42,7 @@ class AcaPyAriesClient(
         )
 
         if (schemaSendResponse.isEmpty) {
-            errorLogger.reportError("AcaPyAriesClient.createSchemaAndCredentialDefinition: Failed to create schema.")
+            errorLogger.reportAriesClientError("AcaPyAriesClient.createSchemaAndCredentialDefinition: Failed to create schema.")
         }
 
         val credentialDefinitionResponse = acaPy.credentialDefinitionsCreate(
@@ -55,7 +55,7 @@ class AcaPyAriesClient(
         )
 
         if (credentialDefinitionResponse.isEmpty) {
-            errorLogger.reportError("AcaPyAriesClient.createSchemaAndCredentialDefinition: Failed to create credential definition.")
+            errorLogger.reportAriesClientError("AcaPyAriesClient.createSchemaAndCredentialDefinition: Failed to create credential definition.")
         }
 
         return CredentialDefinitionDo(credentialDefinitionResponse.get().credentialDefinitionId)
@@ -73,7 +73,7 @@ class AcaPyAriesClient(
         )
 
         if (createInvitationRequest.isEmpty) {
-            errorLogger.reportError("AcaPyAriesClient.createConnectionInvitation: Failed to create connection invitation.")
+            errorLogger.reportAriesClientError("AcaPyAriesClient.createConnectionInvitation: Failed to create connection invitation.")
         }
 
         return ConnectionInvitationDo(
@@ -98,7 +98,7 @@ class AcaPyAriesClient(
         )
 
         if (connectionRecord.isEmpty) {
-            errorLogger.reportError("AcaPyAriesClient.receiveConnectionInvitation: Failed to receive connection invitation.")
+            errorLogger.reportAriesClientError("AcaPyAriesClient.receiveConnectionInvitation: Failed to receive connection invitation.")
         }
     }
 
@@ -123,17 +123,17 @@ class AcaPyAriesClient(
         )
 
         if (credentialExchange.isEmpty) {
-            errorLogger.reportError("AcaPyAriesClient.issueCredentialToConnection: Failed to issue credential.")
+            errorLogger.reportAriesClientError("AcaPyAriesClient.issueCredentialToConnection: Failed to issue credential.")
         }
     }
 
     override fun createOobCredentialOffer(credentialDo: CredentialDo): OobCredentialOfferDo {
-        errorLogger.reportError("AcaPyAriesClient.createOobCredentialOffer: Creating an OOB Credential Offer is not implemented yet.")
+        errorLogger.reportAriesClientError("AcaPyAriesClient.createOobCredentialOffer: Creating an OOB Credential Offer is not implemented yet.")
         throw NotImplementedError("Creating an OOB Credential Offer is not implemented yet.")
     }
 
     override fun receiveOobCredentialOffer(oobCredentialOfferDo: OobCredentialOfferDo) {
-        errorLogger.reportError("AcaPyAriesClient.receiveOobCredentialOffer: Receiving an OOB Credential Offer is not implemented yet.")
+        errorLogger.reportAriesClientError("AcaPyAriesClient.receiveOobCredentialOffer: Receiving an OOB Credential Offer is not implemented yet.")
         throw NotImplementedError("Receiving an OOB Credential Offer is not implemented yet.")
     }
 
@@ -180,17 +180,17 @@ class AcaPyAriesClient(
         )
 
         if (presentationExchangeRecord.isEmpty) {
-            errorLogger.reportError("AcaPyAriesClient.sendProofRequestToConnection: Failed to create and send proof request to connectionId.")
+            errorLogger.reportAriesClientError("AcaPyAriesClient.sendProofRequestToConnection: Failed to create and send proof request to connectionId.")
         }
     }
 
     override fun createOobProofRequest(proofRequestDo: ProofRequestDo, checkNonRevoked: Boolean): OobProofRequestDo {
-        errorLogger.reportError("AcaPyAriesClient.createOobProofRequest: Creating an OOB Proof Request is not implemented yet.")
+        errorLogger.reportAriesClientError("AcaPyAriesClient.createOobProofRequest: Creating an OOB Proof Request is not implemented yet.")
         throw NotImplementedError("Creating an OOB Proof Request is not implemented yet.")
     }
 
     override fun receiveOobProofRequest(oobProofRequestDo: OobProofRequestDo) {
-        errorLogger.reportError("AcaPyAriesClient.receiveOobProofRequest: Receiving an OOB Proof Request is not implemented yet.")
+        errorLogger.reportAriesClientError("AcaPyAriesClient.receiveOobProofRequest: Receiving an OOB Proof Request is not implemented yet.")
         throw NotImplementedError("Receiving an OOB Proof Request is not implemented yet.")
     }
 }
