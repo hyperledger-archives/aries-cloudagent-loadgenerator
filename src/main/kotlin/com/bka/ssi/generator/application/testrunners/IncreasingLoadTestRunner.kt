@@ -118,19 +118,19 @@ class IncreasingLoadTestRunner(
             TimeUnit.MILLISECONDS
         )
 
-        totalNumberOfPeaksStarted++
-
         if (totalNumberOfPeaksStarted >= totalNumberOfPeaks) {
             startScheduler.cancel(false)
         }
+
+        totalNumberOfPeaksStarted++
     }
 
     private fun killCurrentPeakLoad() {
         loadScheduler.cancel(false)
 
         if (totalNumberOfPeaksStarted >= totalNumberOfPeaks) {
-            killScheduler.cancel(false)
-            fixedThreadPoolExecutor.shutdown()
+            killScheduler.cancel(true)
+            fixedThreadPoolExecutor.shutdownNow()
         }
     }
 
