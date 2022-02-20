@@ -73,8 +73,8 @@ class ConstantLoadTestRunner(
         logger.info("Finished ${numberOfIterationsFinished} of $numberOfTotalIterations iterations")
 
         if (numberOfIterationsFinished >= numberOfTotalIterations) {
-            loadScheduler.cancel(false)
-            fixedThreadPoolExecutor.shutdown()
+            loadScheduler.cancel(true)
+            fixedThreadPoolExecutor.shutdownNow()
         }
     }
 
