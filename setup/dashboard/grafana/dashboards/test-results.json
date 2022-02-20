@@ -21,7 +21,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "iteration": 1645342610697,
+  "iteration": 1645347585575,
   "links": [
     {
       "asDropdown": false,
@@ -2104,7 +2104,7 @@
       "type": "stat"
     },
     {
-      "description": "POST/connections/receive-invitation [HTTP 400] ",
+      "description": "POST/connections/receive-invitation [HTTP 422] *3",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2156,7 +2156,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_client_error\"\n    |= \"request:POST/connections/receive-invitation httpCode:400\"\n[10d])",
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_client_error\"\n    |= \"request:POST/connections/receive-invitation httpCode:422\"\n    |= \"is not a raw Ed25519VerificationKey2018 key\"\n[10d])",
           "legendFormat": "",
           "refId": "A"
         }
@@ -2228,9 +2228,9 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_client_error\"\n    |= \"request:POST/connections/receive-invitation httpCode:400\"\n[1m])",
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_client_error\"\n    |= \"request:POST/connections/receive-invitation httpCode:422\"\n    |= \"is not a raw Ed25519VerificationKey2018 key\"\n[1m])",
           "hide": false,
-          "legendFormat": "POST/connections/receive-invitation [HTTP 400] ",
+          "legendFormat": "POST/connections/receive-invitation [HTTP 422]*3 ",
           "refId": "B"
         },
         {
@@ -2266,7 +2266,7 @@
       },
       "id": 117,
       "options": {
-        "content": "- *1: Error when fetching storage record. Backend error. Caused by: pool timed out while waiting for an open connection.\n- *2: Internal Server Error",
+        "content": "- *1: Error when fetching storage record. Backend error. Caused by: pool timed out while waiting for an open connection.\n- *2: Internal Server Error\n- *3: recipientKeys [...] is not a raw Ed25519VerificationKey2018 key",
         "mode": "markdown"
       },
       "pluginVersion": "8.4.0-beta1",
@@ -4720,13 +4720,13 @@
     ]
   },
   "time": {
-    "from": "2022-02-20T06:58:13.901Z",
-    "to": "2022-02-20T07:29:44.613Z"
+    "from": "now-30m",
+    "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Test Results",
   "uid": "0Pe9llbnz",
-  "version": 3,
+  "version": 1,
   "weekStart": ""
 }
