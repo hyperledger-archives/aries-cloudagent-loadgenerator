@@ -1,28 +1,6 @@
 version: "3.7"
 services:
 
-  issuer-verifier-wallet-db:
-    container_name: issuer-verifier-wallet-db
-    image: ${POSTGRES_IMAGE}
-    volumes:
-      - issuer-verifier-wallet-db-volume:/var/lib/postgresql/data
-    command: postgres -c 'max_connections=${MAX_CONNECTIONS_WALLET_DB}'
-    environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    networks:
-      - aries-load-test
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "5"
-        max-size: "50m"
-    ports:
-      - 5432:5432
-    restart: always
-    profiles: [ "all", "all-but-load-generator", "issuer-verifier-provisioning" ]
-
   issuer-verifier-acapy:
     image: ${ACAPY_IMAGE}
     entrypoint: /bin/bash
@@ -44,7 +22,7 @@ services:
         --wallet-name ${POSTGRES_DB} \
         --wallet-key key \
         --wallet-storage-type postgres_storage \
-        --wallet-storage-config '{\"url\":\"issuer-verifier-wallet-db:5432\",\"max_connections\":${MAX_WALLET_CONNECTIONS_PER_ACAPY}}' \
+        --wallet-storage-config '{\"url\":\"${POSTGRES_URL}\",\"max_connections\":${MAX_WALLET_CONNECTIONS_PER_ACAPY}}' \
         --wallet-storage-creds '{\"account\":\"${POSTGRES_USER}\",\"password\":\"${POSTGRES_PASSWORD}\",\"admin_account\":\"${POSTGRES_USER}\",\"admin_password\":\"${POSTGRES_PASSWORD}\"}' \
         --auto-ping-connection \
         --auto-verify-presentation \
@@ -57,8 +35,6 @@ services:
         --webhook-url ${LOAD_GENERATOR_WEBHOOK_ENDPOINT} \
         ${ACAPY_DEBUG_OPTIONS}"
     ]
-    depends_on:
-      - issuer-verifier-wallet-db
     networks:
       - aries-load-test
     extra_hosts:
@@ -657,8 +633,8 @@ services:
 
 networks:
   aries-load-test:
+    external: true
     name: aries-load-test
 
 volumes:
-  issuer-verifier-wallet-db-volume:
   tails-server-volume:

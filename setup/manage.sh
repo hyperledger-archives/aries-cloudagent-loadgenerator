@@ -30,6 +30,8 @@ usage() {
       startWithoutLoadGenerator - Starts all containers but the load generator.
                                   Can be used for running the load generator via the IDE.
 
+      startclusterednetwork - Starts network with Walled DB in a Patroni Postgres Cluster
+
       startloadgenerator - Starts only Spring service to generate load on the network
 
       startdashboard - Starts dashboard infrastructure to collect and present metrics
@@ -88,15 +90,6 @@ function logs() {
   fi
 }
 
-function startAll() {
-  startAllWithoutLoadGenerator
-
-  echo "Waiting for system to start... (sleeping 15 seconds)"
-  sleep 15
-
-  startLoadGenerator
-}
-
 function startLoadGenerator() {
   echo "Starting Load Generator ..."
   docker-compose -f docker-load-generator.yml up -d --build
@@ -107,7 +100,7 @@ function startDashboard() {
   docker-compose -f ./dashboard/docker-compose.yml up -d
 }
 
-function startAllWithoutLoadGenerator() {
+function createBlockchainNetwork() {
   echo "Starting the VON Network ..."
   git submodule update --init --recursive
   ./von-network/manage build
@@ -117,17 +110,60 @@ function startAllWithoutLoadGenerator() {
 
   echo "Registering issuer DID..."
   curl -d "{\"role\": \"ENDORSER\", \"seed\":\"$ISSUER_DID_SEED\"}" -H "Content-Type: application/json" -X POST $LEDGER_REGISTER_DID_ENDPOINT
+}
 
-  startDashboard
-
-  echo "Provisioning AcaPys and Wallet DBs ..."
+function provisionAcaPy() {
+  echo "Provisioning AcaPys... (sleeping 15 seconds)"
   docker-compose -f docker-agents.yml --profile issuer-verifier-provisioning up -d
-
-  echo "Waiting for the Wallet DB to be provisioned... (sleeping 10 seconds)"
-  sleep 10
+  sleep 15
 
   echo "Starting all AcaPy related docker containers ..."
   docker-compose -f docker-agents.yml --profile all-but-load-generator up -d --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES
+}
+
+function startPostgresSingleInstance() {
+  echo "Starting Issuer Wallet DB as single instance... (sleeping 15 seconds)"
+  docker-compose -f issuer-walletdb.yml --profile non-cluster up -d;
+  sleep 15
+}
+
+# cluster is built using Patroni technologies: https://github.com/zalando/patroni
+# details about toy environment using Docker: https://github.com/zalando/patroni/tree/master/docker
+function startPostgresCluster() {
+  echo "Starting Issuer Wallet DB as the Postgres Patroni cluster...(sleeping 30 seconds)"
+  # TODO update only needed submodule
+  git submodule update --init --recursive
+
+  cd "$SCRIPT_HOME/patroni";
+  docker build -t postgres-cluster-node --build-arg PG_MAJOR=13 .;
+
+  cd $SCRIPT_HOME;
+  docker-compose -f issuer-walletdb.yml --profile cluster up -d;
+
+  sleep 30
+}
+
+function startAllWithoutLoadGenerator() {
+  createBlockchainNetwork
+  startDashboard
+  startPostgresSingleInstance
+  provisionAcaPy
+}
+
+function startAllWithClusteredWalletDB() {
+  createBlockchainNetwork
+  startDashboard
+  startPostgresCluster
+  provisionAcaPy
+}
+
+function startAll() {
+  startAllWithoutLoadGenerator
+
+  echo "Waiting for system to start... (sleeping 15 seconds)"
+  sleep 15
+
+  startLoadGenerator
 }
 
 function downAll() {
@@ -142,6 +178,9 @@ function downAll() {
 
   echo "Stopping and removing any running AcaPy containers as well as volumes ..."
   docker-compose -f docker-agents.yml down -v
+
+  echo "Stopping and removing any walletdb containers"
+  docker-compose -f issuer-walletdb.yml down -v
 }
 
 case "${COMMAND}" in
@@ -156,6 +195,12 @@ startloadgenerator)
   ;;
 startdashboard)
   startDashboard
+  ;;
+startpostgrescluster)
+  startPostgresCluster
+  ;;
+startclusterednetwork)
+  startAllWithClusteredWalletDB
   ;;
 restart)
   downAll
@@ -173,6 +218,8 @@ stop)
 
   echo "Stopping and removing any running AcaPy containers ..."
   docker-compose -f docker-agents.yml rm -f -s
+
+  # TODO add stop for wallet db
   ;;
 down)
   downAll
