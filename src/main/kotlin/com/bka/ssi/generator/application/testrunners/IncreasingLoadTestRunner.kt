@@ -96,6 +96,11 @@ class IncreasingLoadTestRunner(
     }
 
     private fun startNewPeakLoad() {
+        if (totalNumberOfPeaksStarted >= totalNumberOfPeaks) {
+            startScheduler.cancel(true)
+            return
+        }
+
         val currentNumberOfIterationsPerMinute =
             initialNumberOfIterationsPerMinute + stepSizeOfIterationsPerMinute * totalNumberOfPeaksStarted
 
@@ -118,15 +123,11 @@ class IncreasingLoadTestRunner(
             TimeUnit.MILLISECONDS
         )
 
-        if (totalNumberOfPeaksStarted >= totalNumberOfPeaks) {
-            startScheduler.cancel(false)
-        }
-
         totalNumberOfPeaksStarted++
     }
 
     private fun killCurrentPeakLoad() {
-        loadScheduler.cancel(false)
+        loadScheduler.cancel(true)
 
         if (totalNumberOfPeaksStarted >= totalNumberOfPeaks) {
             killScheduler.cancel(true)
