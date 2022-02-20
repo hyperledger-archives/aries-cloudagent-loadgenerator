@@ -30,10 +30,10 @@ services:
     networks:
       - dashboard-and-logging
 
-  # https://github.com/PaulWen/grafana-pdf-exporter/blob/master/Dockerfile
+  # https://github.com/IzakMarais/reporter
   grafana-pdf-exporter:
     container_name: grafana-pdf-exporter
-    build: ./grafana-pdf-exporter/
+    image: izakmarais/grafana-reporter
     entrypoint: "/usr/local/bin/grafana-reporter -ip grafana:3000 -grid-layout=1"
     ports:
       - 8686:8686
