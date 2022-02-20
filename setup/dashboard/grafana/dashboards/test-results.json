@@ -21,7 +21,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "iteration": 1645349719913,
+  "iteration": 1645362521906,
   "links": [
     {
       "asDropdown": false,
@@ -90,7 +90,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": {
@@ -149,7 +149,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": {
@@ -204,7 +204,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": {
@@ -365,7 +365,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": {
@@ -420,7 +420,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": {
@@ -475,7 +475,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": {
@@ -534,7 +534,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": {
@@ -593,7 +593,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": {
@@ -652,7 +652,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": {
@@ -1916,7 +1916,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": {
@@ -1976,7 +1976,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": {
@@ -2037,7 +2037,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": {
@@ -2098,7 +2098,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": {
@@ -2111,6 +2111,67 @@
         }
       ],
       "title": "IV: Issue Credential",
+      "type": "stat"
+    },
+    {
+      "description": "POST/connections/receive-invitation [HTTP 400/500] *4,5,6,7",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 18,
+        "y": 58
+      },
+      "id": 126,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_client_error\"\n    |~ \"request:POST/connections/receive-invitation httpCode:[4 5]00\"\n[10d])",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "H: Receive Invitation",
       "type": "stat"
     },
     {
@@ -2140,8 +2201,8 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 4,
-        "x": 20,
+        "w": 3,
+        "x": 21,
         "y": 58
       },
       "id": 122,
@@ -2159,7 +2220,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": {
@@ -2202,7 +2263,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
+        "h": 8,
         "w": 24,
         "x": 0,
         "y": 61
@@ -2262,6 +2323,46 @@
           "hide": false,
           "legendFormat": "POST/issue-credential/send [HTTP 500]*2",
           "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_client_error\"\n    |= \"request:POST/connections/receive-invitation httpCode:400\"\n    |= \"Error when adding storage record. Backend error. Caused by: pool timed out while waiting for an open connection.\"\n[1m])",
+          "hide": false,
+          "legendFormat": "POST/connections/receive-invitation [HTTP 400] *4",
+          "refId": "E"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_client_error\"\n    |= \"request:POST/connections/receive-invitation httpCode:400\"\n    |= \"Error when adding storage record. Backend error. Caused by: error returned from database: database is locked.\"\n[1m])",
+          "hide": false,
+          "legendFormat": "POST/connections/receive-invitation [HTTP 400] *5",
+          "refId": "F"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_client_error\"\n    |= \"request:POST/connections/receive-invitation httpCode:400\"\n    |= \"Error when adding storage record. Backend error. Caused by: error returned from database: no such savepoint\"\n[1m])",
+          "hide": false,
+          "legendFormat": "POST/connections/receive-invitation [HTTP 400] *6",
+          "refId": "G"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_client_error\"\n    |= \"request:POST/connections/receive-invitation httpCode:400\"\n    |= \"Error when updating storage record value. Backend error. Caused by: error returned from database: no such savepoint\"\n[1m])",
+          "hide": false,
+          "legendFormat": "POST/connections/receive-invitation [HTTP 400] *7",
+          "refId": "H"
         }
       ],
       "title": "Failed HTTP Requests (per Minute)",
@@ -2269,17 +2370,17 @@
     },
     {
       "gridPos": {
-        "h": 4,
+        "h": 9,
         "w": 24,
         "x": 0,
-        "y": 66
+        "y": 69
       },
       "id": 117,
       "options": {
-        "content": "- *1: Error when fetching storage record. Backend error. Caused by: pool timed out while waiting for an open connection.\n- *2: Internal Server Error\n- *3: recipientKeys [...] is not a raw Ed25519VerificationKey2018 key",
+        "content": "- *1: Error when fetching storage record. Backend error. Caused by: pool timed out while waiting for an open connection.\n- *2: Internal Server Error\n- *3: recipientKeys [...] is not a raw Ed25519VerificationKey2018 key\n- *4: Error when adding storage record. Backend error. Caused by: pool timed out while waiting for an open connection.\n- *5: Error when adding storage record. Backend error. Caused by: error returned from database: database is locked.\n- *6: Error when adding storage record. Backend error. Caused by: error returned from database: no such savepoint\n- *7: Error when updating storage record value. Backend error. Caused by: error returned from database: no such savepoint",
         "mode": "markdown"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.5",
       "title": "Error Messages",
       "type": "text"
     },
@@ -2289,7 +2390,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 70
+        "y": 78
       },
       "id": 59,
       "panels": [],
@@ -2324,7 +2425,7 @@
         "h": 3,
         "w": 24,
         "x": 0,
-        "y": 71
+        "y": 79
       },
       "id": 60,
       "options": {
@@ -2341,7 +2442,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": {
@@ -2382,9 +2483,9 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 12,
+        "w": 8,
         "x": 0,
-        "y": 74
+        "y": 82
       },
       "id": 119,
       "options": {
@@ -2401,7 +2502,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": {
@@ -2442,9 +2543,9 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 12,
-        "x": 12,
-        "y": 74
+        "w": 9,
+        "x": 8,
+        "y": 82
       },
       "id": 118,
       "options": {
@@ -2461,7 +2562,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": {
@@ -2469,6 +2570,66 @@
             "uid": "P8E80F9AEF21F6940"
           },
           "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"AcaPyPublisher.handleCredential: Record not found.\"\n[10d])",
+          "refId": "A"
+        }
+      ],
+      "title": "IV: Issue Credential",
+      "type": "stat"
+    },
+    {
+      "description": "AcaPyPublisher.handleCredential: issuance-abandoned",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 7,
+        "x": 17,
+        "y": 82
+      },
+      "id": 127,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"AcaPyPublisher.handleCredential: issuance-abandoned\"\n[10d])",
           "refId": "A"
         }
       ],
@@ -2506,7 +2667,7 @@
         "h": 5,
         "w": 24,
         "x": 0,
-        "y": 77
+        "y": 85
       },
       "id": 62,
       "options": {
@@ -2543,6 +2704,16 @@
           "hide": false,
           "legendFormat": "AcaPyPublisher.handleCredential: Record not found.",
           "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"AcaPyPublisher.handleCredential: issuance-abandoned\"\n[1m])",
+          "hide": false,
+          "legendFormat": "AcaPyPublisher.handleCredential: issuance-abandoned",
+          "refId": "C"
         }
       ],
       "title": "Errors Reported through Events (per Minute)",
@@ -2554,7 +2725,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 82
+        "y": 90
       },
       "id": 44,
       "panels": [],
@@ -2589,7 +2760,7 @@
         "h": 4,
         "w": 24,
         "x": 0,
-        "y": 83
+        "y": 91
       },
       "id": 120,
       "options": {
@@ -2606,7 +2777,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": {
@@ -2626,7 +2797,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 87
+        "y": 95
       },
       "id": 20,
       "panels": [],
@@ -2648,7 +2819,7 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 88
+        "y": 96
       },
       "hiddenSeries": false,
       "id": 75,
@@ -2672,7 +2843,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2741,7 +2912,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 98
+        "y": 106
       },
       "hiddenSeries": false,
       "id": 77,
@@ -2764,7 +2935,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2873,7 +3044,7 @@
         "h": 11,
         "w": 24,
         "x": 0,
-        "y": 106
+        "y": 114
       },
       "id": 2,
       "options": {
@@ -2906,7 +3077,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 117
+        "y": 125
       },
       "id": 81,
       "panels": [],
@@ -2973,7 +3144,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 118
+        "y": 126
       },
       "id": 83,
       "options": {
@@ -3068,7 +3239,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 127
+        "y": 135
       },
       "id": 85,
       "options": {
@@ -3110,7 +3281,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 136
+        "y": 144
       },
       "id": 103,
       "panels": [],
@@ -3177,7 +3348,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 137
+        "y": 145
       },
       "id": 86,
       "options": {
@@ -3272,7 +3443,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 145
+        "y": 153
       },
       "id": 89,
       "options": {
@@ -3314,7 +3485,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 152
+        "y": 160
       },
       "id": 105,
       "panels": [],
@@ -3381,7 +3552,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 153
+        "y": 161
       },
       "id": 87,
       "options": {
@@ -3476,7 +3647,7 @@
         "h": 11,
         "w": 24,
         "x": 0,
-        "y": 162
+        "y": 170
       },
       "id": 90,
       "options": {
@@ -3518,7 +3689,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 173
+        "y": 181
       },
       "id": 109,
       "panels": [],
@@ -3585,7 +3756,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 174
+        "y": 182
       },
       "id": 98,
       "options": {
@@ -3680,7 +3851,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 182
+        "y": 190
       },
       "id": 91,
       "options": {
@@ -3722,7 +3893,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 191
+        "y": 199
       },
       "id": 111,
       "panels": [],
@@ -3789,7 +3960,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 192
+        "y": 200
       },
       "id": 100,
       "options": {
@@ -3884,7 +4055,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 200
+        "y": 208
       },
       "id": 99,
       "options": {
@@ -3926,7 +4097,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 208
+        "y": 216
       },
       "id": 107,
       "panels": [],
@@ -3993,7 +4164,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 209
+        "y": 217
       },
       "id": 88,
       "options": {
@@ -4088,7 +4259,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 217
+        "y": 225
       },
       "id": 115,
       "options": {
@@ -4130,7 +4301,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 226
+        "y": 234
       },
       "id": 113,
       "panels": [],
@@ -4197,7 +4368,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 227
+        "y": 235
       },
       "id": 114,
       "options": {
@@ -4292,7 +4463,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 227
+        "y": 235
       },
       "id": 101,
       "options": {
@@ -4334,7 +4505,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 236
+        "y": 244
       },
       "id": 79,
       "panels": [],
@@ -4379,7 +4550,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 237
+        "y": 245
       },
       "hiddenSeries": false,
       "id": 97,
@@ -4404,7 +4575,7 @@
         "alertThreshold": true
       },
       "percentage": true,
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -4563,7 +4734,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 237
+        "y": 245
       },
       "hiddenSeries": false,
       "id": 95,
@@ -4588,7 +4759,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -4695,7 +4866,7 @@
     }
   ],
   "refresh": false,
-  "schemaVersion": 35,
+  "schemaVersion": 34,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -4731,13 +4902,13 @@
     ]
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-6h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Test Results",
   "uid": "0Pe9llbnz",
-  "version": 1,
+  "version": 6,
   "weekStart": ""
 }
