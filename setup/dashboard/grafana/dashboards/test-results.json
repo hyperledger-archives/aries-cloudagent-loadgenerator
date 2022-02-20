@@ -21,7 +21,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "iteration": 1645340973204,
+  "iteration": 1645342610697,
   "links": [
     {
       "asDropdown": false,
@@ -70,7 +70,7 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 6,
+        "w": 8,
         "x": 0,
         "y": 1
       },
@@ -118,7 +118,7 @@
                 "value": null
               },
               {
-                "color": "orange",
+                "color": "red",
                 "value": 1
               }
             ]
@@ -128,8 +128,8 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 6,
-        "x": 6,
+        "w": 8,
+        "x": 8,
         "y": 1
       },
       "id": 68,
@@ -154,7 +154,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "sum(count_over_time(\n  {app=\"aries-load-generator\"}\n    |= \"Started\"\n    |= \"of\"\n    |= \"iterations\"\n[10d])) -\nsum(count_over_time(\n  {app=\"aries-load-generator\"}\n    |= \"Finished\"\n    |= \"of\"\n    |= \"iterations\"\n[10d])) -\nsum(count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"AcaPyPublisher.handleCredential: Revocation registry metadata not found.\"\n[10d]))",
+          "expr": "sum(count_over_time(\n  {app=\"aries-load-generator\"}\n    |= \"Started\"\n    |= \"of\"\n    |= \"iterations\"\n[10d])) -\nsum(count_over_time(\n  {app=\"aries-load-generator\"}\n    |= \"Finished\"\n    |= \"of\"\n    |= \"iterations\"\n[10d]))",
           "refId": "A"
         }
       ],
@@ -182,8 +182,8 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 6,
-        "x": 12,
+        "w": 8,
+        "x": 16,
         "y": 1
       },
       "id": 69,
@@ -213,64 +213,6 @@
         }
       ],
       "title": "Number of Iterations Finished",
-      "type": "stat"
-    },
-    {
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 1
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 6,
-        "x": 18,
-        "y": 1
-      },
-      "id": 70,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.4.0-beta1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"AcaPyPublisher.handleCredential: Revocation registry metadata not found.\"\n[10d])",
-          "refId": "A"
-        }
-      ],
-      "title": "Number of Iterations Failed due to an Error",
       "type": "stat"
     },
     {
@@ -556,7 +498,7 @@
                 "value": null
               },
               {
-                "color": "orange",
+                "color": "red",
                 "value": 1
               }
             ]
@@ -592,7 +534,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=connectionRecord\"\n  |= \"state=INVITATION\" [10d]) -\n  \ncount_over_time({app=\"aries-load-generator\"}\n  |= \"type=connectionRecord\"\n  |= \"state=ACTIVE\" [10d])",
+          "expr": "sum(count_over_time({app=\"aries-load-generator\"}\n  |= \"type=connectionRecord\"\n  |= \"state=INVITATION\" [10d])) -\n  \nsum(count_over_time({app=\"aries-load-generator\"}\n  |= \"type=connectionRecord\"\n  |= \"state=ACTIVE\" [10d]))",
           "refId": "A"
         }
       ],
@@ -614,7 +556,7 @@
                 "value": null
               },
               {
-                "color": "orange",
+                "color": "red",
                 "value": 1
               }
             ]
@@ -650,7 +592,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "sum(count_over_time({app=\"aries-load-generator\"}\n  |= \"type=credentialRecord\"\n  |= \"state=OFFER_SENT\" [10d])) -\n  \nsum(count_over_time({app=\"aries-load-generator\"}\n  |= \"type=credentialRecord\"\n  |= \"state=CREDENTIAL_ACKED\" [10d])) -\n  \nsum(count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"AcaPyPublisher.handleCredential: Revocation registry metadata not found.\"\n[10d]))",
+          "expr": "sum(count_over_time({app=\"aries-load-generator\"}\n  |= \"type=credentialRecord\"\n  |= \"state=OFFER_SENT\" [10d])) -\n  \nsum(count_over_time({app=\"aries-load-generator\"}\n  |= \"type=credentialRecord\"\n  |= \"state=CREDENTIAL_ACKED\" [10d]))",
           "refId": "A"
         }
       ],
@@ -672,7 +614,7 @@
                 "value": null
               },
               {
-                "color": "orange",
+                "color": "red",
                 "value": 1
               }
             ]
@@ -713,180 +655,6 @@
         }
       ],
       "title": "Number of Pending Proof Requests",
-      "type": "stat"
-    },
-    {
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 1
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 8,
-        "x": 0,
-        "y": 19
-      },
-      "id": 71,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.4.0-beta1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "expr": "0",
-          "refId": "A"
-        }
-      ],
-      "title": "Number of Failed Connection Invitations",
-      "type": "stat"
-    },
-    {
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 1
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 8,
-        "x": 8,
-        "y": 19
-      },
-      "id": 72,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.4.0-beta1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "expr": "sum(count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"AcaPyPublisher.handleCredential: Revocation registry metadata not found.\"\n[10d]))",
-          "refId": "A"
-        }
-      ],
-      "title": "Number of Failed Credential Offers",
-      "type": "stat"
-    },
-    {
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 1
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 8,
-        "x": 16,
-        "y": 19
-      },
-      "id": 73,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.4.0-beta1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "expr": "0",
-          "refId": "A"
-        }
-      ],
-      "title": "Number of Failed Proof Requests",
       "type": "stat"
     },
     {
@@ -975,7 +743,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 22
+        "y": 19
       },
       "id": 4,
       "options": {
@@ -1119,7 +887,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 22
+        "y": 19
       },
       "id": 9,
       "options": {
@@ -1280,7 +1048,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 22
+        "y": 19
       },
       "id": 7,
       "options": {
@@ -1384,7 +1152,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 30
+        "y": 27
       },
       "id": 24,
       "options": {
@@ -1499,7 +1267,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 30
+        "y": 27
       },
       "id": 25,
       "options": {
@@ -1629,7 +1397,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 30
+        "y": 27
       },
       "id": 26,
       "options": {
@@ -1712,7 +1480,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 38
+        "y": 35
       },
       "id": 33,
       "options": {
@@ -1825,7 +1593,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 38
+        "y": 35
       },
       "id": 34,
       "options": {
@@ -1938,7 +1706,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 38
+        "y": 35
       },
       "id": 35,
       "options": {
@@ -1992,7 +1760,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 46
+        "y": 43
       },
       "id": 51,
       "panels": [],
@@ -2054,7 +1822,7 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 47
+        "y": 44
       },
       "id": 16,
       "options": {
@@ -2087,7 +1855,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 57
+        "y": 54
       },
       "id": 22,
       "panels": [],
@@ -2121,7 +1889,7 @@
         "h": 3,
         "w": 24,
         "x": 0,
-        "y": 58
+        "y": 55
       },
       "id": 67,
       "options": {
@@ -2150,6 +1918,250 @@
         }
       ],
       "title": "Total Number of Failed HTTP Requests",
+      "type": "stat"
+    },
+    {
+      "description": "POST/connections/create-invitation [HTTP 400] *1",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 0,
+        "y": 58
+      },
+      "id": 121,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.0-beta1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n  |= \"type=aries_client_error\"\n  |= \"request:POST/connections/create-invitation httpCode:400\"\n  |= \"Error when fetching storage record. Backend error. Caused by: pool timed out while waiting for an open connection.\"\n[10d])",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "IV: Create Invitation",
+      "type": "stat"
+    },
+    {
+      "description": "POST/issue-credential/send [HTTP 400] *1",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 4,
+        "y": 58
+      },
+      "id": 123,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.0-beta1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n  |= \"type=aries_client_error\"\n  |= \"request:POST/issue-credential/send httpCode:400\"\n  |= \"Error when fetching storage record. Backend error. Caused by: pool timed out while waiting for an open connection.\"\n[10d])",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "IV: Issue Credential",
+      "type": "stat"
+    },
+    {
+      "description": "POST/issue-credential/send [HTTP 500]*2",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 8,
+        "y": 58
+      },
+      "id": 124,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.0-beta1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n  |= \"type=aries_client_error\"\n  |= \"request:POST/issue-credential/send httpCode:500\"\n[10d])",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "IV: Issue Credential",
+      "type": "stat"
+    },
+    {
+      "description": "POST/connections/receive-invitation [HTTP 400] ",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 20,
+        "y": 58
+      },
+      "id": 122,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.0-beta1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_client_error\"\n    |= \"request:POST/connections/receive-invitation httpCode:400\"\n[10d])",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "H: Receive Invitation",
       "type": "stat"
     },
     {
@@ -2207,8 +2219,8 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n  |= \"type=aries_client_error\"\n  |= \"request:POST/connections/create-invitation httpCode:400\"\n[1m])",
-          "legendFormat": "POST/connections/create-invitation [HTTP 400]",
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n  |= \"type=aries_client_error\"\n  |= \"request:POST/connections/create-invitation httpCode:400\"\n  |= \"Error when fetching storage record. Backend error. Caused by: pool timed out while waiting for an open connection.\"\n[1m])",
+          "legendFormat": "POST/connections/create-invitation [HTTP 400] *1",
           "refId": "A"
         },
         {
@@ -2218,7 +2230,7 @@
           },
           "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_client_error\"\n    |= \"request:POST/connections/receive-invitation httpCode:400\"\n[1m])",
           "hide": false,
-          "legendFormat": "POST/connections/receive-invitation [HTTP 400]",
+          "legendFormat": "POST/connections/receive-invitation [HTTP 400] ",
           "refId": "B"
         },
         {
@@ -2226,10 +2238,20 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n  |= \"type=http_request\"\n  |= \"request:POST/issue-credential/send httpCode:400\"\n[1m])",
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n  |= \"type=aries_client_error\"\n  |= \"request:POST/issue-credential/send httpCode:400\"\n  |= \"Error when fetching storage record. Backend error. Caused by: pool timed out while waiting for an open connection.\"\n[1m])",
           "hide": false,
-          "legendFormat": "POST/issue-credential/send [HTTP 400]",
+          "legendFormat": "POST/issue-credential/send [HTTP 400] *1",
           "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n  |= \"type=aries_client_error\"\n  |= \"request:POST/issue-credential/send httpCode:500\"\n[1m])",
+          "hide": false,
+          "legendFormat": "POST/issue-credential/send [HTTP 500]*2",
+          "refId": "D"
         }
       ],
       "title": "Failed HTTP Requests (per Minute)",
@@ -2237,35 +2259,19 @@
     },
     {
       "gridPos": {
-        "h": 9,
+        "h": 4,
         "w": 24,
         "x": 0,
         "y": 66
       },
-      "id": 57,
+      "id": 117,
       "options": {
-        "dedupStrategy": "none",
-        "enableLogDetails": true,
-        "prettifyLogMessage": false,
-        "showCommonLabels": false,
-        "showLabels": false,
-        "showTime": false,
-        "sortOrder": "Descending",
-        "wrapLogMessage": false
+        "content": "- *1: Error when fetching storage record. Backend error. Caused by: pool timed out while waiting for an open connection.\n- *2: Internal Server Error",
+        "mode": "markdown"
       },
-      "pluginVersion": "8.3.4",
-      "targets": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "expr": " {app=\"aries-load-generator\"}\n    |= \"type=aries_client_error\"\n    != \"request:POST/connections/create-invitation httpCode:400\"\n    != \"request:POST/issue-credential/send httpCode:400\"\n    != \"request:POST/connections/receive-invitation httpCode:400\"",
-          "refId": "A"
-        }
-      ],
-      "title": "Untracked HTTP Request Errors",
-      "type": "logs"
+      "pluginVersion": "8.4.0-beta1",
+      "title": "Error Messages",
+      "type": "text"
     },
     {
       "collapsed": false,
@@ -2273,7 +2279,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 75
+        "y": 70
       },
       "id": 59,
       "panels": [],
@@ -2307,7 +2313,7 @@
         "h": 3,
         "w": 24,
         "x": 0,
-        "y": 76
+        "y": 71
       },
       "id": 60,
       "options": {
@@ -2336,6 +2342,126 @@
         }
       ],
       "title": "Total Number of Errors Reported through Events",
+      "type": "stat"
+    },
+    {
+      "description": "AcaPyPublisher.handleCredential: Revocation registry metadata not found.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 12,
+        "x": 0,
+        "y": 74
+      },
+      "id": 119,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.0-beta1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"AcaPyPublisher.handleCredential: Revocation registry metadata not found.\"\n[10d])",
+          "refId": "A"
+        }
+      ],
+      "title": "IV: Issue Credential",
+      "type": "stat"
+    },
+    {
+      "description": "AcaPyPublisher.handleCredential: Record not found.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 12,
+        "x": 12,
+        "y": 74
+      },
+      "id": 118,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.0-beta1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"AcaPyPublisher.handleCredential: Record not found.\"\n[10d])",
+          "refId": "A"
+        }
+      ],
+      "title": "IV: Issue Credential",
       "type": "stat"
     },
     {
@@ -2369,7 +2495,7 @@
         "h": 5,
         "w": 24,
         "x": 0,
-        "y": 79
+        "y": 77
       },
       "id": 62,
       "options": {
@@ -2412,44 +2538,12 @@
       "type": "state-timeline"
     },
     {
-      "gridPos": {
-        "h": 4,
-        "w": 24,
-        "x": 0,
-        "y": 84
-      },
-      "id": 64,
-      "options": {
-        "dedupStrategy": "none",
-        "enableLogDetails": true,
-        "prettifyLogMessage": false,
-        "showCommonLabels": false,
-        "showLabels": false,
-        "showTime": false,
-        "sortOrder": "Descending",
-        "wrapLogMessage": false
-      },
-      "pluginVersion": "8.3.4",
-      "targets": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "expr": " {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    != \"AcaPyPublisher.handleCredential: Revocation registry metadata not found.\"\n    != \"AcaPyPublisher.handleCredential: Record not found.\"",
-          "refId": "A"
-        }
-      ],
-      "title": "Untracked Errors Reported through Events",
-      "type": "logs"
-    },
-    {
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 88
+        "y": 82
       },
       "id": 44,
       "panels": [],
@@ -2457,36 +2551,63 @@
       "type": "row"
     },
     {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
       "gridPos": {
-        "h": 15,
+        "h": 4,
         "w": 24,
         "x": 0,
-        "y": 89
+        "y": 83
       },
-      "id": 49,
+      "id": 120,
       "options": {
-        "dedupStrategy": "none",
-        "enableLogDetails": true,
-        "prettifyLogMessage": false,
-        "showCommonLabels": false,
-        "showLabels": false,
-        "showTime": false,
-        "sortOrder": "Descending",
-        "wrapLogMessage": false
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.0-beta1",
       "targets": [
         {
           "datasource": {
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": " {app=\"aries-load-generator\"}\n    |= \"type=test_runner_error\"",
+          "expr": "count_over_time(\n  {app=\"aries-load-generator\"}\n    |= \"type=test_runner_error\"\n[10d])",
           "refId": "A"
         }
       ],
-      "title": "Error Caught by Test Runner",
-      "type": "logs"
+      "title": "Number of Errors Caught by Test Runner",
+      "type": "stat"
     },
     {
       "collapsed": false,
@@ -2494,7 +2615,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 104
+        "y": 87
       },
       "id": 20,
       "panels": [],
@@ -2516,7 +2637,7 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 105
+        "y": 88
       },
       "hiddenSeries": false,
       "id": 75,
@@ -2609,7 +2730,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 115
+        "y": 98
       },
       "hiddenSeries": false,
       "id": 77,
@@ -2741,7 +2862,7 @@
         "h": 11,
         "w": 24,
         "x": 0,
-        "y": 123
+        "y": 106
       },
       "id": 2,
       "options": {
@@ -2774,7 +2895,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 134
+        "y": 117
       },
       "id": 81,
       "panels": [],
@@ -2841,7 +2962,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 135
+        "y": 118
       },
       "id": 83,
       "options": {
@@ -2936,7 +3057,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 144
+        "y": 127
       },
       "id": 85,
       "options": {
@@ -2978,7 +3099,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 153
+        "y": 136
       },
       "id": 103,
       "panels": [],
@@ -3045,7 +3166,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 154
+        "y": 137
       },
       "id": 86,
       "options": {
@@ -3140,7 +3261,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 162
+        "y": 145
       },
       "id": 89,
       "options": {
@@ -3182,7 +3303,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 169
+        "y": 152
       },
       "id": 105,
       "panels": [],
@@ -3249,7 +3370,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 170
+        "y": 153
       },
       "id": 87,
       "options": {
@@ -3344,7 +3465,7 @@
         "h": 11,
         "w": 24,
         "x": 0,
-        "y": 179
+        "y": 162
       },
       "id": 90,
       "options": {
@@ -3386,7 +3507,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 190
+        "y": 173
       },
       "id": 109,
       "panels": [],
@@ -3453,7 +3574,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 191
+        "y": 174
       },
       "id": 98,
       "options": {
@@ -3548,7 +3669,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 199
+        "y": 182
       },
       "id": 91,
       "options": {
@@ -3590,7 +3711,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 208
+        "y": 191
       },
       "id": 111,
       "panels": [],
@@ -3657,7 +3778,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 209
+        "y": 192
       },
       "id": 100,
       "options": {
@@ -3752,7 +3873,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 217
+        "y": 200
       },
       "id": 99,
       "options": {
@@ -3794,7 +3915,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 225
+        "y": 208
       },
       "id": 107,
       "panels": [],
@@ -3861,7 +3982,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 226
+        "y": 209
       },
       "id": 88,
       "options": {
@@ -3956,7 +4077,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 234
+        "y": 217
       },
       "id": 115,
       "options": {
@@ -3998,7 +4119,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 243
+        "y": 226
       },
       "id": 113,
       "panels": [],
@@ -4065,7 +4186,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 244
+        "y": 227
       },
       "id": 114,
       "options": {
@@ -4160,7 +4281,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 244
+        "y": 227
       },
       "id": 101,
       "options": {
@@ -4202,7 +4323,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 253
+        "y": 236
       },
       "id": 79,
       "panels": [],
@@ -4247,7 +4368,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 254
+        "y": 237
       },
       "hiddenSeries": false,
       "id": 97,
@@ -4431,7 +4552,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 254
+        "y": 237
       },
       "hiddenSeries": false,
       "id": 95,
@@ -4599,13 +4720,13 @@
     ]
   },
   "time": {
-    "from": "now-15m",
-    "to": "now"
+    "from": "2022-02-20T06:58:13.901Z",
+    "to": "2022-02-20T07:29:44.613Z"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Test Results",
   "uid": "0Pe9llbnz",
-  "version": 2,
+  "version": 3,
   "weekStart": ""
 }
