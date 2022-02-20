@@ -95,8 +95,9 @@ function startAll() {
 }
 
 function startAllWithoutLoadGenerator() {
-  echo "Starting the VON Network ..."
   git submodule update --init --recursive
+
+  echo "Starting the VON Network ..."
   ./von-network/manage build
   ./von-network/manage start
   echo "Waiting for the ledger to start... (sleeping 30 seconds)"
