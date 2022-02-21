@@ -3,24 +3,63 @@
 A simple load generator to test the performance of the ACA-PY agent.
 
 ## Startup a Test Environment
+![Loadgenerator architecture](architecture.png)
 
 This repository comes with an automated testing setup consisting of:
 
-- Issuer/Verifier AcaPy (+ Postgres Wallet DB)
-- Holder AcaPy (+ Postgres Wallet DB)
-- Tails Server
-- VON Network
+- n Issuer/Verifier [ACA-Py](https://github.com/hyperledger/aries-cloudagent-python) instance(s) depending on the [configuration](#configuration) (+ Postgres Wallet DB)
+- 10 Holder [ACA-Py](https://github.com/hyperledger/aries-cloudagent-python) instances (+ SQLite Wallet DB)
+- [Tails Server](https://github.com/bcgov/indy-tails-server/) to support revocation
+- [VON-Network](https://github.com/bcgov/von-network) for a local deployment of an indy ledger
 - Analysis Tools ([see below](#analysis-tools))
+- Aries Clouadagent Load Generator itself
 
-To configure it create a `./setup/.env` file similar to [./setup/.env.example](./setup/.env.example)
+### Prerequisites
 
-To start it run:
+You need to have [Docker](https://docs.docker.com/get-docker/) installed and access to a basic command line.
+
+### Configuration
+
+To configure the environment create a `./setup/.env` file similar to [./setup/.env.example](./setup/.env.example)
+
+
+### Management Script
+
+To start the environment run:
 
 ```
 ./setup/manage.sh start
 ```
 
-For more details check this [README](./setup/README.md).
+This will start all necessary components as well as registering a DID from the given seed in the `.env` file. The Load Generator itself is also included as a Docker container using this command.
+
+If you just want to start the surrounding environment and [startup the Load generator locally](#startup-the-load-generator), run:
+
+
+```
+./setup/manage.sh startwithoutloadgenerator
+```
+
+To restart the environment, run:
+
+```
+./setup/manage.sh restart
+```
+
+To stop the environment, run:
+
+```
+./setup/manage.sh stop
+```
+
+If you also want to delete all data and remove all containers, run:
+
+```
+./setup/manage.sh down
+```
+### Open the SwaggerUI
+
+An automatically generated SwaggerUI is available after startup under http://localhost:8080/swagger-ui.html
 
 ## Startup the Load Generator
 
@@ -112,10 +151,6 @@ docker build -t loadgenerator .
 ```sh
 docker run --rm -p 8080:8080 loadgenerator
 ```
-
-### Open the SwaggerUI
-
-An automatically generated SwaggerUI is available after startup under http://localhost:8080/swagger-ui.html
 
 ## Analyse the Test Results
 
