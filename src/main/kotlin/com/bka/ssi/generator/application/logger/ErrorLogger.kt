@@ -9,9 +9,25 @@ import java.time.Instant
 class ErrorLogger() {
     var logger: Logger = LoggerFactory.getLogger(ErrorLogger::class.java)
 
-    fun reportError(message: String) {
+    fun reportTestRunnerError(message: String) {
         logger.error(
-            "type=error message=$message time=${
+            "type=test_runner_error message=$message time=${
+                Instant.now().toEpochMilli()
+            }"
+        )
+    }
+
+    fun reportAriesEventError(message: String) {
+        logger.error(
+            "type=aries_event_error message=$message time=${
+                Instant.now().toEpochMilli()
+            }"
+        )
+    }
+
+    fun reportAriesClientError(message: String) {
+        logger.error(
+            "type=aries_client_error message=$message time=${
                 Instant.now().toEpochMilli()
             }"
         )

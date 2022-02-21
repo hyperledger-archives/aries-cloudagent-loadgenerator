@@ -630,7 +630,6 @@ services:
     restart: always
     profiles: [ "all", "all-but-load-generator" ]
 
-
 networks:
   aries-load-test:
     external: true

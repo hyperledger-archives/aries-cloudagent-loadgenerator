@@ -2,6 +2,7 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/setup/dashboard/grafana-pdf-exporter" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/setup/indy-tails-server" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/setup/patroni" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/setup/von-network" vcs="Git" />

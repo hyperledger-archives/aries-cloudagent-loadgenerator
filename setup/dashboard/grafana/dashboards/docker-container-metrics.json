@@ -23,9 +23,21 @@
   "fiscalYearStartMonth": 0,
   "gnetId": 14282,
   "graphTooltip": 0,
-  "id": 4,
-  "iteration": 1645117359107,
-  "links": [],
+  "iteration": 1645189048793,
+  "links": [
+    {
+      "asDropdown": false,
+      "icon": "doc",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": true,
+      "title": "Download PDF Report",
+      "tooltip": "",
+      "type": "link",
+      "url": "http://localhost:8686/api/v5/report/pMEd7m0Mz"
+    }
+  ],
   "liveNow": false,
   "panels": [
     {
@@ -82,7 +94,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.3.5",
+      "pluginVersion": "8.4.0-beta1",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -185,7 +197,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.3.5",
+      "pluginVersion": "8.4.0-beta1",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -271,7 +283,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.3.5",
+      "pluginVersion": "8.4.0-beta1",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -376,7 +388,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.3.5",
+      "pluginVersion": "8.4.0-beta1",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -462,7 +474,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.3.5",
+      "pluginVersion": "8.4.0-beta1",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -535,6 +547,7 @@
       "fieldConfig": {
         "defaults": {
           "custom": {
+            "align": "auto",
             "displayMode": "auto",
             "filterable": false
           },
@@ -596,7 +609,7 @@
         ]
       },
       "gridPos": {
-        "h": 10,
+        "h": 45,
         "w": 24,
         "x": 0,
         "y": 27
@@ -613,7 +626,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "8.3.5",
+      "pluginVersion": "8.4.0-beta1",
       "targets": [
         {
           "expr": "(time() - container_start_time_seconds{instance=~\"$host\",name=~\"$container\",name=~\".+\"})/86400",
@@ -662,7 +675,7 @@
       "type": "table"
     }
   ],
-  "schemaVersion": 34,
+  "schemaVersion": 35,
   "style": "dark",
   "tags": [
     "cadvisor",
@@ -735,7 +748,7 @@
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {},
