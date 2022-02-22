@@ -2,13 +2,14 @@
 
 A simple load generator to test the performance of the ACA-PY agent.
 
-## Startup a Test Environment
+## Quick setup
 ![Loadgenerator architecture](architecture.png)
 
 This repository comes with an automated testing setup consisting of:
 
-- n Issuer/Verifier [ACA-Py](https://github.com/hyperledger/aries-cloudagent-python) instance(s) depending on the [configuration](#configuration) (+ Postgres Wallet DB)
-- 10 Holder [ACA-Py](https://github.com/hyperledger/aries-cloudagent-python) instances (+ SQLite Wallet DB)
+- n Issuer/Verifier [ACA-Py](https://github.com/hyperledger/aries-cloudagent-python) instance(s) depending on the [configuration](#configuration) (+ 1 shared Postgres Wallet DB)
+- nginx as reverse proxy for the Issuer/Verifier instances
+- n Holder [ACA-Py](https://github.com/hyperledger/aries-cloudagent-python) instance(s) (+ SQLite Wallet DB for each one)
 - [Tails Server](https://github.com/bcgov/indy-tails-server/) to support revocation
 - [VON-Network](https://github.com/bcgov/von-network) for a local deployment of an indy ledger
 - Analysis Tools ([see below](#analysis-tools))
@@ -33,13 +34,6 @@ To start the environment run:
 
 This will start all necessary components as well as registering a DID from the given seed in the `.env` file. The Load Generator itself is also included as a Docker container using this command.
 
-If you just want to start the surrounding environment and [startup the Load generator locally](#startup-the-load-generator), run:
-
-
-```
-./setup/manage.sh startwithoutloadgenerator
-```
-
 To restart the environment, run:
 
 ```
@@ -57,11 +51,66 @@ If you also want to delete all data and remove all containers, run:
 ```
 ./setup/manage.sh down
 ```
-### Open the SwaggerUI
 
-An automatically generated SwaggerUI is available after startup under http://localhost:8080/swagger-ui.html
+## Analyze the Test Results
 
-## Startup the Load Generator
+This project includes a setup for analyzing and visualizing the test results. The whole analysis setup is started
+automatically when starting the test environment.
+
+### Analysis Tools
+
+- **Grafana:** is used to visualize the collected data on a dashboard
+- **Grafane Image Renderer:** used to render Grafana graphs as images to export them to a PDF (uses
+  the [Image Renderer Plugin](https://grafana.com/grafana/plugins/grafana-image-renderer/))
+- **Grafana PDF Exporter:** used to export a Grafana dashboard as a PDF (
+  uses [IzakMarais/reporter](https://github.com/IzakMarais/reporter))
+- **Grafana Loki:** is used to collect logs from services like the Load Generator
+- **Prometheus:** is used to collect metrics from services like cAdvisor, node-exporter
+
+### Install node-exporter for collecting host metrics
+Prometheus *Node Exporter* exposes a wide variety of hardware- and kernel-related metrics.
+Follow the installation guide to install `node-exporter` as a native application: [Prometheus Node Exporter](https://prometheus.io/docs/guides/node-exporter/)
+
+You may consider running `node-exporter` on system startup, by adding it to `sudo crontab -e`
+```
+@reboot [INSTALLATION-DIR]/node_exporter > /dev/null 2>&1
+```
+
+### View Test Results in Grafana
+
+Grafana runs on http://localhost:3000. It comes preconfigured with dashboards to visualize the test results from the
+load tests. You can for example open http://localhost:3000/d/0Pe9llbnz/test-results to the test results.
+
+To see any data on the dashboard, ensure to select the right time range in Grafana for which data has been collected.
+
+### Export Grafana Dashboard as PDF
+
+Using [IzakMarais/reporter](https://github.com/IzakMarais/reporter) it is possible to export a dashboard as a PDF. For
+this a link exists in the top right corner of the dashboards. The PDF generation can take multiple minutes depending on
+the Dashboard complexity. Check the logs of the `grafana-pdf-exporter` container in case you want to see the progress of
+the PDF generation.
+
+### Grafana Configuration
+
+The data sources, as well as dashboards, are provisioned automatically when running the Grafana container.
+
+Data sources are configured manually
+in [./setup/grafana/grafana-provisioning/datasources/](./setup/grafana/grafana-provisioning/datasources/) using YAML
+files. Dashboards are configured in [./setup/grafana/dashboards](./setup/grafana/dashboards) using JSON files.
+Dashboards can be created via the Grafana Web UI and exported as JSON afterwards.
+
+
+## Development Setup
+
+### Environment startup
+
+To start the environment without the Load Generator container, run:
+
+
+```
+./setup/manage.sh startwithoutloadgenerator
+```
+To configure the environment, follow the steps as [listed above](#configuration).
 
 ### Configuration
 
@@ -151,52 +200,3 @@ docker build -t loadgenerator .
 ```sh
 docker run --rm -p 8080:8080 loadgenerator
 ```
-
-## Analyse the Test Results
-
-This project includes a setup for analysing and visualizing the test results. The whole analysis setup is started
-automatically when starting the test environment.
-
-### Analysis Tools
-
-- **Grafana:** is used to visualize the collected data on a dashboard
-- **Grafane Image Renderer:** used to render Grafana graphs as images to export them to a PDF (uses
-  the [Image Renderer Plugin](https://grafana.com/grafana/plugins/grafana-image-renderer/))
-- **Grafana PDF Exporter:** used to export a Grafana dashboard as a PDF (
-  uses [IzakMarais/reporter](https://github.com/IzakMarais/reporter))
-- **Grafana Loki:** is used to collect logs from services like the Load Generator
-- **Prometheus:** is used to collect metrics from services like cAdvisor, node-exporter
-
-### Install node-exporter for collecting host metrics
-Prometheus *Node Exporter* exposes a wide variety of hardware- and kernel-related metrics.
-Follow the installation guide to install `node-exporter` as a native application: [Prometheus Node Exporter](https://prometheus.io/docs/guides/node-exporter/)
-
-You may consider running `node-exporter` on system startup, by adding it to `sudo crontab -e`
-```
-@reboot [INSTALLATION-DIR]/node_exporter > /dev/null 2>&1
-```
-
-### View Test Results in Grafana
-
-Grafana runs on http://localhost:3000. It comes preconfigured with dashboards to visualize the test results from the
-load tests. You can for example open http://localhost:3000/d/0Pe9llbnz/test-results to the test results.
-
-To see any data on the dashboard, ensure to select the right time range in Grafana for which data has been collected.
-
-### Export Grafana Dashboard as PDF
-
-Using [IzakMarais/reporter](https://github.com/IzakMarais/reporter) it is possible to export a dashboard as a PDF. For
-this a link exists in the top right corner of the dashboards. The PDF generation can take multiple minutes depending on
-the Dashboard complexity. Check the logs of the `grafana-pdf-exporter` container in case you want to see the progress of
-the PDF generation.
-
-### Grafana Configuration
-
-The data sources, as well as dashboards, are provisioned automatically when running the Grafana container.
-
-Data sources are configured manually
-in [./setup/grafana/grafana-provisioning/datasources/](./setup/grafana/grafana-provisioning/datasources/) using YAML
-files. Dashboards are configured in [./setup/grafana/dashboards](./setup/grafana/dashboards) using JSON files.
-Dashboards can be created via the Grafana Web UI and exported as JSON afterwards.
-
-
