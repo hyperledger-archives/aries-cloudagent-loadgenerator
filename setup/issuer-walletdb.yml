@@ -38,7 +38,7 @@ services:
     env_file: ./.env
     container_name: issuer-verifier-wallet-db
     ports:
-      - "5432:5000"
+      - "5000:5000"
       - "5001:5001"
     command: haproxy
     environment: &haproxy_env
@@ -85,7 +85,7 @@ services:
     image: ${POSTGRES_IMAGE}
     volumes:
       - issuer-verifier-wallet-db-volume:/var/lib/postgresql/data
-    command: postgres -c 'max_connections=${MAX_CONNECTIONS_WALLET_DB}'
+    command: postgres -p 5000 -c 'max_connections=${MAX_CONNECTIONS_WALLET_DB}'
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: ${POSTGRES_USER}
@@ -98,7 +98,7 @@ services:
         max-file: "5"
         max-size: "50m"
     ports:
-      - 5432:5432
+      - 5000:5000
     restart: always
     profiles: [ "non-cluster" ]
 
