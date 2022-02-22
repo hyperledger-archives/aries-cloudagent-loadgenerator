@@ -80,7 +80,6 @@ services:
       PATRONI_NAME: patroni3
     profiles: [ "cluster" ]
 
-
   issuer-verifier-wallet-db:
     container_name: issuer-verifier-wallet-db
     image: ${POSTGRES_IMAGE}
@@ -102,7 +101,6 @@ services:
       - 5432:5432
     restart: always
     profiles: [ "non-cluster" ]
-
 
 networks:
   aries-load-test:
