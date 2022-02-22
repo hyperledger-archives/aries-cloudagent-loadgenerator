@@ -113,8 +113,9 @@ function createBlockchainNetwork() {
 }
 
 function provisionAcaPy() {
-  echo "Provisioning AcaPys... (sleeping 15 seconds)"
   docker-compose -f docker-agents.yml --profile issuer-verifier-provisioning up -d
+
+  echo "Provisioning AcaPys... (sleeping 15 seconds)"
   sleep 15
 
   echo "Starting all AcaPy related docker containers ..."
@@ -140,7 +141,8 @@ function startPostgresCluster() {
   cd $SCRIPT_HOME;
   docker-compose -f issuer-walletdb.yml --profile cluster up -d;
 
-  sleep 30
+  echo "Starting Postgres HA Cluster... (sleeping 45 seconds)"
+  sleep 45
 }
 
 function startAllWithoutLoadGenerator() {

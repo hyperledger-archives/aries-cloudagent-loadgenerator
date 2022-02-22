@@ -36,9 +36,9 @@ services:
     networks: [ aries-load-test ]
     hostname: haproxy
     env_file: ./.env
-    container_name: postgres-cluster-haproxy
+    container_name: issuer-verifier-wallet-db
     ports:
-      - "5000:5000"
+      - "5432:5000"
       - "5001:5001"
     command: haproxy
     environment: &haproxy_env
