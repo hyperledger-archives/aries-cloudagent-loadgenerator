@@ -4,3 +4,6 @@
 [submodule "setup/indy-tails-server"]
 	path = setup/indy-tails-server
 	url = https://github.com/bcgov/indy-tails-server
+[submodule "setup/patroni"]
+	path = setup/patroni
+	url = https://github.com/zalando/patroni
