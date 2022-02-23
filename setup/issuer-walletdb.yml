@@ -1,0 +1,116 @@
+# docker compose file for running a 3-node PostgreSQL cluster
+# with 3-node etcd cluster as the DCS and one haproxy node
+version: "3.7"
+
+services:
+  etcd1: &etcd
+    image: postgres-cluster-node
+    networks: [ aries-load-test ]
+    environment:
+      ETCD_LISTEN_PEER_URLS: http://0.0.0.0:2380
+      ETCD_LISTEN_CLIENT_URLS: http://0.0.0.0:2379
+      ETCD_INITIAL_CLUSTER: etcd1=http://etcd1:2380,etcd2=http://etcd2:2380,etcd3=http://etcd3:2380
+      ETCD_INITIAL_CLUSTER_STATE: new
+      ETCD_INITIAL_CLUSTER_TOKEN: tutorial
+      POSTGRES_DB: postgres
+      PATRONI_SUPERUSER_USERNAME: ${POSTGRES_USER}
+      PATRONI_SUPERUSER_PASSWORD: ${POSTGRES_PASSWORD}
+      PATRONI_RESTAPI_USERNAME: admin
+      PATRONI_RESTAPI_PASSWORD: admin
+      PATRONI_REPLICATION_USERNAME: replicator
+      PATRONI_REPLICATION_PASSWORD: replicate
+      PATRONI_admin_PASSWORD: admin
+      PATRONI_admin_OPTIONS: createdb,createrole
+    container_name: postgres-cluster-etcd1
+    hostname: etcd1
+    command: etcd -name etcd1 -initial-advertise-peer-urls http://etcd1:2380
+    profiles: [ "cluster" ]
+
+  etcd2:
+    <<: *etcd
+    container_name: postgres-cluster-etcd2
+    hostname: etcd2
+    command: etcd -name etcd2 -initial-advertise-peer-urls http://etcd2:2380
+    profiles: [ "cluster" ]
+
+  etcd3:
+    <<: *etcd
+    container_name: postgres-cluster-etcd3
+    hostname: etcd3
+    command: etcd -name etcd3 -initial-advertise-peer-urls http://etcd3:2380
+    profiles: [ "cluster" ]
+
+  haproxy:
+    image: postgres-cluster-node
+    networks: [ aries-load-test ]
+    hostname: haproxy
+    container_name: issuer-verifier-wallet-db
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+    command: haproxy
+    environment: &haproxy_env
+      ETCDCTL_ENDPOINTS: http://etcd1:2379,http://etcd2:2379,http://etcd3:2379
+      PATRONI_ETCD3_HOSTS: "'etcd1:2379','etcd2:2379','etcd3:2379'"
+      PATRONI_SCOPE: ssiwalletdb
+    profiles: [ "cluster" ]
+
+  postgres-node-1:
+    image: postgres-cluster-node
+    networks: [ aries-load-test ]
+    hostname: patroni1
+    container_name: postgres-node-1
+    environment:
+      <<: *haproxy_env
+      PATRONI_NAME: patroni1
+    profiles: [ "cluster" ]
+
+  postgres-node-2:
+    image: postgres-cluster-node
+    networks: [ aries-load-test ]
+    hostname: patroni2
+    container_name: postgres-node-2
+    environment:
+      <<: *haproxy_env
+      PATRONI_NAME: patroni2
+    profiles: [ "cluster" ]
+
+  postgres-node-3:
+    image: postgres-cluster-node
+    networks: [ aries-load-test ]
+    hostname: patroni3
+    container_name: postgres-node-3
+    environment:
+      <<: *haproxy_env
+      PATRONI_NAME: patroni3
+    profiles: [ "cluster" ]
+
+  issuer-verifier-wallet-db:
+    container_name: issuer-verifier-wallet-db
+    image: ${POSTGRES_IMAGE}
+    volumes:
+      - issuer-verifier-wallet-db-volume:/var/lib/postgresql/data
+    command: postgres -p 5000 -c 'max_connections=${MAX_CONNECTIONS_WALLET_DB}'
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - aries-load-test
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "50m"
+    ports:
+      - 5000:5000
+    restart: always
+    profiles: [ "non-cluster" ]
+
+networks:
+  aries-load-test:
+    name: aries-load-test
+
+# TODO add volumes for cluster
+volumes:
+  issuer-verifier-wallet-db-volume:
