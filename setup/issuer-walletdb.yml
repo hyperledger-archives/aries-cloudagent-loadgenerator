@@ -12,6 +12,15 @@ services:
       ETCD_INITIAL_CLUSTER: etcd1=http://etcd1:2380,etcd2=http://etcd2:2380,etcd3=http://etcd3:2380
       ETCD_INITIAL_CLUSTER_STATE: new
       ETCD_INITIAL_CLUSTER_TOKEN: tutorial
+      POSTGRES_DB: postgres
+      PATRONI_SUPERUSER_USERNAME: ${POSTGRES_USER}
+      PATRONI_SUPERUSER_PASSWORD: ${POSTGRES_PASSWORD}
+      PATRONI_RESTAPI_USERNAME: admin
+      PATRONI_RESTAPI_PASSWORD: admin
+      PATRONI_REPLICATION_USERNAME: replicator
+      PATRONI_REPLICATION_PASSWORD: replicate
+      PATRONI_admin_PASSWORD: admin
+      PATRONI_admin_OPTIONS: createdb,createrole
     container_name: postgres-cluster-etcd1
     hostname: etcd1
     command: etcd -name etcd1 -initial-advertise-peer-urls http://etcd1:2380
@@ -35,7 +44,7 @@ services:
     image: postgres-cluster-node
     networks: [ aries-load-test ]
     hostname: haproxy
-    env_file: ./.env
+#    env_file: ./.env
     container_name: issuer-verifier-wallet-db
     ports:
       - "5000:5000"
@@ -51,7 +60,7 @@ services:
     image: postgres-cluster-node
     networks: [ aries-load-test ]
     hostname: patroni1
-    env_file: ./.env
+#    env_file: ./.env
     container_name: postgres-node-1
     environment:
       <<: *haproxy_env
@@ -62,7 +71,7 @@ services:
     image: postgres-cluster-node
     networks: [ aries-load-test ]
     hostname: patroni2
-    env_file: ./.env
+#    env_file: ./.env
     container_name: postgres-node-2
     environment:
       <<: *haproxy_env
@@ -73,7 +82,7 @@ services:
     image: postgres-cluster-node
     networks: [ aries-load-test ]
     hostname: patroni3
-    env_file: ./.env
+#    env_file: ./postgres-cluster/configuration.env
     container_name: postgres-node-3
     environment:
       <<: *haproxy_env
