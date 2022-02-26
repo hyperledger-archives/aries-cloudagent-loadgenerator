@@ -45,7 +45,7 @@ services:
         max-file: "5"
         max-size: "50m"
     restart: always
-    profiles: [ "all", "all-but-load-generator", "issuer-verifier-provisioning" ]
+    profiles: [ "issuer-verifier", "issuer-verifier-provisioning" ]
 
   issuer-verifier-nginx:
     container_name: issuer-verifier-nginx
@@ -58,6 +58,7 @@ services:
       - 10000:10000
     networks:
       - aries-load-test
+    profiles: ["issuer-verifier"]
 
   holder-acapy-1:
     container_name: holder-acapy-1
@@ -97,8 +98,6 @@ services:
         --log-level ${ACAPY_LOG_LEVEL} \
         ${ACAPY_DEBUG_OPTIONS}"
     ]
-    depends_on:
-      - tails-server
     ports:
       - 10110:10010
       - 10111:10011
@@ -112,7 +111,7 @@ services:
         max-file: "5"
         max-size: "50m"
     restart: always
-    profiles: [ "all", "all-but-load-generator" ]
+    profiles: [ "holder" ]
 
   holder-acapy-2:
     container_name: holder-acapy-2
@@ -152,8 +151,6 @@ services:
         --log-level ${ACAPY_LOG_LEVEL} \
         ${ACAPY_DEBUG_OPTIONS}"
     ]
-    depends_on:
-      - tails-server
     ports:
       - 10210:10010
       - 10211:10011
@@ -167,7 +164,7 @@ services:
         max-file: "5"
         max-size: "50m"
     restart: always
-    profiles: [ "all", "all-but-load-generator" ]
+    profiles: [ "holder" ]
 
   holder-acapy-3:
     container_name: holder-acapy-3
@@ -207,8 +204,6 @@ services:
         --log-level ${ACAPY_LOG_LEVEL} \
         ${ACAPY_DEBUG_OPTIONS}"
     ]
-    depends_on:
-      - tails-server
     ports:
       - 10310:10010
       - 10311:10011
@@ -222,7 +217,7 @@ services:
         max-file: "5"
         max-size: "50m"
     restart: always
-    profiles: [ "all", "all-but-load-generator" ]
+    profiles: [ "holder" ]
 
   holder-acapy-4:
     container_name: holder-acapy-4
@@ -262,8 +257,6 @@ services:
         --log-level ${ACAPY_LOG_LEVEL} \
         ${ACAPY_DEBUG_OPTIONS}"
     ]
-    depends_on:
-      - tails-server
     ports:
       - 10410:10010
       - 10411:10011
@@ -277,7 +270,7 @@ services:
         max-file: "5"
         max-size: "50m"
     restart: always
-    profiles: [ "all", "all-but-load-generator" ]
+    profiles: [ "holder" ]
 
   holder-acapy-5:
     container_name: holder-acapy-5
@@ -317,8 +310,6 @@ services:
         --log-level ${ACAPY_LOG_LEVEL} \
         ${ACAPY_DEBUG_OPTIONS}"
     ]
-    depends_on:
-      - tails-server
     ports:
       - 10510:10010
       - 10511:10011
@@ -332,7 +323,7 @@ services:
         max-file: "5"
         max-size: "50m"
     restart: always
-    profiles: [ "all", "all-but-load-generator" ]
+    profiles: [ "holder" ]
 
   holder-acapy-6:
     container_name: holder-acapy-6
@@ -372,8 +363,6 @@ services:
         --log-level ${ACAPY_LOG_LEVEL} \
         ${ACAPY_DEBUG_OPTIONS}"
     ]
-    depends_on:
-      - tails-server
     ports:
       - 10610:10010
       - 10611:10011
@@ -387,7 +376,7 @@ services:
         max-file: "5"
         max-size: "50m"
     restart: always
-    profiles: [ "all", "all-but-load-generator" ]
+    profiles: [ "holder" ]
 
   holder-acapy-7:
     container_name: holder-acapy-7
@@ -427,8 +416,6 @@ services:
         --log-level ${ACAPY_LOG_LEVEL} \
         ${ACAPY_DEBUG_OPTIONS}"
     ]
-    depends_on:
-      - tails-server
     ports:
       - 10710:10010
       - 10711:10011
@@ -442,7 +429,7 @@ services:
         max-file: "5"
         max-size: "50m"
     restart: always
-    profiles: [ "all", "all-but-load-generator" ]
+    profiles: [ "holder" ]
 
   holder-acapy-8:
     container_name: holder-acapy-8
@@ -482,8 +469,6 @@ services:
         --log-level ${ACAPY_LOG_LEVEL} \
         ${ACAPY_DEBUG_OPTIONS}"
     ]
-    depends_on:
-      - tails-server
     ports:
       - 10810:10010
       - 10811:10011
@@ -497,7 +482,7 @@ services:
         max-file: "5"
         max-size: "50m"
     restart: always
-    profiles: [ "all", "all-but-load-generator" ]
+    profiles: [ "holder" ]
 
   holder-acapy-9:
     container_name: holder-acapy-9
@@ -537,8 +522,6 @@ services:
         --log-level ${ACAPY_LOG_LEVEL} \
         ${ACAPY_DEBUG_OPTIONS}"
     ]
-    depends_on:
-      - tails-server
     ports:
       - 10910:10010
       - 10911:10011
@@ -552,7 +535,7 @@ services:
         max-file: "5"
         max-size: "50m"
     restart: always
-    profiles: [ "all", "all-but-load-generator" ]
+    profiles: [ "holder" ]
 
   holder-acapy-10:
     container_name: holder-acapy-10
@@ -592,8 +575,6 @@ services:
         --log-level ${ACAPY_LOG_LEVEL} \
         ${ACAPY_DEBUG_OPTIONS}"
     ]
-    depends_on:
-      - tails-server
     ports:
       - 11010:10010
       - 11011:10011
@@ -607,33 +588,9 @@ services:
         max-file: "5"
         max-size: "50m"
     restart: always
-    profiles: [ "all", "all-but-load-generator" ]
-
-  tails-server:
-    container_name: tails-server
-    build:
-      context: ./indy-tails-server
-      dockerfile: docker/Dockerfile.tails-server
-    command: >
-      tails-server
-        --host 0.0.0.0
-        --port 6543
-        --storage-path /tmp/tails-files
-        --log-level INFO
-
-    volumes:
-      - tails-server-volume:/home/indy/tails-files
-    ports:
-      - 6543:6543
-    networks:
-      - aries-load-test
-    restart: always
-    profiles: [ "all", "all-but-load-generator" ]
+    profiles: [ "holder" ]
 
 networks:
   aries-load-test:
     external: true
     name: aries-load-test
-
-volumes:
-  tails-server-volume:

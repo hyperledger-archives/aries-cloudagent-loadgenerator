@@ -25,16 +25,7 @@ usage() {
       Commands:
 
       start - Creates the application containers from the built images
-              and starts the services based on the docker-compose.yml file.
-
-      startWithoutLoadGenerator - Starts all containers but the load generator.
-                                  Can be used for running the load generator via the IDE.
-
-      startclusterednetwork - Starts network with Walled DB in a Patroni Postgres Cluster
-
-      startloadgenerator - Starts only Spring service to generate load on the network
-
-      startdashboard - Starts dashboard infrastructure to collect and present metrics
+              and starts the services based on the docker-compose.yml files and configuration supplied in the .env.
 
       restart - First, "down" is executed. Then, "start" is run.
 
@@ -86,7 +77,7 @@ function logs() {
   if [ ! -z "${LOG_LEDGER}" ]; then
     docker-compose -p von -f von-network/docker-compose.yml logs -f
   elif [ ! -z "${LOG_ACAPY}" ]; then
-    docker-compose -f docker-compose.yml logs -f
+    docker-compose -f docker-agents.yml logs -f
   fi
 }
 
@@ -108,18 +99,22 @@ function createBlockchainNetwork() {
   echo "Waiting for the ledger to start... (sleeping 30 seconds)"
   sleep 30
 
+  echo "Starting tails server"
+  docker-compose -f ./docker-tails-server.yml up -d
+
   echo "Registering issuer DID..."
   curl -d "{\"role\": \"ENDORSER\", \"seed\":\"$ISSUER_DID_SEED\"}" -H "Content-Type: application/json" -X POST $LEDGER_REGISTER_DID_ENDPOINT
 }
 
-function provisionAcaPy() {
+function provisionAcaPyAgents() {
+  echo "Start provisioning AcaPys..."
   docker-compose -f docker-agents.yml --profile issuer-verifier-provisioning up -d
 
   echo "Provisioning AcaPys... (sleeping 15 seconds)"
   sleep 15
 
   echo "Starting all AcaPy related docker containers ..."
-  docker-compose -f docker-agents.yml --profile all-but-load-generator up -d --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES
+  docker-compose -f docker-agents.yml --profile issuer-verifier --profile holder up -d --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES
 }
 
 function startPostgresSingleInstance() {
@@ -131,8 +126,7 @@ function startPostgresSingleInstance() {
 # cluster is built using Patroni technologies: https://github.com/zalando/patroni
 # details about toy environment using Docker: https://github.com/zalando/patroni/tree/master/docker
 function startPostgresCluster() {
-  echo "Starting Issuer Wallet DB as the Postgres Patroni cluster...(sleeping 30 seconds)"
-  # TODO update only needed submodule
+  echo "Starting Issuer Wallet DB as the Postgres Patroni cluster..."
   git submodule update --init --recursive
 
   cd "$SCRIPT_HOME/patroni";
@@ -145,32 +139,12 @@ function startPostgresCluster() {
   sleep 45
 }
 
-function startAllWithoutLoadGenerator() {
-  createBlockchainNetwork
-  startDashboard
-  startPostgresSingleInstance
-  provisionAcaPy
-}
-
-function startAllWithClusteredWalletDB() {
-  createBlockchainNetwork
-  startDashboard
-  startPostgresCluster
-  provisionAcaPy
-}
-
-function startAll() {
-  startAllWithoutLoadGenerator
-
-  echo "Waiting for system to start... (sleeping 15 seconds)"
-  sleep 15
-
-  startLoadGenerator
-}
-
 function downAll() {
   echo "Stopping the VON Network and deleting ledger data ..."
   ./von-network/manage down
+
+  echo "Stopping and removing tails-server"
+  docker-compose -f ./docker-tails-server.yml down -v
 
   echo "Stopping and removing dashboard and logging containers as well as volumes ..."
   docker-compose -f ./dashboard/docker-compose.yml down -v
@@ -185,43 +159,64 @@ function downAll() {
   docker-compose -f issuer-walletdb.yml down -v
 }
 
+function startAll() {
+  if [ $SYSTEM_LEDGER ] && [ $SYSTEM_LEDGER  = "true" ]
+  then
+    createBlockchainNetwork
+  fi;
+
+  if [ $SYSTEM_ISSUER_POSTGRES_DB ] && [ $SYSTEM_ISSUER_POSTGRES_DB = "true"]
+  then
+    if [ $SYSTEM_ISSUER_POSTGRES_DB_CLUSTER ] && [ $SYSTEM_ISSUER_POSTGRES_DB_CLUSTER  = "true" ]
+    then
+      startPostgresCluster
+    else
+      startPostgresSingleInstance
+    fi;
+  fi;
+
+  if [ $SYSTEM_METRICS_DASHBOARD ] && [ $SYSTEM_METRICS_DASHBOARD  = "true" ]
+  then
+    startDashboard
+  fi;
+
+  if [ $SYSTEM_AGENTS ] && [ $SYSTEM_AGENTS  = "true" ]
+  then
+    provisionAcaPyAgents
+  fi;
+
+  if [ $SYSTEM_LOAD_GENERATOR ] && [ $SYSTEM_LOAD_GENERATOR  = "true" ]
+  then
+    startLoadGenerator
+  fi;
+}
+
 case "${COMMAND}" in
 start)
   startAll
-  ;;
-startwithoutloadgenerator)
-  startAllWithoutLoadGenerator
-  ;;
-startloadgenerator)
-  startLoadGenerator
-  ;;
-startdashboard)
-  startDashboard
-  ;;
-startpostgrescluster)
-  startPostgresCluster
-  ;;
-startclusterednetwork)
-  startAllWithClusteredWalletDB
   ;;
 restart)
   downAll
   startAll
   ;;
 stop)
-  echo "Stopping the VON Network ..."
-  ./von-network/manage stop
-
   echo "Stopping load generator"
   docker-compose -f docker-load-generator rm -f -s
-
-  echo "Stopping and removing dashboard and logging containers ..."
-  docker-compose -f ./dashboard/docker-compose.yml rm -f -s
 
   echo "Stopping and removing any running AcaPy containers ..."
   docker-compose -f docker-agents.yml rm -f -s
 
-  # TODO add stop for wallet db
+  echo "Stopping and removing dashboard and logging containers ..."
+  docker-compose -f ./dashboard/docker-compose.yml rm -f -s
+
+  echo "Stopping the VON Network ..."
+  ./von-network/manage stop
+
+  echo "Stopping the Tails Server ..."
+  docker-compose -f ./docker-tails-server.yml rm -f -s
+
+  echo "Stopping the Wallet DB ..."
+  docker-compose -f ./issuer-walletdb.yml rm -f -s
   ;;
 down)
   downAll
