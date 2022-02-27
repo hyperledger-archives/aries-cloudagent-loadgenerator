@@ -105,7 +105,7 @@ services:
     ports:
       - 5000:5000
     restart: always
-    profiles: [ "non-cluster" ]
+    profiles: [ "single-instance" ]
 
 networks:
   aries-load-test:
