@@ -70,7 +70,9 @@ class AcaPyConfig(
             return holderAcaPyClients
         }
 
+        logger.info("Using ${holderAcaPyUrls.size} Holder Agents")
         holderAcaPyUrls.forEach {
+        logger.info("Using Holder Agent: $it")
             val holderAcaPyClient =
                 buildAcaPyAriesClient(okHttpPublisher, it, holderAcaPyApiKey, holderAcapyHttpTimeoutInSeconds)
 
