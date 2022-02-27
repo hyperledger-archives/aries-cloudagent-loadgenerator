@@ -22,7 +22,7 @@ services:
         --wallet-name ${POSTGRES_DB} \
         --wallet-key key \
         --wallet-storage-type postgres_storage \
-        --wallet-storage-config '{\"url\":\"${POSTGRES_URL}\",\"max_connections\":${MAX_WALLET_CONNECTIONS_PER_ACAPY}}' \
+        --wallet-storage-config '{\"url\":\"issuer-verifier-wallet-db:5000\",\"max_connections\":${MAX_WALLET_CONNECTIONS_PER_ACAPY}}' \
         --wallet-storage-creds '{\"account\":\"${POSTGRES_USER}\",\"password\":\"${POSTGRES_PASSWORD}\",\"admin_account\":\"${POSTGRES_USER}\",\"admin_password\":\"${POSTGRES_PASSWORD}\"}' \
         --auto-ping-connection \
         --auto-verify-presentation \
@@ -51,7 +51,7 @@ services:
     container_name: issuer-verifier-nginx
     image: nginx:latest
     volumes:
-      - ./issuer-verifier-nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx-issuer-verifier.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - issuer-verifier-acapy
     ports:

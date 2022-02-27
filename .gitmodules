@@ -1,9 +1,9 @@
-[submodule "setup/von-network"]
-	path = setup/von-network
+[submodule "setup/agents/von-network"]
+	path = setup/agents/von-network
 	url = https://github.com/bcgov/von-network.git
 [submodule "setup/indy-tails-server"]
 	path = setup/indy-tails-server
 	url = https://github.com/bcgov/indy-tails-server
-[submodule "setup/patroni"]
-	path = setup/patroni
+[submodule "setup/agents/patroni"]
+	path = setup/agents/patroni
 	url = https://github.com/zalando/patroni
