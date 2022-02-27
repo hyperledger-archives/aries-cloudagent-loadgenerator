@@ -63,6 +63,8 @@ services:
     environment:
       <<: *haproxy_env
       PATRONI_NAME: patroni1
+    ports:
+      - "5433:5432"
     profiles: [ "cluster" ]
 
   postgres-node-2:
@@ -73,6 +75,8 @@ services:
     environment:
       <<: *haproxy_env
       PATRONI_NAME: patroni2
+    ports:
+      - "5434:5432"
     profiles: [ "cluster" ]
 
   postgres-node-3:
@@ -83,6 +87,8 @@ services:
     environment:
       <<: *haproxy_env
       PATRONI_NAME: patroni3
+    ports:
+      - "5435:5432"
     profiles: [ "cluster" ]
 
   issuer-verifier-wallet-db:

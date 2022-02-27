@@ -88,7 +88,18 @@ function startLoadGenerator() {
 
 function startDashboard() {
   echo "Starting dashboard and logging containers ..."
-  docker-compose -f ./dashboard/docker-compose.yml up -d
+
+  if [ $SYSTEM_ISSUER_POSTGRES_DB ] && [ $SYSTEM_ISSUER_POSTGRES_DB = "true"]
+  then
+    if [ $SYSTEM_ISSUER_POSTGRES_DB_CLUSTER ] && [ $SYSTEM_ISSUER_POSTGRES_DB_CLUSTER  = "true" ]
+    then
+      docker-compose -f ./dashboard/docker-compose.yml --profile cluster up -d
+    else
+      docker-compose -f ./dashboard/docker-compose.yml --profile non-cluster up -d
+    fi;
+  else
+    docker-compose -f ./dashboard/docker-compose.yml up -d
+  fi
 }
 
 function createBlockchainNetwork() {
