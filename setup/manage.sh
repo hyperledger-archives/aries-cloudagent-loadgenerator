@@ -112,13 +112,13 @@ function startIndyNetwork() {
 }
 
 function startAgents() {
-  docker-compose -f ./agents/docker-compose-agents.yml --profile issuer-verifier-provisioning up -d
+  docker-compose -f ./agents/docker-compose-agents.yml up -d issuer-verifier-acapy
 
   echo "Provisioning AcaPys... (sleeping 15 seconds)"
   sleep 15
 
   echo "Starting all AcaPy related docker containers ..."
-  docker-compose -f ./agents/docker-compose-agents.yml --profile all-but-load-generator up -d --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES
+  docker-compose -f ./agents/docker-compose-agents.yml up -d --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES
 
   echo "Waiting for all the agents to start... (sleeping 15 seconds)"
   sleep 15

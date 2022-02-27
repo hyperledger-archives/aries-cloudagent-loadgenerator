@@ -45,7 +45,6 @@ services:
         max-file: "5"
         max-size: "50m"
     restart: always
-    profiles: [ "all", "all-but-load-generator", "issuer-verifier-provisioning" ]
 
   issuer-verifier-nginx:
     container_name: issuer-verifier-nginx
@@ -112,7 +111,6 @@ services:
         max-file: "5"
         max-size: "50m"
     restart: always
-    profiles: [ "all", "all-but-load-generator" ]
 
   holder-acapy-2:
     container_name: holder-acapy-2
@@ -167,7 +165,6 @@ services:
         max-file: "5"
         max-size: "50m"
     restart: always
-    profiles: [ "all", "all-but-load-generator" ]
 
   holder-acapy-3:
     container_name: holder-acapy-3
@@ -222,7 +219,6 @@ services:
         max-file: "5"
         max-size: "50m"
     restart: always
-    profiles: [ "all", "all-but-load-generator" ]
 
   holder-acapy-4:
     container_name: holder-acapy-4
@@ -277,7 +273,6 @@ services:
         max-file: "5"
         max-size: "50m"
     restart: always
-    profiles: [ "all", "all-but-load-generator" ]
 
   holder-acapy-5:
     container_name: holder-acapy-5
@@ -332,7 +327,6 @@ services:
         max-file: "5"
         max-size: "50m"
     restart: always
-    profiles: [ "all", "all-but-load-generator" ]
 
   holder-acapy-6:
     container_name: holder-acapy-6
@@ -387,7 +381,6 @@ services:
         max-file: "5"
         max-size: "50m"
     restart: always
-    profiles: [ "all", "all-but-load-generator" ]
 
   holder-acapy-7:
     container_name: holder-acapy-7
@@ -442,7 +435,6 @@ services:
         max-file: "5"
         max-size: "50m"
     restart: always
-    profiles: [ "all", "all-but-load-generator" ]
 
   holder-acapy-8:
     container_name: holder-acapy-8
@@ -497,7 +489,6 @@ services:
         max-file: "5"
         max-size: "50m"
     restart: always
-    profiles: [ "all", "all-but-load-generator" ]
 
   holder-acapy-9:
     container_name: holder-acapy-9
@@ -552,7 +543,6 @@ services:
         max-file: "5"
         max-size: "50m"
     restart: always
-    profiles: [ "all", "all-but-load-generator" ]
 
   holder-acapy-10:
     container_name: holder-acapy-10
@@ -607,7 +597,6 @@ services:
         max-file: "5"
         max-size: "50m"
     restart: always
-    profiles: [ "all", "all-but-load-generator" ]
 
   tails-server:
     container_name: tails-server
@@ -628,7 +617,6 @@ services:
     networks:
       - aries-load-test
     restart: always
-    profiles: [ "all", "all-but-load-generator" ]
 
 networks:
   aries-load-test:
