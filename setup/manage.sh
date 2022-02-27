@@ -32,21 +32,10 @@ usage() {
       startWithoutLoadGenerator - Starts all containers but the load generator.
                                   Can be used for running the load generator via the IDE.
 
-      startclusterednetwork - Starts network with Walled DB in a Patroni Postgres Cluster
-
-      startloadgenerator - Starts only Spring service to generate load on the network
-
-      startdashboard - Starts dashboard infrastructure to collect and present metrics
-
       restart - First, "down" is executed. Then, "start" is run.
 
       down - Brings down the services and removes the volumes (storage) and containers.
 
-      logs - To tail the logs of running containers (ctrl-c to exit).
-             Possible to print logs for acapy or ledger related containers.
-             Examples:
-              $0 logs --acapy
-              $0 logs --ledger
 EOF
   exit 1
 }
@@ -79,14 +68,6 @@ function initEnv() {
         ;;
     esac
   done
-}
-
-function logs() {
-  if [ ! -z "${LOG_LEDGER}" ]; then
-    docker-compose -p von -f von-network/docker-compose.yml logs -f
-  elif [ ! -z "${LOG_ACAPY}" ]; then
-    docker-compose -f docker-compose.yml logs -f
-  fi
 }
 
 function startLoadGenerator() {
@@ -131,9 +112,10 @@ function startPostgresSingleInstance() {
   sleep 15
 }
 
-# cluster is built using Patroni technologies: https://github.com/zalando/patroni
-# details about toy environment using Docker: https://github.com/zalando/patroni/tree/master/docker
 function startPostgresCluster() {
+  # cluster is built using Patroni technologies: https://github.com/zalando/patroni
+  # details about toy environment using Docker: https://github.com/zalando/patroni/tree/master/docker
+
   cd "$SCRIPT_HOME/agents/patroni";
   docker build -t postgres-cluster-node --build-arg PG_MAJOR=13 .;
 
@@ -145,17 +127,17 @@ function startPostgresCluster() {
 }
 
 function startAllWithoutLoadGenerator() {
-  startIndyNetwork
-  startDashboard
-  startPostgresSingleInstance
-  startAgents
-}
-
-function startAllWithClusteredWalletDB() {
-  startIndyNetwork
-  startDashboard
-  startPostgresCluster
-  startAgents
+  if [ "${START_POSTGRES_CLUSTER}" = true ]; then
+      startIndyNetwork
+      startDashboard
+      startPostgresCluster
+      startAgents
+  else
+      startIndyNetwork
+      startDashboard
+      startPostgresSingleInstance
+      startAgents
+  fi
 }
 
 function startAll() {
@@ -187,28 +169,12 @@ start)
 startwithoutloadgenerator)
   startAllWithoutLoadGenerator
   ;;
-startloadgenerator)
-  startLoadGenerator
-  ;;
-startdashboard)
-  startDashboard
-  ;;
-startpostgrescluster)
-  startPostgresCluster
-  ;;
-startclusterednetwork)
-  startAllWithClusteredWalletDB
-  ;;
 restart)
   downAll
   startAll
   ;;
 down)
   downAll
-  ;;
-logs)
-  initEnv "$@"
-  logs
   ;;
 *)
   usage

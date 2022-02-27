@@ -90,7 +90,7 @@ services:
     image: ${POSTGRES_IMAGE}
     volumes:
       - issuer-verifier-wallet-db-volume:/var/lib/postgresql/data
-    command: postgres -p 5000 -c 'max_connections=${MAX_CONNECTIONS_WALLET_DB}'
+    command: postgres -p 5000 -c 'max_connections=${MAX_CONNECTIONS_WALLET_DB_SINGLE_INSTANCE}'
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: ${POSTGRES_USER}
