@@ -88,7 +88,7 @@ services:
     networks:
       - aries-load-test
 
-  issuer-verifier-postgres-exporter-non-cluster:
+  issuer-verifier-postgres-exporter-postgres-single-instance:
     container_name: issuer-verifier-postgres-exporter
     image: quay.io/prometheuscommunity/postgres-exporter
     environment:
@@ -102,7 +102,7 @@ services:
       options:
         max-file: "5"
         max-size: "50m"
-    profiles: [ "non-cluster" ]
+    profiles: [ "postgres-single-instance" ]
 
   issuer-verifier-postgres-exporter-node-1:
     container_name: issuer-verifier-postgres-exporter-node-1
@@ -118,7 +118,7 @@ services:
       options:
         max-file: "5"
         max-size: "50m"
-    profiles: [ "cluster" ]
+    profiles: [ "postgres-cluster" ]
 
   issuer-verifier-postgres-exporter-node-2:
     container_name: issuer-verifier-postgres-exporter-node-2
@@ -134,7 +134,7 @@ services:
       options:
         max-file: "5"
         max-size: "50m"
-    profiles: [ "cluster" ]
+    profiles: [ "postgres-cluster" ]
 
   issuer-verifier-postgres-exporter-node-3:
     container_name: issuer-verifier-postgres-exporter-node-3
@@ -150,7 +150,7 @@ services:
       options:
         max-file: "5"
         max-size: "50m"
-    profiles: [ "cluster" ]
+    profiles: [ "postgres-cluster" ]
 
   dozzle:
     container_name: dozzle
@@ -171,7 +171,7 @@ services:
 
 networks:
   aries-load-test:
-    external: true
+    external: false
     name: aries-load-test
 
 volumes:

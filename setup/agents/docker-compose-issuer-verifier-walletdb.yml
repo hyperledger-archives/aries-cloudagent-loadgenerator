@@ -58,37 +58,37 @@ services:
   postgres-node-1:
     image: postgres-cluster-node
     networks: [ aries-load-test ]
+    ports:
+      - "5433:5432"
     hostname: patroni1
     container_name: postgres-node-1
     environment:
       <<: *haproxy_env
       PATRONI_NAME: patroni1
-    ports:
-      - "5433:5432"
     profiles: [ "cluster" ]
 
   postgres-node-2:
     image: postgres-cluster-node
     networks: [ aries-load-test ]
+    ports:
+      - "5434:5432"
     hostname: patroni2
     container_name: postgres-node-2
     environment:
       <<: *haproxy_env
       PATRONI_NAME: patroni2
-    ports:
-      - "5434:5432"
     profiles: [ "cluster" ]
 
   postgres-node-3:
     image: postgres-cluster-node
     networks: [ aries-load-test ]
+    ports:
+      - "5435:5432"
     hostname: patroni3
     container_name: postgres-node-3
     environment:
       <<: *haproxy_env
       PATRONI_NAME: patroni3
-    ports:
-      - "5435:5432"
     profiles: [ "cluster" ]
 
   issuer-verifier-wallet-db:
@@ -96,7 +96,7 @@ services:
     image: ${POSTGRES_IMAGE}
     volumes:
       - issuer-verifier-wallet-db-volume:/var/lib/postgresql/data
-    command: postgres -p 5000 -c 'max_connections=${MAX_CONNECTIONS_WALLET_DB}'
+    command: postgres -p 5000 -c 'max_connections=${MAX_CONNECTIONS_WALLET_DB_SINGLE_INSTANCE}'
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: ${POSTGRES_USER}
@@ -111,10 +111,11 @@ services:
     ports:
       - 5000:5000
     restart: always
-    profiles: [ "non-cluster" ]
+    profiles: [ "single-instance" ]
 
 networks:
   aries-load-test:
+    external: true
     name: aries-load-test
 
 # TODO add volumes for cluster
