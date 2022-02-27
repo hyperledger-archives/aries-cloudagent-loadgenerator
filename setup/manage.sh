@@ -10,9 +10,11 @@ SCRIPT_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 # export environment variables from .env
 export $(grep -v '^#' $SCRIPT_HOME/.env | xargs)
 
-
 # ignore orphans warning
 export COMPOSE_IGNORE_ORPHANS=True
+
+# load all required git submodules
+git submodule update --init --recursive
 
 # =================================================================================================================
 # Usage:
@@ -92,7 +94,7 @@ function logs() {
 
 function startLoadGenerator() {
   echo "Starting Load Generator ..."
-  docker-compose -f docker-load-generator.yml up -d --build
+  docker-compose -f docker-compose-load-generator.yml up -d --build
 }
 
 function startDashboard() {
@@ -100,11 +102,11 @@ function startDashboard() {
   docker-compose -f ./dashboard/docker-compose.yml up -d
 }
 
-function createBlockchainNetwork() {
+function startIndyNetwork() {
   echo "Starting the VON Network ..."
-  git submodule update --init --recursive
   ./von-network/manage build
   ./von-network/manage start
+
   echo "Waiting for the ledger to start... (sleeping 30 seconds)"
   sleep 30
 
@@ -112,60 +114,73 @@ function createBlockchainNetwork() {
   curl -d "{\"role\": \"ENDORSER\", \"seed\":\"$ISSUER_DID_SEED\"}" -H "Content-Type: application/json" -X POST $LEDGER_REGISTER_DID_ENDPOINT
 }
 
-function provisionAcaPy() {
-  docker-compose -f docker-agents.yml --profile issuer-verifier-provisioning up -d
+function startAgents() {
+  docker-compose -f ./agents/docker-compose-agents.yml --profile issuer-verifier-provisioning up -d
 
   echo "Provisioning AcaPys... (sleeping 15 seconds)"
   sleep 15
 
   echo "Starting all AcaPy related docker containers ..."
-  docker-compose -f docker-agents.yml --profile all-but-load-generator up -d --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES
+  docker-compose -f ./agents/docker-compose-agents.yml --profile all-but-load-generator up -d --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES
+
+  echo "Waiting for all the agents to start... (sleeping 15 seconds)"
+  sleep 15
 }
 
 function startPostgresSingleInstance() {
+  docker-compose -f ./agents/docker-compose-issuer-verifier-walletdb.yml --profile non-cluster up -d;
+
   echo "Starting Issuer Wallet DB as single instance... (sleeping 15 seconds)"
-  docker-compose -f issuer-walletdb.yml --profile non-cluster up -d;
   sleep 15
 }
 
 # cluster is built using Patroni technologies: https://github.com/zalando/patroni
 # details about toy environment using Docker: https://github.com/zalando/patroni/tree/master/docker
 function startPostgresCluster() {
-  echo "Starting Issuer Wallet DB as the Postgres Patroni cluster...(sleeping 30 seconds)"
-  # TODO update only needed submodule
-  git submodule update --init --recursive
-
   cd "$SCRIPT_HOME/patroni";
   docker build -t postgres-cluster-node --build-arg PG_MAJOR=13 .;
 
   cd $SCRIPT_HOME;
-  docker-compose -f issuer-walletdb.yml --profile cluster up -d;
+  docker-compose -f ./agents/docker-compose-issuer-verifier-walletdb.yml --profile cluster up -d;
 
   echo "Starting Postgres HA Cluster... (sleeping 45 seconds)"
   sleep 45
 }
 
 function startAllWithoutLoadGenerator() {
-  createBlockchainNetwork
+  startIndyNetwork
   startDashboard
   startPostgresSingleInstance
-  provisionAcaPy
+  startAgents
 }
 
 function startAllWithClusteredWalletDB() {
-  createBlockchainNetwork
+  startIndyNetwork
   startDashboard
   startPostgresCluster
-  provisionAcaPy
+  startAgents
 }
 
 function startAll() {
   startAllWithoutLoadGenerator
-
-  echo "Waiting for system to start... (sleeping 15 seconds)"
-  sleep 15
-
   startLoadGenerator
+}
+
+function stopAll() {
+  echo "Stopping the VON Network ..."
+  ./von-network/manage stop
+
+  echo "Stopping load generator"
+  docker-compose -f docker-compose-load-generator rm -f -s
+
+  echo "Stopping and removing dashboard and logging containers ..."
+  docker-compose -f ./dashboard/docker-compose.yml rm -f -s
+
+  echo "Stopping and removing any running AcaPy containers ..."
+  docker-compose -f ./agents/docker-compose-agents.yml rm -f -s
+
+  echo "Stopping and removing any Wallet-DB containers ..."
+  docker-compose -f ./agents/docker-compose-agents.yml rm -f -s
 }
 
 function downAll() {
@@ -176,13 +191,13 @@ function downAll() {
   docker-compose -f ./dashboard/docker-compose.yml down -v
 
   echo "Stopping load generator ..."
-  docker-compose -f docker-load-generator.yml down -v
+  docker-compose -f docker-compose-load-generator.yml down -v
 
   echo "Stopping and removing any running AcaPy containers as well as volumes ..."
-  docker-compose -f docker-agents.yml down -v
+  docker-compose -f ./agents/docker-compose-agents.yml down -v
 
-  echo "Stopping and removing any walletdb containers"
-  docker-compose -f issuer-walletdb.yml down -v
+  echo "Stopping and removing any Wallet-DB containers as well as volumes ..."
+  docker-compose -f ./agents/docker-compose-issuer-verifier-walletdb.yml down -v
 }
 
 case "${COMMAND}" in
@@ -209,19 +224,7 @@ restart)
   startAll
   ;;
 stop)
-  echo "Stopping the VON Network ..."
-  ./von-network/manage stop
-
-  echo "Stopping load generator"
-  docker-compose -f docker-load-generator rm -f -s
-
-  echo "Stopping and removing dashboard and logging containers ..."
-  docker-compose -f ./dashboard/docker-compose.yml rm -f -s
-
-  echo "Stopping and removing any running AcaPy containers ..."
-  docker-compose -f docker-agents.yml rm -f -s
-
-  # TODO add stop for wallet db
+  stopAll
   ;;
 down)
   downAll
