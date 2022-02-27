@@ -40,9 +40,6 @@ usage() {
 
       restart - First, "down" is executed. Then, "start" is run.
 
-      stop - Stops and remove the services.
-             The volumes are not deleted so they will be reused the next time you run start.
-
       down - Brings down the services and removes the volumes (storage) and containers.
 
       logs - To tail the logs of running containers (ctrl-c to exit).
@@ -128,7 +125,7 @@ function startAgents() {
 }
 
 function startPostgresSingleInstance() {
-  docker-compose -f ./agents/docker-compose-issuer-verifier-walletdb.yml --profile non-cluster up -d;
+  docker-compose -f ./agents/docker-compose-issuer-verifier-walletdb.yml --profile single-instance up -d;
 
   echo "Starting Issuer Wallet DB as single instance... (sleeping 15 seconds)"
   sleep 15
@@ -137,7 +134,7 @@ function startPostgresSingleInstance() {
 # cluster is built using Patroni technologies: https://github.com/zalando/patroni
 # details about toy environment using Docker: https://github.com/zalando/patroni/tree/master/docker
 function startPostgresCluster() {
-  cd "$SCRIPT_HOME/patroni";
+  cd "$SCRIPT_HOME/agents/patroni";
   docker build -t postgres-cluster-node --build-arg PG_MAJOR=13 .;
 
   cd $SCRIPT_HOME;
@@ -164,23 +161,6 @@ function startAllWithClusteredWalletDB() {
 function startAll() {
   startAllWithoutLoadGenerator
   startLoadGenerator
-}
-
-function stopAll() {
-  echo "Stopping the VON Network ..."
-  ./von-network/manage stop
-
-  echo "Stopping load generator"
-  docker-compose -f docker-compose-load-generator rm -f -s
-
-  echo "Stopping and removing dashboard and logging containers ..."
-  docker-compose -f ./dashboard/docker-compose.yml rm -f -s
-
-  echo "Stopping and removing any running AcaPy containers ..."
-  docker-compose -f ./agents/docker-compose-agents.yml rm -f -s
-
-  echo "Stopping and removing any Wallet-DB containers ..."
-  docker-compose -f ./agents/docker-compose-agents.yml rm -f -s
 }
 
 function downAll() {
@@ -222,9 +202,6 @@ startclusterednetwork)
 restart)
   downAll
   startAll
-  ;;
-stop)
-  stopAll
   ;;
 down)
   downAll
