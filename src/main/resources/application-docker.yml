@@ -11,4 +11,4 @@ issuer-verifier:
 
 holder:
     acapy:
-        urls: 'http://holder-acapy-1:10010, http://holder-acapy-2:10010, http://holder-acapy-3:10010, http://holder-acapy-4:10010, http://holder-acapy-5:10010, http://holder-acapy-6:10010, http://holder-acapy-7:10010, http://holder-acapy-8:10010, http://holder-acapy-9:10010, http://holder-acapy-10:10010'
+        urls: 'http://agents_holder-acapy_1:10010'

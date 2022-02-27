@@ -29,8 +29,8 @@ usage() {
       start - Creates the application containers from the built images
               and starts the services based on the docker-compose.yml file.
 
-      startWithoutLoadGenerator - Starts all containers but the load generator.
-                                  Can be used for running the load generator via the IDE.
+      debug - Starts all containers but the load generator. Only one Issuer/Verifier AcaPy and only one Holder AcaPy will be started.
+              Can be used for running the load generator via the IDE.
 
       restart - First, "down" is executed. Then, "start" is run.
 
@@ -99,10 +99,14 @@ function startAgents() {
   sleep 15
 
   echo "Starting all AcaPy related docker containers ..."
-  docker-compose -f ./agents/docker-compose-agents.yml up -d --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES
+  docker-compose -f ./agents/docker-compose-agents.yml --profile prd up -d --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES --scale holder-acapy=$NUMBER_OF_HOLDER_ACAPY_INSTANCES
 
   echo "Waiting for all the agents to start... (sleeping 15 seconds)"
   sleep 15
+
+  export HOLDER_ACAPY_URLS="http://`docker network inspect aries-load-test | jq '.[].Containers |  to_entries[].value | select(.Name|test("^agents_holder-acapy_.")) | .IPv4Address' -r | paste -sd, - | sed 's/\/[0-9]*/:10010/g' | sed 's/,/, http:\/\//g'`"
+
+  echo $HOLDER_ACAPY_URLS
 }
 
 function startPostgresSingleInstance() {
@@ -126,23 +130,32 @@ function startPostgresCluster() {
   sleep 45
 }
 
-function startAllWithoutLoadGenerator() {
+function startAll() {
+  startIndyNetwork
+  startDashboard
+
   if [ "${START_POSTGRES_CLUSTER}" = true ]; then
-      startIndyNetwork
-      startDashboard
       startPostgresCluster
-      startAgents
   else
-      startIndyNetwork
-      startDashboard
       startPostgresSingleInstance
-      startAgents
   fi
+
+  startAgents
+  startLoadGenerator
 }
 
-function startAll() {
-  startAllWithoutLoadGenerator
-  startLoadGenerator
+function debug() {
+  startIndyNetwork
+  startDashboard
+
+  if [ "${START_POSTGRES_CLUSTER}" = true ]; then
+      startPostgresCluster
+  else
+      startPostgresSingleInstance
+  fi
+
+  export NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES=1
+  docker-compose -f ./agents/docker-compose-agents.yml --profile debugging up -d --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES
 }
 
 function downAll() {
@@ -166,8 +179,8 @@ case "${COMMAND}" in
 start)
   startAll
   ;;
-startwithoutloadgenerator)
-  startAllWithoutLoadGenerator
+debug)
+  debug
   ;;
 restart)
   downAll
