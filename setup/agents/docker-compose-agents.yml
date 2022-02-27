@@ -50,7 +50,7 @@ services:
     container_name: issuer-verifier-nginx
     image: nginx:latest
     volumes:
-      - ./nginx-issuer-verifier.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx-issuer-verifier-${NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES}.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - issuer-verifier-acapy
     ports:
