@@ -19,7 +19,7 @@ services:
       - grafana-image-renderer
       - loki
     networks:
-      - dashboard-and-logging
+      - aries-load-test
 
   # https://grafana.com/grafana/plugins/grafana-image-renderer/#installation
   grafana-image-renderer:
@@ -28,7 +28,7 @@ services:
     ports:
       - 8081
     networks:
-      - dashboard-and-logging
+      - aries-load-test
 
   # https://github.com/IzakMarais/reporter
   grafana-pdf-exporter:
@@ -41,7 +41,7 @@ services:
       - grafana
       - grafana-image-renderer
     networks:
-      - dashboard-and-logging
+      - aries-load-test
 
   loki:
     container_name: loki
@@ -53,7 +53,7 @@ services:
       - loki-volume:/data/loki
       - ./loki/local-config.yaml:/etc/loki/local-config.yaml
     networks:
-      - dashboard-and-logging
+      - aries-load-test
 
   prometheus:
     container_name: prometheus
@@ -67,7 +67,7 @@ services:
     depends_on:
       - cadvisor
     networks:
-      - dashboard-and-logging
+      - aries-load-test
     # https://stackoverflow.com/a/67158212/898
     extra_hosts:
       - "host.docker.internal:host-gateway"
@@ -86,17 +86,15 @@ services:
       - /var/lib/docker/:/var/lib/docker:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
-      - dashboard-and-logging
+      - aries-load-test
 
-  issuer-verifier-postgres-exporter:
+  issuer-verifier-postgres-exporter-postgres-single-instance:
     container_name: issuer-verifier-postgres-exporter
     image: quay.io/prometheuscommunity/postgres-exporter
     environment:
-      - DATA_SOURCE_NAME=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@host.docker.internal:5000/postgres?sslmode=disable
+      - DATA_SOURCE_NAME=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@issuer-verifier-wallet-db:5000/postgres?sslmode=disable
     networks:
-      - dashboard-and-logging
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - aries-load-test
     ports:
       - 9187:9187
     logging:
@@ -104,6 +102,55 @@ services:
       options:
         max-file: "5"
         max-size: "50m"
+    profiles: [ "postgres-single-instance" ]
+
+  issuer-verifier-postgres-exporter-node-1:
+    container_name: issuer-verifier-postgres-exporter-node-1
+    image: quay.io/prometheuscommunity/postgres-exporter
+    environment:
+      - DATA_SOURCE_NAME=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres-node-1:5432/postgres?sslmode=disable
+    networks:
+      - aries-load-test
+    ports:
+      - 9187:9187
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "50m"
+    profiles: [ "postgres-cluster" ]
+
+  issuer-verifier-postgres-exporter-node-2:
+    container_name: issuer-verifier-postgres-exporter-node-2
+    image: quay.io/prometheuscommunity/postgres-exporter
+    environment:
+      - DATA_SOURCE_NAME=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres-node-2:5432/postgres?sslmode=disable
+    networks:
+      - aries-load-test
+    ports:
+      - 9188:9187
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "50m"
+    profiles: [ "postgres-cluster" ]
+
+  issuer-verifier-postgres-exporter-node-3:
+    container_name: issuer-verifier-postgres-exporter-node-3
+    image: quay.io/prometheuscommunity/postgres-exporter
+    environment:
+      - DATA_SOURCE_NAME=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres-node-2:5432/postgres?sslmode=disable
+    networks:
+      - aries-load-test
+    ports:
+      - 9189:9187
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "50m"
+    profiles: [ "postgres-cluster" ]
 
   dozzle:
     container_name: dozzle
@@ -116,15 +163,16 @@ services:
       - DOZZLE_KEY=7zocTTANMOOH3eZVXmD5DShm4ja1vQmfoHqZRh3a
       - DOZZLE_NO_ANALYTICS=true
     networks:
-      - dashboard-and-logging
+      - aries-load-test
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
       - 9999:8080
 
 networks:
-  dashboard-and-logging:
-    name: dashboard-and-logging
+  aries-load-test:
+    external: false
+    name: aries-load-test
 
 volumes:
   grafana-volume:
