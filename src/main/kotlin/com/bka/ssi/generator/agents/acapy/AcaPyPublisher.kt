@@ -75,7 +75,9 @@ class AcaPyPublisher(
                     credential.connectionId,
                     dateStringToMilliseconds(credential.updatedAt),
                     credential.state.toString(),
-                    credential.stateIsCredentialAcked()
+                    credential.stateIsCredentialAcked(),
+                    credential.revocRegId,
+                    credential.revocationId
                 )
             )
         }

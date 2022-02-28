@@ -42,6 +42,12 @@ class AriesEventLogger : IAriesObserver {
         logger.info(
             "type=credentialRecord time=${credentialExchangeRecord.time} credentialExchangeId=${credentialExchangeRecord.id} connectionId=${credentialExchangeRecord.connectionId} state=${credentialExchangeRecord.state}"
         )
+
+        if (credentialExchangeRecord.issued) {
+            logger.info(
+                "type=credentialRevocationMetadata time=${credentialExchangeRecord.time} credentialExchangeId=${credentialExchangeRecord.id} revocationRegistryId=${credentialExchangeRecord.revocationRegistryId} revocationIndex=${credentialExchangeRecord.revocationIndex}"
+            )
+        }
     }
 
     override fun handleProofRequestRecord(proofExchangeRecord: ProofExchangeRecordDo) {
