@@ -27,9 +27,11 @@ usage() {
       Commands:
 
       start - Creates the application containers from the built images
-              and starts the services based on the docker-compose.yml file.
+              and starts the services based on the docker-compose.yml files
+              and configuration supplied in the .env.
 
-      debug - Starts all containers but the load generator. Only one Issuer/Verifier AcaPy and only one Holder AcaPy will be started.
+      debug - Starts all containers but the load generator.
+              Only one Issuer/Verifier AcaPy and only one Holder AcaPy will be started.
               Can be used for running the load generator via the IDE.
 
       restart - First, "down" is executed. Then, "start" is run.
@@ -77,7 +79,16 @@ function startLoadGenerator() {
 
 function startDashboard() {
   echo "Starting dashboard and logging containers ..."
-  docker-compose -f ./dashboard/docker-compose.yml up -d
+
+  if [ "${SYSTEM_ISSUER_POSTGRES_DB}" = true ]; then
+    if [ "${SYSTEM_ISSUER_POSTGRES_DB_CLUSTER}" = true ]; then
+      docker-compose -f ./dashboard/docker-compose.yml --profile postgres-cluster up -d
+    else
+      docker-compose -f ./dashboard/docker-compose.yml --profile postgres-single-instance up -d
+    fi
+  else
+    docker-compose -f ./dashboard/docker-compose.yml up -d
+  fi
 }
 
 function startIndyNetwork() {
@@ -105,8 +116,6 @@ function startAgents() {
   sleep 15
 
   export HOLDER_ACAPY_URLS="http://`docker network inspect aries-load-test | jq '.[].Containers |  to_entries[].value | select(.Name|test("^agents_holder-acapy_.")) | .IPv4Address' -r | paste -sd, - | sed 's/\/[0-9]*/:10010/g' | sed 's/,/, http:\/\//g'`"
-
-  echo $HOLDER_ACAPY_URLS
 }
 
 function startPostgresSingleInstance() {
@@ -126,29 +135,41 @@ function startPostgresCluster() {
   cd $SCRIPT_HOME;
   docker-compose -f ./agents/docker-compose-issuer-verifier-walletdb.yml --profile cluster up -d;
 
-  echo "Starting Postgres HA Cluster... (sleeping 45 seconds)"
+  echo "Starting Postgres HA Cluster using Patroni... (sleeping 45 seconds)"
   sleep 45
 }
 
 function startAll() {
-  startIndyNetwork
-  startDashboard
-
-  if [ "${START_POSTGRES_CLUSTER}" = true ]; then
-      startPostgresCluster
-  else
-      startPostgresSingleInstance
+  if [ "${SYSTEM_LEDGER}" = true ]; then
+    startIndyNetwork
   fi
 
-  startAgents
-  startLoadGenerator
+  if [ "${SYSTEM_METRICS_DASHBOARD}" = true ]; then
+    startDashboard
+  fi
+
+  if [ "${SYSTEM_ISSUER_POSTGRES_DB}" = true ]; then
+    if [ "${SYSTEM_ISSUER_POSTGRES_DB_CLUSTER}" = true ]; then
+      startPostgresCluster
+    else
+      startPostgresSingleInstance
+    fi
+  fi
+
+  if [ "${SYSTEM_AGENTS}" = true ]; then
+    startAgents
+  fi
+
+  if [ "${SYSTEM_LOAD_GENERATOR}" = true ]; then
+    startLoadGenerator
+  fi
 }
 
 function debug() {
   startIndyNetwork
   startDashboard
 
-  if [ "${START_POSTGRES_CLUSTER}" = true ]; then
+  if [ "${SYSTEM_ISSUER_POSTGRES_DB_CLUSTER}" = true ]; then
       startPostgresCluster
   else
       startPostgresSingleInstance
@@ -162,9 +183,6 @@ function downAll() {
   echo "Stopping the VON Network and deleting ledger data ..."
   ./von-network/manage down
 
-  echo "Stopping and removing dashboard and logging containers as well as volumes ..."
-  docker-compose -f ./dashboard/docker-compose.yml down -v
-
   echo "Stopping load generator ..."
   docker-compose -f docker-compose-load-generator.yml down -v
 
@@ -173,6 +191,9 @@ function downAll() {
 
   echo "Stopping and removing any Wallet-DB containers as well as volumes ..."
   docker-compose -f ./agents/docker-compose-issuer-verifier-walletdb.yml down -v
+
+  echo "Stopping and removing dashboard and logging containers as well as volumes ..."
+  docker-compose -f ./dashboard/docker-compose.yml down -v
 }
 
 case "${COMMAND}" in

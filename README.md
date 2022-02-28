@@ -23,6 +23,15 @@ You need to have [Docker](https://docs.docker.com/get-docker/) installed and acc
 
 To configure the environment create a `./setup/.env` file similar to [./setup/.env.example](./setup/.env.example)
 
+Declarative deployment approach is used. 
+All variables in the `./setup/.env` which have prefix `SYSTEM_` indicate what and how components must be deployed.
+
+- `SYSTEM_LEDGER=true` -  ledger will be deployed
+- `SYSTEM_ISSUER_POSTGRES_DB=true` - Postgres database wallet will be deployed
+- `SYSTEM_ISSUER_POSTGRES_DB_CLUSTER=true` - Postgres database will be deployed as cluster
+- `SYSTEM_METRICS_DASHBOARD=true` - Dashboard to collect system metrics will be deployed
+- `SYSTEM_AGENTS=true` - Issuers and Holders will be deployed
+- `SYSTEM_LOAD_GENERATOR=true` - Load generator which immediately generates load is deployed
 
 ### Management Script
 
