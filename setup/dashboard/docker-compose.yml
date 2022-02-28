@@ -128,7 +128,7 @@ services:
     networks:
       - aries-load-test
     ports:
-      - 9187:9187
+      - 9188:9187
     logging:
       driver: "json-file"
       options:
@@ -144,7 +144,7 @@ services:
     networks:
       - aries-load-test
     ports:
-      - 9187:9187
+      - 9189:9187
     logging:
       driver: "json-file"
       options:
