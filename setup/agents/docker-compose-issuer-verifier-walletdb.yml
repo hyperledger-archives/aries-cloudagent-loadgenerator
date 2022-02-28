@@ -58,6 +58,8 @@ services:
   postgres-node-1:
     image: postgres-cluster-node
     networks: [ aries-load-test ]
+    ports:
+      - "5433:5432"
     hostname: patroni1
     container_name: postgres-node-1
     environment:
@@ -68,6 +70,8 @@ services:
   postgres-node-2:
     image: postgres-cluster-node
     networks: [ aries-load-test ]
+    ports:
+      - "5434:5432"
     hostname: patroni2
     container_name: postgres-node-2
     environment:
@@ -78,6 +82,8 @@ services:
   postgres-node-3:
     image: postgres-cluster-node
     networks: [ aries-load-test ]
+    ports:
+      - "5435:5432"
     hostname: patroni3
     container_name: postgres-node-3
     environment:
@@ -109,6 +115,7 @@ services:
 
 networks:
   aries-load-test:
+    external: true
     name: aries-load-test
 
 # TODO add volumes for cluster

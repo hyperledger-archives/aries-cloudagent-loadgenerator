@@ -25,6 +25,4 @@ scrape_configs:
 
   - job_name: 'issuer-verifier-postgres-exporter'
     static_configs:
-      - targets: [ 'host.docker.internal:9187' ]
-
-
+      - targets: [ 'host.docker.internal:9187', 'host.docker.internal:9188', 'host.docker.internal:9189' ]
