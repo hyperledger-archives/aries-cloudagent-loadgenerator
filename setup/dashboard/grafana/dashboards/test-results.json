@@ -21,7 +21,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "iteration": 1645555731000,
+  "iteration": 1646072809082,
   "links": [
     {
       "asDropdown": false,
@@ -90,7 +90,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -149,7 +149,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -204,7 +204,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -365,7 +365,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -420,7 +420,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -475,7 +475,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -534,7 +534,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -593,7 +593,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -652,7 +652,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -1771,6 +1771,160 @@
         "x": 0,
         "y": 43
       },
+      "id": 139,
+      "panels": [],
+      "title": "Indy Revocation Registry Usage",
+      "type": "row"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 18,
+        "x": 0,
+        "y": 44
+      },
+      "id": 135,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "sum(\n  count_over_time(\n    {app=\"aries-load-generator\"}\n      |= \"type=credentialRevocationMetadata\"\n      | logfmt\n  [10d])\n) by (revocationRegistryId)",
+          "refId": "A"
+        }
+      ],
+      "title": "Revocation Registry Usage",
+      "type": "timeseries"
+    },
+    {
+      "description": "Allows to see if any RevReg/Index combination has been assigned to multiple credentials. In case it is > 2 a RevReg/Index combination has been assigned to two different credentials.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 2
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 6,
+        "x": 18,
+        "y": 44
+      },
+      "id": 137,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "max(\n  sum (\n    count_over_time(\n      {app=\"aries-load-generator\"}\n        |= \"type=credentialRevocationMetadata\"\n        | logfmt\n    [10d])\n  ) by (revocationRegistryId, revocationIndex)\n)",
+          "refId": "A"
+        }
+      ],
+      "title": "Verify RevReg/Index Combinations are Unique",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 54
+      },
       "id": 51,
       "panels": [],
       "title": "Aries Admin API",
@@ -1831,7 +1985,7 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 44
+        "y": 55
       },
       "id": 16,
       "options": {
@@ -1864,7 +2018,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 54
+        "y": 65
       },
       "id": 22,
       "panels": [],
@@ -1899,7 +2053,7 @@
         "h": 3,
         "w": 24,
         "x": 0,
-        "y": 55
+        "y": 66
       },
       "id": 67,
       "options": {
@@ -1916,7 +2070,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -1959,7 +2113,7 @@
         "h": 3,
         "w": 4,
         "x": 0,
-        "y": 58
+        "y": 69
       },
       "id": 121,
       "options": {
@@ -1976,7 +2130,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -2020,7 +2174,7 @@
         "h": 3,
         "w": 4,
         "x": 4,
-        "y": 58
+        "y": 69
       },
       "id": 123,
       "options": {
@@ -2037,7 +2191,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -2081,7 +2235,7 @@
         "h": 3,
         "w": 4,
         "x": 8,
-        "y": 58
+        "y": 69
       },
       "id": 124,
       "options": {
@@ -2098,7 +2252,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -2142,7 +2296,7 @@
         "h": 3,
         "w": 3,
         "x": 18,
-        "y": 58
+        "y": 69
       },
       "id": 126,
       "options": {
@@ -2159,7 +2313,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -2203,7 +2357,7 @@
         "h": 3,
         "w": 3,
         "x": 21,
-        "y": 58
+        "y": 69
       },
       "id": 122,
       "options": {
@@ -2220,7 +2374,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -2266,7 +2420,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 61
+        "y": 72
       },
       "id": 55,
       "options": {
@@ -2373,14 +2527,14 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 69
+        "y": 80
       },
       "id": 117,
       "options": {
         "content": "- *1: Error when fetching storage record. Backend error. Caused by: pool timed out while waiting for an open connection.\n- *2: Internal Server Error\n- *3: recipientKeys [...] is not a raw Ed25519VerificationKey2018 key\n- *4: Error when adding storage record. Backend error. Caused by: pool timed out while waiting for an open connection.\n- *5: Error when adding storage record. Backend error. Caused by: error returned from database: database is locked.\n- *6: Error when adding storage record. Backend error. Caused by: error returned from database: no such savepoint\n- *7: Error when updating storage record value. Backend error. Caused by: error returned from database: no such savepoint",
         "mode": "markdown"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "title": "Error Messages",
       "type": "text"
     },
@@ -2390,7 +2544,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 78
+        "y": 89
       },
       "id": 59,
       "panels": [],
@@ -2425,7 +2579,7 @@
         "h": 3,
         "w": 24,
         "x": 0,
-        "y": 79
+        "y": 90
       },
       "id": 60,
       "options": {
@@ -2442,7 +2596,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -2485,7 +2639,7 @@
         "h": 3,
         "w": 8,
         "x": 0,
-        "y": 82
+        "y": 93
       },
       "id": 119,
       "options": {
@@ -2502,7 +2656,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -2545,7 +2699,7 @@
         "h": 3,
         "w": 9,
         "x": 8,
-        "y": 82
+        "y": 93
       },
       "id": 118,
       "options": {
@@ -2562,7 +2716,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -2605,7 +2759,7 @@
         "h": 3,
         "w": 7,
         "x": 17,
-        "y": 82
+        "y": 93
       },
       "id": 127,
       "options": {
@@ -2622,7 +2776,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -2667,7 +2821,7 @@
         "h": 5,
         "w": 24,
         "x": 0,
-        "y": 85
+        "y": 96
       },
       "id": 62,
       "options": {
@@ -2725,7 +2879,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 90
+        "y": 101
       },
       "id": 44,
       "panels": [],
@@ -2760,7 +2914,7 @@
         "h": 4,
         "w": 24,
         "x": 0,
-        "y": 91
+        "y": 102
       },
       "id": 120,
       "options": {
@@ -2777,7 +2931,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -2797,7 +2951,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 95
+        "y": 106
       },
       "id": 20,
       "panels": [],
@@ -2819,7 +2973,7 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 96
+        "y": 107
       },
       "hiddenSeries": false,
       "id": 75,
@@ -2843,7 +2997,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2912,7 +3066,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 106
+        "y": 117
       },
       "hiddenSeries": false,
       "id": 77,
@@ -2935,7 +3089,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -3044,7 +3198,7 @@
         "h": 11,
         "w": 24,
         "x": 0,
-        "y": 114
+        "y": 125
       },
       "id": 2,
       "options": {
@@ -3077,7 +3231,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 125
+        "y": 136
       },
       "id": 81,
       "panels": [],
@@ -3144,7 +3298,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 126
+        "y": 137
       },
       "id": 83,
       "options": {
@@ -3239,7 +3393,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 135
+        "y": 146
       },
       "id": 85,
       "options": {
@@ -3281,7 +3435,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 144
+        "y": 155
       },
       "id": 103,
       "panels": [],
@@ -3348,7 +3502,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 145
+        "y": 156
       },
       "id": 86,
       "options": {
@@ -3443,7 +3597,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 153
+        "y": 164
       },
       "id": 89,
       "options": {
@@ -3485,7 +3639,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 160
+        "y": 171
       },
       "id": 105,
       "panels": [],
@@ -3552,7 +3706,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 161
+        "y": 172
       },
       "id": 87,
       "options": {
@@ -3647,7 +3801,7 @@
         "h": 11,
         "w": 24,
         "x": 0,
-        "y": 170
+        "y": 181
       },
       "id": 90,
       "options": {
@@ -3689,7 +3843,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 181
+        "y": 192
       },
       "id": 109,
       "panels": [],
@@ -3756,7 +3910,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 182
+        "y": 193
       },
       "id": 98,
       "options": {
@@ -3851,7 +4005,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 190
+        "y": 201
       },
       "id": 91,
       "options": {
@@ -3893,7 +4047,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 199
+        "y": 210
       },
       "id": 111,
       "panels": [],
@@ -3960,7 +4114,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 200
+        "y": 211
       },
       "id": 100,
       "options": {
@@ -4055,7 +4209,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 208
+        "y": 219
       },
       "id": 99,
       "options": {
@@ -4097,7 +4251,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 216
+        "y": 227
       },
       "id": 107,
       "panels": [],
@@ -4164,7 +4318,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 217
+        "y": 228
       },
       "id": 88,
       "options": {
@@ -4259,7 +4413,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 225
+        "y": 236
       },
       "id": 115,
       "options": {
@@ -4301,7 +4455,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 234
+        "y": 245
       },
       "id": 113,
       "panels": [],
@@ -4368,7 +4522,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 235
+        "y": 246
       },
       "id": 114,
       "options": {
@@ -4463,7 +4617,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 235
+        "y": 246
       },
       "id": 101,
       "options": {
@@ -4505,7 +4659,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 244
+        "y": 255
       },
       "id": 79,
       "panels": [],
@@ -4550,7 +4704,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 245
+        "y": 256
       },
       "hiddenSeries": false,
       "id": 97,
@@ -4575,7 +4729,7 @@
         "alertThreshold": true
       },
       "percentage": true,
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -4734,7 +4888,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 245
+        "y": 256
       },
       "hiddenSeries": false,
       "id": 95,
@@ -4759,7 +4913,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -4956,7 +5110,7 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 254
+        "y": 265
       },
       "id": 129,
       "links": [],
@@ -5019,7 +5173,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 264
+        "y": 275
       },
       "height": "",
       "hiddenSeries": false,
@@ -5048,7 +5202,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -5158,7 +5312,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 264
+        "y": 275
       },
       "height": "",
       "hiddenSeries": false,
@@ -5185,7 +5339,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.4.0-beta1",
+      "pluginVersion": "8.3.4",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -5258,7 +5412,7 @@
     }
   ],
   "refresh": false,
-  "schemaVersion": 35,
+  "schemaVersion": 34,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -5294,13 +5448,13 @@
     ]
   },
   "time": {
-    "from": "now-30m",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Test Results",
   "uid": "0Pe9llbnz",
-  "version": 2,
+  "version": 1,
   "weekStart": ""
 }

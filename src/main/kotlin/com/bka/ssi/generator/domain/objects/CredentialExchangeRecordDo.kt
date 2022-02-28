@@ -6,5 +6,7 @@ class CredentialExchangeRecordDo(
     val time: Long,
     val state: String,
     val issued: Boolean,
+    val revocationRegistryId: String?,
+    val revocationIndex: String?
 ) {
 }
