@@ -43,7 +43,7 @@ class AriesEventLogger : IAriesObserver {
             "type=credentialRecord time=${credentialExchangeRecord.time} credentialExchangeId=${credentialExchangeRecord.id} connectionId=${credentialExchangeRecord.connectionId} state=${credentialExchangeRecord.state}"
         )
 
-        if (credentialExchangeRecord.issued) {
+        if (credentialExchangeRecord.issued && credentialExchangeRecord.revocationRegistryId != null && credentialExchangeRecord.revocationIndex != null) {
             logger.info(
                 "type=credentialRevocationMetadata time=${credentialExchangeRecord.time} credentialExchangeId=${credentialExchangeRecord.id} revocationRegistryId=${credentialExchangeRecord.revocationRegistryId} revocationIndex=${credentialExchangeRecord.revocationIndex}"
             )
