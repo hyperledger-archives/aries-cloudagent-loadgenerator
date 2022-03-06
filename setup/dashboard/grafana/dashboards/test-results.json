@@ -21,7 +21,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "iteration": 1646458691639,
+  "iteration": 1646591201477,
   "links": [
     {
       "asDropdown": false,
@@ -2637,7 +2637,7 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 8,
+        "w": 4,
         "x": 0,
         "y": 93
       },
@@ -2697,8 +2697,8 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 9,
-        "x": 8,
+        "w": 4,
+        "x": 4,
         "y": 93
       },
       "id": 118,
@@ -2757,8 +2757,8 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 7,
-        "x": 17,
+        "w": 4,
+        "x": 8,
         "y": 93
       },
       "id": 127,
@@ -2788,6 +2788,186 @@
         }
       ],
       "title": "IV: Issue Credential",
+      "type": "stat"
+    },
+    {
+      "description": "AcaPyPublisher.handleCredential: issuance-abandoned",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 12,
+        "y": 93
+      },
+      "id": 140,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"AcaPyPublisher.handleCredential: issuance-abandoned\"\n[10d])",
+          "refId": "A"
+        }
+      ],
+      "title": "IV: Issue Credential",
+      "type": "stat"
+    },
+    {
+      "description": "AcaPyPublisher.handleCredential: ConnectionTarget schema validation failed. Not a raw Ed25519VerificationKey2018 key.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 16,
+        "y": 93
+      },
+      "id": 142,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"AcaPyPublisher.handleCredential: ConnectionTarget schema validation failed.\"\n    |= \"is not a raw Ed25519VerificationKey2018 key\"\n[10d])",
+          "refId": "A"
+        }
+      ],
+      "title": "IV: Issue Credential",
+      "type": "stat"
+    },
+    {
+      "description": "AcaPyPublisher.handleProof: abandoned",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 20,
+        "y": 93
+      },
+      "id": 141,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"AcaPyPublisher.handleProof: abandoned\"\n[10d])",
+          "refId": "A"
+        }
+      ],
+      "title": "IV: Request Proof",
       "type": "stat"
     },
     {
@@ -2868,6 +3048,26 @@
           "hide": false,
           "legendFormat": "AcaPyPublisher.handleCredential: issuance-abandoned",
           "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"AcaPyPublisher.handleProof: abandoned\"\n[1m])",
+          "hide": false,
+          "legendFormat": "AcaPyPublisher.handleProof: abandoned",
+          "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"AcaPyPublisher.handleCredential: ConnectionTarget schema validation failed.\"\n    |= \"is not a raw Ed25519VerificationKey2018 key\"\n[1m])",
+          "hide": false,
+          "legendFormat": "AcaPyPublisher.handleCredential: ConnectionTarget schema validation failed. Not a raw Ed25519VerificationKey2018 key.",
+          "refId": "E"
         }
       ],
       "title": "Errors Reported through Events (per Minute)",
@@ -5455,6 +5655,6 @@
   "timezone": "",
   "title": "Test Results",
   "uid": "0Pe9llbnz",
-  "version": 14,
+  "version": 16,
   "weekStart": ""
 }
