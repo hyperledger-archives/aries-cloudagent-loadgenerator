@@ -16,6 +16,7 @@ services:
         --genesis-url ${LEDGER_GENESIS} \
         --ledger-pool-name ${LEDGER_POOL_NAME} \
         --invite-base-url didcomm://aries_connection_invitation \
+        ${MULTITENANCY_SETTINGS} \
         --admin-insecure-mode \
         --label issuer_verifier_acapy \
         --wallet-type ${WALLET_TYPE} \
