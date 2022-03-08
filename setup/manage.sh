@@ -72,9 +72,21 @@ function initEnv() {
   done
 }
 
+function configureMultitenancyFlags() {
+  if [ "${ENABLE_MULTITENANCY}" = true ]; then
+    export MULTITENANCY_SETTINGS="--multitenant --multitenant-admin --jwt-secret SECRET"
+  else
+    export MULTITENANCY_SETTINGS=""
+  fi
+}
+
 function startLoadGenerator() {
   echo "Starting Load Generator ..."
-  docker-compose -f docker-compose-load-generator.yml up -d --build
+  if [ "${ENABLE_MULTITENANCY}" = true ]; then
+    docker-compose -f ./load-generator/docker-compose-load-generator.yml --profile ${NUMBER_OF_LOAD_GENERATOR_INSTANCES_FOR_MULTITENANCY} up -d --build
+  else
+    docker-compose -f ./load-generator/docker-compose-load-generator.yml --profile 1 up -d --build
+  fi
 }
 
 function startDashboard() {
@@ -100,10 +112,12 @@ function startIndyNetwork() {
   sleep 30
 
   echo "Registering issuer DID..."
-  curl -d "{\"role\": \"ENDORSER\", \"seed\":\"$ISSUER_DID_SEED\"}" -H "Content-Type: application/json" -X POST $LEDGER_REGISTER_DID_ENDPOINT
+  curl -d "{\"role\": \"ENDORSER\", \"seed\":\"$ISSUER_DID_SEED\"}" -H "Content-Type: application/json" -X POST $LEDGER_REGISTER_DID_ENDPOINT_HOST
 }
 
 function startAgents() {
+  configureMultitenancyFlags
+
   docker-compose -f ./agents/docker-compose-agents.yml up -d issuer-verifier-acapy
 
   echo "Provisioning AcaPys... (sleeping 15 seconds)"
@@ -175,6 +189,7 @@ function debug() {
       startPostgresSingleInstance
   fi
 
+  configureMultitenancyFlags
   export NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES=1
   docker-compose -f ./agents/docker-compose-agents.yml --profile debugging up -d --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES
 }
@@ -184,7 +199,7 @@ function downAll() {
   ./von-network/manage down
 
   echo "Stopping load generator ..."
-  docker-compose -f docker-compose-load-generator.yml down -v
+  docker-compose -f ./load-generator/docker-compose-load-generator.yml down -v
 
   echo "Stopping and removing any running AcaPy containers as well as volumes ..."
   docker-compose -f ./agents/docker-compose-agents.yml down -v
