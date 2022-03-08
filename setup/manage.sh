@@ -27,7 +27,7 @@ usage() {
       Commands:
 
       start - Creates the application containers from the built images
-              and starts the services based on the docker-compose.yml files
+              and starts the services based on the docker-compose files
               and configuration supplied in the .env.
 
       debug - Starts all containers but the load generator.
@@ -94,12 +94,12 @@ function startDashboard() {
 
   if [ "${SYSTEM_ISSUER_POSTGRES_DB}" = true ]; then
     if [ "${SYSTEM_ISSUER_POSTGRES_DB_CLUSTER}" = true ]; then
-      docker-compose -f ./dashboard/docker-compose.yml --profile postgres-cluster up -d
+      docker-compose -f ./dashboard/docker-compose-dashboards.yml --profile postgres-cluster up -d
     else
-      docker-compose -f ./dashboard/docker-compose.yml --profile postgres-single-instance up -d
+      docker-compose -f ./dashboard/docker-compose-dashboards.yml --profile postgres-single-instance up -d
     fi
   else
-    docker-compose -f ./dashboard/docker-compose.yml up -d
+    docker-compose -f ./dashboard/docker-compose-dashboards.yml up -d
   fi
 }
 
@@ -208,7 +208,7 @@ function downAll() {
   docker-compose -f ./agents/docker-compose-issuer-verifier-walletdb.yml down -v
 
   echo "Stopping and removing dashboard and logging containers as well as volumes ..."
-  docker-compose -f ./dashboard/docker-compose.yml down -v
+  docker-compose -f ./dashboard/docker-compose-dashboards.yml down -v
 }
 
 case "${COMMAND}" in
