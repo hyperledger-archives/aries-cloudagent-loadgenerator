@@ -8,6 +8,9 @@ logging:
 issuer-verifier:
     acapy:
         url: 'http://issuer-verifier-nginx:10000'
+    multitenancy:
+        register-did-endpoint: http://von_webserver_1:9000/register
+        webhook-endpoint-url: http://load-generator-1:8080/acapy-webhook
 
 holder:
     acapy:

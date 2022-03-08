@@ -14,6 +14,7 @@ class AcaPyOkHttpInterceptor(
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
+
         val t1 = System.nanoTime()
         val response = chain.proceed(request)
         val t2 = System.nanoTime()

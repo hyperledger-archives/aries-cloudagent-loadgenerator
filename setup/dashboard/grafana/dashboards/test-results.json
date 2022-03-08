@@ -21,7 +21,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "iteration": 1646591201477,
+  "iteration": 1646685427322,
   "links": [
     {
       "asDropdown": false,
@@ -2111,7 +2111,7 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 4,
+        "w": 2,
         "x": 0,
         "y": 69
       },
@@ -2142,7 +2142,7 @@
           "refId": "A"
         }
       ],
-      "title": "IV: Create Invitation",
+      "title": "IV: Create Invitation *1",
       "type": "stat"
     },
     {
@@ -2172,8 +2172,8 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 4,
-        "x": 4,
+        "w": 2,
+        "x": 2,
         "y": 69
       },
       "id": 123,
@@ -2203,7 +2203,7 @@
           "refId": "A"
         }
       ],
-      "title": "IV: Issue Credential",
+      "title": "IV: Issue Credential *1",
       "type": "stat"
     },
     {
@@ -2233,8 +2233,8 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 4,
-        "x": 8,
+        "w": 2,
+        "x": 4,
         "y": 69
       },
       "id": 124,
@@ -2264,7 +2264,190 @@
           "refId": "A"
         }
       ],
-      "title": "IV: Issue Credential",
+      "title": "IV: Issue Credential *2",
+      "type": "stat"
+    },
+    {
+      "description": "*9",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 2,
+        "x": 9,
+        "y": 69
+      },
+      "id": 144,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n  |= \"type=aries_client_error\"\n  |= \"Error when fetching storage record. Backend error. Caused by: error returned from database: sorry, too many clients already.\"\n[10d])",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Error reading from DB *9",
+      "type": "stat"
+    },
+    {
+      "description": "*8",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 2,
+        "x": 11,
+        "y": 69
+      },
+      "id": 143,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n  |= \"type=aries_client_error\"\n  |= \"Error when adding storage record. Backend error. Caused by: error returned from database: sorry, too many clients already.\"\n[10d])",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Error writing to DB *8",
+      "type": "stat"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 2,
+        "x": 13,
+        "y": 69
+      },
+      "id": 145,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n  |= \"type=aries_client_error\"\n  != \"request:POST/issue-credential/send httpCode:500\"\n  |= \"500 Internal Server Error\"\n[10d])",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "500 Internal Server Error",
       "type": "stat"
     },
     {
@@ -2325,7 +2508,7 @@
           "refId": "A"
         }
       ],
-      "title": "H: Receive Invitation",
+      "title": "H: Receive Invitation *4,5,6,7",
       "type": "stat"
     },
     {
@@ -2386,7 +2569,7 @@
           "refId": "A"
         }
       ],
-      "title": "H: Receive Invitation",
+      "title": "H: Receive Invitation *3",
       "type": "stat"
     },
     {
@@ -2517,6 +2700,26 @@
           "hide": false,
           "legendFormat": "POST/connections/receive-invitation [HTTP 400] *7",
           "refId": "H"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_client_error\"\n    |= \"Error when adding storage record. Backend error. Caused by: error returned from database: sorry, too many clients already.\"\n[1m])",
+          "hide": false,
+          "legendFormat": "Error Writing to Database *8",
+          "refId": "J"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_client_error\"\n    |= \"Error when fetching storage record. Backend error. Caused by: error returned from database: sorry, too many clients already.\"\n[1m])",
+          "hide": false,
+          "legendFormat": "Error Reading from Database *9",
+          "refId": "I"
         }
       ],
       "title": "Failed HTTP Requests (per Minute)",
@@ -2524,14 +2727,14 @@
     },
     {
       "gridPos": {
-        "h": 9,
+        "h": 10,
         "w": 24,
         "x": 0,
         "y": 80
       },
       "id": 117,
       "options": {
-        "content": "- *1: Error when fetching storage record. Backend error. Caused by: pool timed out while waiting for an open connection.\n- *2: Internal Server Error\n- *3: recipientKeys [...] is not a raw Ed25519VerificationKey2018 key\n- *4: Error when adding storage record. Backend error. Caused by: pool timed out while waiting for an open connection.\n- *5: Error when adding storage record. Backend error. Caused by: error returned from database: database is locked.\n- *6: Error when adding storage record. Backend error. Caused by: error returned from database: no such savepoint\n- *7: Error when updating storage record value. Backend error. Caused by: error returned from database: no such savepoint",
+        "content": "- *1: Error when fetching storage record. Backend error. Caused by: pool timed out while waiting for an open connection.\n- *2: Internal Server Error\n- *3: recipientKeys [...] is not a raw Ed25519VerificationKey2018 key\n- *4: Error when adding storage record. Backend error. Caused by: pool timed out while waiting for an open connection.\n- *5: Error when adding storage record. Backend error. Caused by: error returned from database: database is locked.\n- *6: Error when adding storage record. Backend error. Caused by: error returned from database: no such savepoint\n- *7: Error when updating storage record value. Backend error. Caused by: error returned from database: no such savepoint\n- *8: Error when adding storage record. Backend error. Caused by: error returned from database: sorry, too many clients already.\n- *9: Error when fetching storage record. Backend error. Caused by: error returned from database: sorry, too many clients already.",
         "mode": "markdown"
       },
       "pluginVersion": "8.3.5",
@@ -2544,7 +2747,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 89
+        "y": 90
       },
       "id": 59,
       "panels": [],
@@ -2579,7 +2782,7 @@
         "h": 3,
         "w": 24,
         "x": 0,
-        "y": 90
+        "y": 91
       },
       "id": 60,
       "options": {
@@ -2639,7 +2842,7 @@
         "h": 3,
         "w": 4,
         "x": 0,
-        "y": 93
+        "y": 94
       },
       "id": 119,
       "options": {
@@ -2699,7 +2902,7 @@
         "h": 3,
         "w": 4,
         "x": 4,
-        "y": 93
+        "y": 94
       },
       "id": 118,
       "options": {
@@ -2759,7 +2962,7 @@
         "h": 3,
         "w": 4,
         "x": 8,
-        "y": 93
+        "y": 94
       },
       "id": 127,
       "options": {
@@ -2819,9 +3022,9 @@
         "h": 3,
         "w": 4,
         "x": 12,
-        "y": 93
+        "y": 94
       },
-      "id": 140,
+      "id": 146,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
@@ -2879,7 +3082,7 @@
         "h": 3,
         "w": 4,
         "x": 16,
-        "y": 93
+        "y": 94
       },
       "id": 142,
       "options": {
@@ -2939,7 +3142,7 @@
         "h": 3,
         "w": 4,
         "x": 20,
-        "y": 93
+        "y": 94
       },
       "id": 141,
       "options": {
@@ -2968,6 +3171,126 @@
         }
       ],
       "title": "IV: Request Proof",
+      "type": "stat"
+    },
+    {
+      "description": "Error updating revocation registry index. Backend error. Caused by: error returned from database: sorry, too many clients already.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 8,
+        "y": 97
+      },
+      "id": 140,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"Error updating revocation registry index. Backend error. Caused by: error returned from database: sorry, too many clients already.\"\n[10d])\n+\ncount_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"Error when updating storage record value. Backend error. Caused by: error returned from database: sorry, too many clients already.\"\n[10d])",
+          "refId": "A"
+        }
+      ],
+      "title": "Error writing to DB",
+      "type": "stat"
+    },
+    {
+      "description": "Error when finding storage record. Backend error. Caused by: error returned from database: sorry, too many clients already.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 12,
+        "y": 97
+      },
+      "id": 147,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"Error when finding storage record. Backend error. Caused by: error returned from database: sorry, too many clients already.\"\n[10d])\n+\ncount_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"Error retrieving credential definition. Backend error. Caused by: error returned from database: sorry, too many clients already.\"\n[10d])",
+          "refId": "A"
+        }
+      ],
+      "title": "Error reading from DB",
       "type": "stat"
     },
     {
@@ -3001,7 +3324,7 @@
         "h": 5,
         "w": 24,
         "x": 0,
-        "y": 96
+        "y": 100
       },
       "id": 62,
       "options": {
@@ -3068,6 +3391,26 @@
           "hide": false,
           "legendFormat": "AcaPyPublisher.handleCredential: ConnectionTarget schema validation failed. Not a raw Ed25519VerificationKey2018 key.",
           "refId": "E"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"Error updating revocation registry index. Backend error. Caused by: error returned from database: sorry, too many clients already.\"\n[1m])\n+\ncount_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"Error when updating storage record value. Backend error. Caused by: error returned from database: sorry, too many clients already.\"\n[1m])",
+          "hide": false,
+          "legendFormat": "Error writing to DB",
+          "refId": "F"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"Error when finding storage record. Backend error. Caused by: error returned from database: sorry, too many clients already.\"\n[1m])\n+\ncount_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"Error retrieving credential definition. Backend error. Caused by: error returned from database: sorry, too many clients already.\"\n[1m])",
+          "hide": false,
+          "legendFormat": "Error reading from DB",
+          "refId": "G"
         }
       ],
       "title": "Errors Reported through Events (per Minute)",
@@ -3079,7 +3422,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 101
+        "y": 105
       },
       "id": 44,
       "panels": [],
@@ -3114,7 +3457,7 @@
         "h": 4,
         "w": 24,
         "x": 0,
-        "y": 102
+        "y": 106
       },
       "id": 120,
       "options": {
@@ -3151,7 +3494,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 106
+        "y": 110
       },
       "id": 20,
       "panels": [],
@@ -3173,7 +3516,7 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 107
+        "y": 111
       },
       "hiddenSeries": false,
       "id": 75,
@@ -3266,7 +3609,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 117
+        "y": 121
       },
       "hiddenSeries": false,
       "id": 77,
@@ -3398,7 +3741,7 @@
         "h": 11,
         "w": 24,
         "x": 0,
-        "y": 125
+        "y": 129
       },
       "id": 2,
       "options": {
@@ -3431,7 +3774,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 136
+        "y": 140
       },
       "id": 81,
       "panels": [],
@@ -3498,7 +3841,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 137
+        "y": 141
       },
       "id": 83,
       "options": {
@@ -3593,7 +3936,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 146
+        "y": 150
       },
       "id": 85,
       "options": {
@@ -3635,7 +3978,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 155
+        "y": 159
       },
       "id": 103,
       "panels": [],
@@ -3702,7 +4045,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 156
+        "y": 160
       },
       "id": 86,
       "options": {
@@ -3797,7 +4140,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 164
+        "y": 168
       },
       "id": 89,
       "options": {
@@ -3839,7 +4182,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 171
+        "y": 175
       },
       "id": 105,
       "panels": [],
@@ -3906,7 +4249,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 172
+        "y": 176
       },
       "id": 87,
       "options": {
@@ -4001,7 +4344,7 @@
         "h": 11,
         "w": 24,
         "x": 0,
-        "y": 181
+        "y": 185
       },
       "id": 90,
       "options": {
@@ -4043,7 +4386,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 192
+        "y": 196
       },
       "id": 109,
       "panels": [],
@@ -4110,7 +4453,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 193
+        "y": 197
       },
       "id": 98,
       "options": {
@@ -4205,7 +4548,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 201
+        "y": 205
       },
       "id": 91,
       "options": {
@@ -4247,7 +4590,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 210
+        "y": 214
       },
       "id": 111,
       "panels": [],
@@ -4314,7 +4657,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 211
+        "y": 215
       },
       "id": 100,
       "options": {
@@ -4409,7 +4752,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 219
+        "y": 223
       },
       "id": 99,
       "options": {
@@ -4451,7 +4794,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 227
+        "y": 231
       },
       "id": 107,
       "panels": [],
@@ -4518,7 +4861,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 228
+        "y": 232
       },
       "id": 88,
       "options": {
@@ -4543,7 +4886,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "sum(rate(container_cpu_usage_seconds_total{instance=~\".*\",name=~\"load-generator\",name=~\".+\"}[5m])) by (name) *100",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{instance=~\".*\",name=~\"load-generator.*\",name=~\".+\"}[5m])) by (name) *100",
           "hide": false,
           "interval": "",
           "legendFormat": "{{name}}",
@@ -4613,7 +4956,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 236
+        "y": 240
       },
       "id": 115,
       "options": {
@@ -4639,7 +4982,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "sum(container_memory_rss{instance=~\".*\",name=~\"load-generator\",name=~\".+\"}) by (name)",
+          "expr": "sum(container_memory_rss{instance=~\".*\",name=~\"load-generator.*\",name=~\".+\"}) by (name)",
           "hide": false,
           "interval": "",
           "legendFormat": "{{name}}",
@@ -4655,7 +4998,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 245
+        "y": 249
       },
       "id": 113,
       "panels": [],
@@ -4722,7 +5065,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 246
+        "y": 250
       },
       "id": 114,
       "options": {
@@ -4817,7 +5160,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 246
+        "y": 250
       },
       "id": 101,
       "options": {
@@ -4859,7 +5202,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 255
+        "y": 259
       },
       "id": 79,
       "panels": [],
@@ -4904,7 +5247,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 256
+        "y": 260
       },
       "hiddenSeries": false,
       "id": 97,
@@ -5088,7 +5431,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 256
+        "y": 260
       },
       "hiddenSeries": false,
       "id": 95,
@@ -5310,7 +5653,7 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 265
+        "y": 269
       },
       "id": 129,
       "links": [],
@@ -5373,7 +5716,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 275
+        "y": 279
       },
       "height": "",
       "hiddenSeries": false,
@@ -5512,7 +5855,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 275
+        "y": 279
       },
       "height": "",
       "hiddenSeries": false,
@@ -5648,13 +5991,13 @@
     ]
   },
   "time": {
-    "from": "now-15m",
-    "to": "now"
+    "from": "2022-03-07T20:13:11.804Z",
+    "to": "2022-03-07T20:25:39.623Z"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Test Results",
   "uid": "0Pe9llbnz",
-  "version": 16,
+  "version": 22,
   "weekStart": ""
 }

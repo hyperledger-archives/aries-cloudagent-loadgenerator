@@ -1,0 +1,102 @@
+version: "3.7"
+services:
+
+  load-generator-1:
+    container_name: load-generator-1
+    build: ../../
+    environment:
+      - ISSUERVERIFIER_MULTITENANCY_WEBHOOKENDPOINTURL=http://load-generator-1:8080/acapy-webhook
+      - ISSUERVERIFIER_MULTITENANCY_SUBWALLETNAME=load-generator-1
+    env_file:
+      - load-generator.env
+    networks:
+      - aries-load-test
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "50m"
+    profiles: [ "1", "2", "3", "4", "5" ]
+
+  load-generator-2:
+    container_name: load-generator-2
+    build: ../../
+    environment:
+      - ISSUERVERIFIER_MULTITENANCY_WEBHOOKENDPOINTURL=http://load-generator-2:8080/acapy-webhook
+      - ISSUERVERIFIER_MULTITENANCY_SUBWALLETNAME=load-generator-2
+    env_file:
+      - load-generator.env
+    networks:
+      - aries-load-test
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "50m"
+    profiles: [ "2", "3", "4", "5" ]
+
+  load-generator-3:
+    container_name: load-generator-3
+    build: ../../
+    environment:
+      - ISSUERVERIFIER_MULTITENANCY_WEBHOOKENDPOINTURL=http://load-generator-3:8080/acapy-webhook
+      - ISSUERVERIFIER_MULTITENANCY_SUBWALLETNAME=load-generator-3
+    env_file:
+      - load-generator.env
+    networks:
+      - aries-load-test
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "50m"
+    profiles: [ "3", "4", "5" ]
+
+  load-generator-4:
+    container_name: load-generator-4
+    build: ../../
+    environment:
+      - ISSUERVERIFIER_MULTITENANCY_WEBHOOKENDPOINTURL=http://load-generator-4:8080/acapy-webhook
+      - ISSUERVERIFIER_MULTITENANCY_SUBWALLETNAME=load-generator-4
+    env_file:
+      - load-generator.env
+    networks:
+      - aries-load-test
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "50m"
+    profiles: [ "4", "5" ]
+
+  load-generator-5:
+    container_name: load-generator-5
+    build: ../../
+    environment:
+      - ISSUERVERIFIER_MULTITENANCY_WEBHOOKENDPOINTURL=http://load-generator-5:8080/acapy-webhook
+      - ISSUERVERIFIER_MULTITENANCY_SUBWALLETNAME=load-generator-5
+    env_file:
+      - load-generator.env
+    networks:
+      - aries-load-test
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "50m"
+    profiles: [ "5" ]
+
+networks:
+  aries-load-test:
+    external: true
+    name: aries-load-test
