@@ -11,6 +11,8 @@ services:
       - load-generator.env
     networks:
       - aries-load-test
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     logging:
       driver: "json-file"
       options:
@@ -28,6 +30,8 @@ services:
       - load-generator.env
     networks:
       - aries-load-test
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     logging:
       driver: "json-file"
       options:
@@ -45,6 +49,8 @@ services:
       - load-generator.env
     networks:
       - aries-load-test
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     logging:
       driver: "json-file"
       options:
@@ -62,6 +68,8 @@ services:
       - load-generator.env
     networks:
       - aries-load-test
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     logging:
       driver: "json-file"
       options:
@@ -79,6 +87,8 @@ services:
       - load-generator.env
     networks:
       - aries-load-test
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     logging:
       driver: "json-file"
       options:
