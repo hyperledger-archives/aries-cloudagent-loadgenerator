@@ -73,3 +73,14 @@ Data sources are configured manually
 in [./setup/grafana/grafana-provisioning/datasources/](./setup/grafana/grafana-provisioning/datasources/) using YAML
 files. Dashboards are configured in [./setup/grafana/dashboards](./setup/grafana/dashboards) using JSON files.
 Dashboards can be created via the Grafana Web UI and exported as JSON afterwards.
+
+## E2E Test Cases
+
+- Start whole system with multitenancy disabled
+- Start whole system with multitenancy enabled
+- Down the whole system using `manage.sh down`
+- Restart the whole system using `manage.sh restart`
+- Start whole system with postgres cluster
+- Start whole system without the load generator using `manage.sh debug` and start the load generator via the IDE
+- Run it on MacOS
+- Run it on Linux
