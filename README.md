@@ -2,7 +2,6 @@
 
 A simple load generator to test the performance of the ACA-PY agent.
 
-## Quick setup
 ![Loadgenerator architecture](architecture.png)
 
 This repository comes with an automated testing setup consisting of:
@@ -15,6 +14,7 @@ This repository comes with an automated testing setup consisting of:
 - Analysis Tools ([see below](#analysis-tools))
 - Aries Clouadagent Load Generator itself
 
+## Getting Started
 ### Prerequisites
 
 You need to have [Docker](https://docs.docker.com/get-docker/)
@@ -36,7 +36,7 @@ All variables in the `./setup/.env` which have prefix `SYSTEM_` indicate what an
 
 ### Management Script
 
-To start the environment run:
+To start the environment and execute the load generator run:
 
 ```
 ./setup/manage.sh start
@@ -50,13 +50,7 @@ To restart the environment, run:
 ./setup/manage.sh restart
 ```
 
-To stop the environment, run:
-
-```
-./setup/manage.sh stop
-```
-
-If you also want to delete all data and remove all containers, run:
+If stop the system, delete all data, and remove all containers, run:
 
 ```
 ./setup/manage.sh down
@@ -65,7 +59,7 @@ If you also want to delete all data and remove all containers, run:
 ## Analyze the Test Results
 
 This project includes a setup for analyzing and visualizing the test results. The whole analysis setup is started
-automatically when starting the test environment.
+automatically when starting the test environment and available under http://localhost:3000/d/0Pe9llbnz/test-results.
 
 ### Analysis Tools
 
