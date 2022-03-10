@@ -2,19 +2,24 @@
 
 A simple load generator to test the performance of the ACA-PY agent.
 
-![Loadgenerator architecture](architecture.png)
+## System Overview
 
 This repository comes with an automated testing setup consisting of:
 
-- n Issuer/Verifier [ACA-Py](https://github.com/hyperledger/aries-cloudagent-python) instance(s) depending on the [configuration](#configuration) (+ 1 shared Postgres Wallet DB)
+- n Issuer/Verifier [ACA-Py](https://github.com/hyperledger/aries-cloudagent-python) instance(s) depending on
+  the [configuration](#configuration) (+ 1 shared Postgres Wallet DB)
 - nginx as reverse proxy for the Issuer/Verifier instances
-- n Holder [ACA-Py](https://github.com/hyperledger/aries-cloudagent-python) instance(s) (+ SQLite Wallet DB for each one)
+- n Holder [ACA-Py](https://github.com/hyperledger/aries-cloudagent-python) instance(s) (+ SQLite Wallet DB for each
+  one)
 - [Tails Server](https://github.com/bcgov/indy-tails-server/) to support revocation
 - [VON-Network](https://github.com/bcgov/von-network) for a local deployment of an indy ledger
 - Analysis Tools ([see below](#analysis-tools))
 - Aries Clouadagent Load Generator itself
 
+![Loadgenerator architecture](architecture.png)
+
 ## Getting Started
+
 ### Prerequisites
 
 You need to have [Docker](https://docs.docker.com/get-docker/)
