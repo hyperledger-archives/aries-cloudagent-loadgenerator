@@ -72,6 +72,19 @@ function initEnv() {
   done
 }
 
+function configurePostgresLoggingFlags() {
+  if [ "${POSTGRES_LOG_DEBUG}" = true ]; then
+    export POSTGRES_LOGGING_STATEMENT="all"
+    export POSTGRES_LOGGING_TOGGLE="on"
+    export POSTGRES_LOGGING_SAMPLE_RATE="1.0"
+  else
+    export POSTGRES_LOGGING_STATEMENT="none"
+    export POSTGRES_LOGGING_TOGGLE="off"
+    export POSTGRES_LOGGING_SAMPLE_RATE="0"
+  fi
+}
+
+
 function configureMultitenancyFlags() {
   if [ "${ENABLE_MULTITENANCY}" = true ]; then
     export MULTITENANCY_SETTINGS="--multitenant --multitenant-admin --jwt-secret SECRET"
@@ -133,6 +146,8 @@ function startAgents() {
 }
 
 function startPostgresSingleInstance() {
+  configurePostgresLoggingFlags
+
   docker-compose -f ./agents/docker-compose-issuer-verifier-walletdb.yml --profile single-instance up -d;
 
   echo "Starting Issuer Wallet DB as single instance... (sleeping 15 seconds)"
@@ -145,6 +160,8 @@ function startPostgresCluster() {
 
   cd "$SCRIPT_HOME/agents/patroni";
   docker build -t postgres-cluster-node --build-arg PG_MAJOR=13 .;
+
+  configurePostgresLoggingFlags
 
   cd $SCRIPT_HOME;
   docker-compose -f ./agents/docker-compose-issuer-verifier-walletdb.yml --profile cluster up -d;

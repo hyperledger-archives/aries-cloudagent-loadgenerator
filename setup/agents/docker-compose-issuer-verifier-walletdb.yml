@@ -96,7 +96,21 @@ services:
     image: ${POSTGRES_IMAGE}
     volumes:
       - issuer-verifier-wallet-db-volume:/var/lib/postgresql/data
-    command: postgres -p 5000 -c 'max_connections=${MAX_CONNECTIONS_WALLET_DB_SINGLE_INSTANCE}' -c 'log_min_error_statement=ERROR' -c 'statement_timeout=${STATEMENT_TIMEOUT_IN_MS_WALLET_DB_SINGLE_INSTANCE}' -c 'idle_in_transaction_session_timeout=${IDLE_IN_TRASATION_SESSION_TIMEOUT_IN_MS_WALLET_DB_SINGLE_INSTANCE}' -c 'lock_timeout=${LOCK_TIMEOUT_IN_MS_WALLET_DB_SINGLE_INSTANCE}'
+#      - "$PWD/postgresql.conf:/etc/postgresql/postgresql.conf"
+    command: ["postgres", "-p", "5000",
+              "-c", "max_connections=${MAX_CONNECTIONS_WALLET_DB_SINGLE_INSTANCE}",
+              "-c", "log_min_error_statement=ERROR",
+              "-c", "log_statement_sample_rate=${POSTGRES_LOGGING_SAMPLE_RATE}",
+              "-c", "log_transaction_sample_rate=${POSTGRES_LOGGING_SAMPLE_RATE}",
+              "-c", "log_checkpoints=${POSTGRES_LOGGING_TOGGLE}",
+              "-c", "log_connections=${POSTGRES_LOGGING_TOGGLE}",
+              "-c", "log_disconnections=${POSTGRES_LOGGING_TOGGLE}",
+              "-c", "log_duration=${POSTGRES_LOGGING_TOGGLE}",
+              "-c", "log_lock_waits=${POSTGRES_LOGGING_TOGGLE}",
+              "-c", "log_statement=${POSTGRES_LOGGING_STATEMENT}",
+              "-c", "statement_timeout=${STATEMENT_TIMEOUT_IN_MS_WALLET_DB_SINGLE_INSTANCE}",
+              "-c", "idle_in_transaction_session_timeout=${IDLE_IN_TRASATION_SESSION_TIMEOUT_IN_MS_WALLET_DB_SINGLE_INSTANCE}",
+              "-c", "lock_timeout=${LOCK_TIMEOUT_IN_MS_WALLET_DB_SINGLE_INSTANCE}"]
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: ${POSTGRES_USER}
