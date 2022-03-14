@@ -98,3 +98,9 @@ Using [IzakMarais/reporter](https://github.com/IzakMarais/reporter) it is possib
 this a link exists in the top right corner of the dashboards. The PDF generation can take multiple minutes depending on
 the Dashboard complexity. Check the logs of the `grafana-pdf-exporter` container in case you want to see the progress of
 the PDF generation.
+
+## Troubleshooting
+
+The startup process is orchestrated by the [manage.sh](./setup/manage.sh). During this process `sleep XX`
+is used to wait for Docker containers to properly start before continuing with the setup. Depending on the system's
+performance the sleep durations might need to be increased to ensure that the containers get enough time to boot.    
