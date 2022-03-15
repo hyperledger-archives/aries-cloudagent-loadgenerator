@@ -109,6 +109,6 @@ performance the sleep durations might need to be increased to ensure that the co
 
 ### Only started iterations are visible on the "Test Results" Grafana Dashboard
 
-This is likely caused by an communiation issue between the AcaPy and the Load Generator. The AcaPy should notify the
+This is likely caused by a communication issue between the AcaPy and the Load Generator. The AcaPy should notify the
 Load Generator about updates via the Webhook Endpoint. If the Load Generator does not receive the updates or is unable
-to process the udpates it will not log any progress on the "Test Results" dashboard in Grafana.
+to process the updates it will not log any progress on the "Test Results" dashboard in Grafana.
