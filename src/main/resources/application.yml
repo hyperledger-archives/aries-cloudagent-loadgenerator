@@ -88,3 +88,6 @@ test-flows:
         check-non-revoked: true
         revocation-registry-size: 500
         use-oob-proof-requests: false
+    revocation-flow:
+        active: false
+        revocation-registry-size: 500

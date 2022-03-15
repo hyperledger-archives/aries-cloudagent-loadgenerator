@@ -14,6 +14,7 @@ import org.hyperledger.aries.api.credentials.CredentialAttributes
 import org.hyperledger.aries.api.credentials.CredentialPreview
 import org.hyperledger.aries.api.issue_credential_v1.V1CredentialProposalRequest
 import org.hyperledger.aries.api.present_proof.PresentProofRequest
+import org.hyperledger.aries.api.revocation.RevokeRequest
 import org.hyperledger.aries.api.schema.SchemaSendRequest
 
 
@@ -124,6 +125,19 @@ class AcaPyAriesClient(
 
         if (credentialExchange.isEmpty) {
             errorLogger.reportAriesClientError("AcaPyAriesClient.issueCredentialToConnection: Failed to issue credential.")
+        }
+    }
+
+    override fun revokeCredential(credentialRevocationRegistryRecord: CredentialRevocationRegistryRecordDo) {
+        val credentialRevocation = acaPy.revocationRevoke(
+            RevokeRequest.builder()
+                .credRevId(credentialRevocationRegistryRecord.credentialRevocationRegistryIndex)
+                .revRegId(credentialRevocationRegistryRecord.credentialRevocationRegistryId)
+                .build()
+        )
+
+        if (credentialRevocation.isEmpty) {
+            errorLogger.reportAriesClientError("AcaPyAriesClient.revokeCredential: Failed to revoke credential.")
         }
     }
 

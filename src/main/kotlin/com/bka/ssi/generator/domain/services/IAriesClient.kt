@@ -13,6 +13,7 @@ interface IAriesClient {
     fun createConnectionInvitation(alias: String): ConnectionInvitationDo
     fun receiveConnectionInvitation(connectionInvitationDo: ConnectionInvitationDo)
     fun issueCredentialToConnection(connectionId: String, credentialDo: CredentialDo)
+    fun revokeCredential(credentialRevocationRegistryRecord: CredentialRevocationRegistryRecordDo)
     fun createOobCredentialOffer(credentialDo: CredentialDo): OobCredentialOfferDo
     fun receiveOobCredentialOffer(oobCredentialOfferDo: OobCredentialOfferDo)
     fun sendProofRequestToConnection(connectionId: String, proofRequestDo: ProofRequestDo, checkNonRevoked: Boolean)
