@@ -87,6 +87,8 @@ class RevocationFlow(
             "Should succeed as the credential has NOT been revoked yet"
         )
 
+        // NOT a good idea as it will cause a race condition between holder and issuer!
+
         if (credentialExchangeRecord.revocationRegistryId != null && credentialExchangeRecord.revocationIndex != null) {
             issuerVerifierAriesClient.revokeCredential(
                 CredentialRevocationRegistryRecordDo(
