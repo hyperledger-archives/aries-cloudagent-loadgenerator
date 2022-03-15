@@ -154,10 +154,11 @@ class AcaPyAriesClient(
     override fun sendProofRequestToConnection(
         connectionId: String,
         proofRequestDo: ProofRequestDo,
-        checkNonRevoked: Boolean
+        checkNonRevoked: Boolean,
+        comment: String
     ) {
         val proofRequestBuilder = PresentProofRequest.ProofRequest.builder()
-            .name("Proof Request")
+            .name("Proof Request: $comment")
             .requestedAttributes(
                 proofRequestDo.requestedCredentials.mapIndexed { index: Int, credentialRequestDo: CredentialRequestDo ->
                     "${index}_credential" to PresentProofRequest.ProofRequest.ProofRequestedAttributes.builder()

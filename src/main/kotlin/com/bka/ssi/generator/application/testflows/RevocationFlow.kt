@@ -82,12 +82,29 @@ class RevocationFlow(
             return
         }
 
-        sendProofRequestToConnection(credentialExchangeRecord.connectionId)
+        sendProofRequestToConnection(
+            credentialExchangeRecord.connectionId,
+            "Should succeed as the credential has NOT been revoked yet"
+        )
+
+        if (credentialExchangeRecord.revocationRegistryId != null && credentialExchangeRecord.revocationIndex != null) {
+            issuerVerifierAriesClient.revokeCredential(
+                CredentialRevocationRegistryRecordDo(
+                    credentialExchangeRecord.revocationRegistryId,
+                    credentialExchangeRecord.revocationIndex
+                )
+            )
+
+            sendProofRequestToConnection(
+                credentialExchangeRecord.connectionId,
+                "Should fail as the credential has been revoked"
+            )
+        }
 
         logger.info("Sent proof request")
     }
 
-    private fun sendProofRequestToConnection(connectionId: String) {
+    private fun sendProofRequestToConnection(connectionId: String, comment: String) {
         issuerVerifierAriesClient.sendProofRequestToConnection(
             connectionId,
             ProofRequestDo(
@@ -100,7 +117,8 @@ class RevocationFlow(
                     )
                 )
             ),
-            true
+            true,
+            comment
         )
     }
 
@@ -108,6 +126,15 @@ class RevocationFlow(
         if (!proofExchangeRecord.verifiedAndValid) {
             return
         }
+
+        if (proofExchangeRecord.state == "Should succeed") {
+
+        }
+
+        if (proofExchangeRecord.state == "Should fail") {
+
+        }
+
 
         logger.info("Received valid proof presentation")
 
