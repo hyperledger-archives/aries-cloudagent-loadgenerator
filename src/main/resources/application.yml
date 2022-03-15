@@ -1,4 +1,12 @@
+server:
+    tomcat:
+        threads:
+            max: 200 # Maximum amount of worker threads.
+        max-connections: 8192 # default size is 8192
+
 spring:
+    application:
+        name: spring-load-generator
     datasource:
         url: jdbc:postgresql://localhost:5000/
         username: postgres
@@ -10,13 +18,19 @@ spring:
 logging:
     config: classpath:logback-spring.xml
 
+management:
+    endpoints:
+        web:
+            exposure:
+                include: "*"
+
 issuer-verifier:
     acapy:
         api-key:
         url: 'http://localhost:10000'
         http-timeout-in-seconds: 60
     multitenancy:
-        enabled: true
+        enabled: false
         wallet-type: askar
         register-did-endpoint: http://localhost:9000/register
         webhook-endpoint-url: http://host.docker.internal:8080/acapy-webhook
