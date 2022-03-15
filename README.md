@@ -101,6 +101,14 @@ the PDF generation.
 
 ## Troubleshooting
 
+### Issues during system start up
+
 The startup process is orchestrated by the [manage.sh](./setup/manage.sh). During this process `sleep XX`
 is used to wait for Docker containers to properly start before continuing with the setup. Depending on the system's
-performance the sleep durations might need to be increased to ensure that the containers get enough time to boot.    
+performance the sleep durations might need to be increased to ensure that the containers get enough time to boot.
+
+### Only started iterations are visible on the "Test Results" Grafana Dashboard
+
+This is likely caused by an communiation issue between the AcaPy and the Load Generator. The AcaPy should notify the
+Load Generator about updates via the Webhook Endpoint. If the Load Generator does not receive the updates or is unable
+to process the udpates it will not log any progress on the "Test Results" dashboard in Grafana.
