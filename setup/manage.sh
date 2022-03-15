@@ -161,8 +161,6 @@ function startPostgresCluster() {
   cd "$SCRIPT_HOME/agents/patroni";
   docker build -t postgres-cluster-node --build-arg PG_MAJOR=13 .;
 
-  configurePostgresLoggingFlags
-
   cd $SCRIPT_HOME;
   docker-compose -f ./agents/docker-compose-issuer-verifier-walletdb.yml --profile cluster up -d;
 
