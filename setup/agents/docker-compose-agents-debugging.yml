@@ -5,6 +5,8 @@ services:
     image: ${ACAPY_IMAGE}
     container_name: issuer-verifier-acapy
     entrypoint: /bin/bash
+    environment:
+      ENABLE_PTVSD: ${ENABLE_PTVSD}
     command: [
         "-c",
         "sleep 10;

@@ -99,6 +99,46 @@ this a link exists in the top right corner of the dashboards. The PDF generation
 the Dashboard complexity. Check the logs of the `grafana-pdf-exporter` container in case you want to see the progress of
 the PDF generation.
 
+## Debug AcaPy
+
+In case you want to debug the AcaPy while running the load-tests you can
+set `ISSUER_VERIFIER_AGENT_ENABLE_DEBUGGING=true` in the `.env`. Afterwards, you can start the test environment
+using `./setup/manage.sh debug`. This will build an AcaPy docker image based on the AcaPy version currently checked out
+under `./setup/agents/acapy` and includes a Python debugger into the docker image.
+
+Once the test environment started the issuer-verifier-acapy will state `=== Waiting for debugger to attach ===`. To
+attach a debugger open `./setup/agents/acapy` in VS Code, add the following debug configuration to the `launch.json`,
+and start the debugging.
+
+```
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    
+    {
+      "name": "Python: Remote Attach",
+      "type": "python",
+      "request": "attach",
+      "connect": {
+        "host": "localhost",
+        "port": 5678
+      },
+      "pathMappings": [
+        {
+          "localRoot": "${workspaceFolder}",
+          "remoteRoot": "."
+        }
+      ]
+    }
+  ]
+}
+```
+
+Finally, you can start the load-generator from the IDE.
+
 ## Troubleshooting
 
 ### Issues during system start up

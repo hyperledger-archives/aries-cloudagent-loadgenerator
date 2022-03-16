@@ -31,8 +31,10 @@ usage() {
               and configuration supplied in the .env.
 
       debug - Starts all containers but the load generator.
-              Only one Issuer/Verifier AcaPy and only one Holder AcaPy will be started.
-              Can be used for running the load generator via the IDE.
+              Only one Issuer/Verifier AcaPy (optionally with a debugger enabled)
+              and only one Holder AcaPy will be started. Can be used for running
+              the load generator via the IDE as well as to debug the Issuer/Verifier
+              AcaPy.
 
       restart - First, "down" is executed. Then, "start" is run.
 
@@ -168,6 +170,10 @@ function startPostgresCluster() {
   sleep 45
 }
 
+function buildAcaPyDebugImage() {
+ docker build -t acapy-debug -f ./agents/acapy/docker/Dockerfile.run ./agents/acapy/
+}
+
 function startAll() {
   if [ "${SYSTEM_LEDGER}" = true ]; then
     startIndyNetwork
@@ -195,17 +201,35 @@ function startAll() {
 }
 
 function debug() {
-  startIndyNetwork
-  startDashboard
-
-  if [ "${SYSTEM_ISSUER_POSTGRES_DB_CLUSTER}" = true ]; then
-      startPostgresCluster
-  else
-      startPostgresSingleInstance
+  if [ "${SYSTEM_LEDGER}" = true ]; then
+      startIndyNetwork
   fi
 
-  configureMultitenancyFlags
-  docker-compose -f ./agents/docker-compose-agents-debugging.yml up -d
+  if [ "${SYSTEM_METRICS_DASHBOARD}" = true ]; then
+    startDashboard
+  fi
+
+  if [ "${SYSTEM_ISSUER_POSTGRES_DB}" = true ]; then
+    if [ "${SYSTEM_ISSUER_POSTGRES_DB_CLUSTER}" = true ]; then
+      startPostgresCluster
+    else
+      startPostgresSingleInstance
+    fi
+  fi
+
+  if [ "${SYSTEM_AGENTS}" = true ]; then
+    configureMultitenancyFlags
+
+    if [ "${ISSUER_VERIFIER_AGENT_ENABLE_DEBUGGING}" = true ]; then
+      buildAcaPyDebugImage
+      export ACAPY_IMAGE=acapy-debug
+      export ENABLE_PTVSD=1
+    else
+      export ENABLE_PTVSD=0
+    fi
+
+    docker-compose -f ./agents/docker-compose-agents-debugging.yml up -d
+  fi
 }
 
 function downAll() {
