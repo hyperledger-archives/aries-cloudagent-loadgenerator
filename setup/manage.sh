@@ -137,7 +137,7 @@ function startAgents() {
   sleep 15
 
   echo "Starting all AcaPy related docker containers ..."
-  docker-compose -f ./agents/docker-compose-agents.yml --profile prd up -d --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES --scale holder-acapy=$NUMBER_OF_HOLDER_ACAPY_INSTANCES
+  docker-compose -f ./agents/docker-compose-agents.yml up -d --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES --scale holder-acapy=$NUMBER_OF_HOLDER_ACAPY_INSTANCES
 
   echo "Waiting for all the agents to start... (sleeping 15 seconds)"
   sleep 15
@@ -206,7 +206,7 @@ function debug() {
 
   configureMultitenancyFlags
   export NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES=1
-  docker-compose -f ./agents/docker-compose-agents.yml --profile debugging up -d --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES
+  docker-compose -f ./agents/docker-compose-agents-debugging.yml up -d --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES
 }
 
 function downAll() {

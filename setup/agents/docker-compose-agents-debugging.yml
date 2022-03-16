@@ -3,6 +3,7 @@ services:
 
   issuer-verifier-acapy:
     image: ${ACAPY_IMAGE}
+    container_name: issuer-verifier-acapy
     entrypoint: /bin/bash
     command: [
         "-c",
@@ -38,6 +39,10 @@ services:
     ]
     networks:
       - aries-load-test
+    ports:
+      - 10000:10000 # Admin API
+      - 10001:10001 # DIDcomm
+      - 5678:5678 # Debugger
     extra_hosts:
       - "host.docker.internal:host-gateway"
     logging:
@@ -47,20 +52,9 @@ services:
         max-size: "50m"
     restart: always
 
-  issuer-verifier-nginx:
-    container_name: issuer-verifier-nginx
-    image: nginx:latest
-    volumes:
-      - ./nginx-issuer-verifier-${NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES}.conf:/etc/nginx/nginx.conf:ro
-    depends_on:
-      - issuer-verifier-acapy
-    ports:
-      - 10000:10000
-    networks:
-      - aries-load-test
-
   holder-acapy:
     image: ${ACAPY_IMAGE}
+    container_name: holder-acapy
     entrypoint: /bin/bash
     command: [
         "-c",
@@ -102,6 +96,9 @@ services:
       - tails-server
     networks:
       - aries-load-test
+    ports:
+      - 10010:10010
+      - 10011:10011
     extra_hosts:
       - "host.docker.internal:host-gateway"
     logging:
@@ -110,6 +107,7 @@ services:
         max-file: "5"
         max-size: "50m"
     restart: always
+    profiles: [ "debugging"]
 
   tails-server:
     container_name: tails-server
