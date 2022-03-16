@@ -205,8 +205,7 @@ function debug() {
   fi
 
   configureMultitenancyFlags
-  export NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES=1
-  docker-compose -f ./agents/docker-compose-agents-debugging.yml up -d --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES
+  docker-compose -f ./agents/docker-compose-agents-debugging.yml up -d
 }
 
 function downAll() {

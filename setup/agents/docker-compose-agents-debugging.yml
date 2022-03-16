@@ -13,7 +13,7 @@ services:
         --admin 0.0.0.0 10000 \
         --inbound-transport http 0.0.0.0 10001 \
         --outbound-transport http \
-        --endpoint http://issuer-verifier-nginx:10001 \
+        --endpoint http://issuer-verifier-acapy:10001 \
         --genesis-url ${LEDGER_GENESIS} \
         --ledger-pool-name ${LEDGER_POOL_NAME} \
         --invite-base-url didcomm://aries_connection_invitation \
@@ -59,14 +59,12 @@ services:
     command: [
         "-c",
         "sleep 10;
-        export IP=`ifconfig eth0 | grep 'inet ' | awk '{print $$2}'`;
-        echo $$IP;
         aca-py start \
         --auto-provision \
         --inbound-transport http 0.0.0.0 10011 \
         --outbound-transport http \
         --admin 0.0.0.0 10010 \
-        --endpoint http://$$IP:10011 \
+        --endpoint http://holder-acapy:10011 \
         --genesis-url ${LEDGER_GENESIS} \
         --ledger-pool-name $LEDGER_POOL_NAME \
         --ledger-pool-name ${LEDGER_POOL_NAME} \
@@ -107,7 +105,6 @@ services:
         max-file: "5"
         max-size: "50m"
     restart: always
-    profiles: [ "debugging"]
 
   tails-server:
     container_name: tails-server

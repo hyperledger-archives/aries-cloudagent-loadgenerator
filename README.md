@@ -112,3 +112,8 @@ performance the sleep durations might need to be increased to ensure that the co
 This is likely caused by a communication issue between the AcaPy and the Load Generator. The AcaPy should notify the
 Load Generator about updates via the Webhook Endpoint. If the Load Generator does not receive the updates or is unable
 to process the updates it will not log any progress on the "Test Results" dashboard in Grafana.
+
+Alternatively, it can also indicate that the load generator is not able to reach out to the issuer-verifier and/or holder agents' admin API.
+Ensure that issuer-verifier as well as holder agent containers are running and that the load-generator is using the correct URLs to reach out to the admin APIs.
+
+Further, the holder agents need to be able to reach the issuer-verifier DIDcomm endpoint to accept connection invitations.
