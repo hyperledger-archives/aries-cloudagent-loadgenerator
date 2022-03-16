@@ -11,6 +11,8 @@ services:
       - load-generator.env
     networks:
       - aries-load-test
+    ports:
+      - 8080:8080
     extra_hosts:
       - "host.docker.internal:host-gateway"
     logging:
