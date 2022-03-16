@@ -6,7 +6,7 @@ services:
     container_name: issuer-verifier-acapy
     entrypoint: /bin/bash
     environment:
-      ENABLE_PTVSD: ${ENABLE_PTVSD}
+      ENABLE_PTVSD: 1
     command: [
         "-c",
         "sleep 10;

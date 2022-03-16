@@ -223,9 +223,6 @@ function debug() {
     if [ "${ISSUER_VERIFIER_AGENT_ENABLE_DEBUGGING}" = true ]; then
       buildAcaPyDebugImage
       export ACAPY_IMAGE=acapy-debug
-      export ENABLE_PTVSD=1
-    else
-      export ENABLE_PTVSD=0
     fi
 
     docker-compose -f ./agents/docker-compose-agents-debugging.yml up -d
