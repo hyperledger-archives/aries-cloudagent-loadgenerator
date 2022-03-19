@@ -20,7 +20,7 @@ interface IAriesClient {
         connectionId: String,
         proofRequestDo: ProofRequestDo,
         checkNonRevoked: Boolean,
-        comment: String
+        comment: ProofExchangeComment
     )
 
     fun createOobProofRequest(proofRequestDo: ProofRequestDo, checkNonRevoked: Boolean): OobProofRequestDo

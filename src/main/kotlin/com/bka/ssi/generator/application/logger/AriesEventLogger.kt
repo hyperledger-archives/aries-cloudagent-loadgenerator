@@ -52,7 +52,7 @@ class AriesEventLogger : IAriesObserver {
 
     override fun handleProofRequestRecord(proofExchangeRecord: ProofExchangeRecordDo) {
         logger.info(
-            "type=presentationRecord time=${proofExchangeRecord.time} presentationExchangeId=${proofExchangeRecord.id} connectionId=${proofExchangeRecord.connectionId} state=${proofExchangeRecord.state}"
+            "type=presentationRecord time=${proofExchangeRecord.time} presentationExchangeId=${proofExchangeRecord.id} connectionId=${proofExchangeRecord.connectionId} state=${proofExchangeRecord.state} valid=${proofExchangeRecord.isValid} comment=${proofExchangeRecord.comment}"
         )
     }
 }

@@ -84,29 +84,17 @@ class RevocationFlow(
 
         sendProofRequestToConnection(
             credentialExchangeRecord.connectionId,
-            "Should succeed as the credential has NOT been revoked yet"
+            ProofExchangeComment(
+                true,
+                credentialExchangeRecord.revocationRegistryId,
+                credentialExchangeRecord.revocationIndex
+            )
         )
-
-        // NOT a good idea as it will cause a race condition between holder and issuer!
-
-        if (credentialExchangeRecord.revocationRegistryId != null && credentialExchangeRecord.revocationIndex != null) {
-            issuerVerifierAriesClient.revokeCredential(
-                CredentialRevocationRegistryRecordDo(
-                    credentialExchangeRecord.revocationRegistryId,
-                    credentialExchangeRecord.revocationIndex
-                )
-            )
-
-            sendProofRequestToConnection(
-                credentialExchangeRecord.connectionId,
-                "Should fail as the credential has been revoked"
-            )
-        }
 
         logger.info("Sent proof request")
     }
 
-    private fun sendProofRequestToConnection(connectionId: String, comment: String) {
+    private fun sendProofRequestToConnection(connectionId: String, comment: ProofExchangeComment) {
         issuerVerifierAriesClient.sendProofRequestToConnection(
             connectionId,
             ProofRequestDo(
@@ -125,21 +113,42 @@ class RevocationFlow(
     }
 
     override fun handleProofRequestRecord(proofExchangeRecord: ProofExchangeRecordDo) {
-        if (!proofExchangeRecord.verifiedAndValid) {
+        if (!proofExchangeRecord.isVerified) {
             return
         }
 
-        if (proofExchangeRecord.state == "Should succeed") {
+        if (proofExchangeRecord.comment.shouldBeValid) {
+            if (!proofExchangeRecord.isValid) {
+                logger.error("Received invalid proof presentation but expected a valid proof presentation")
+                return
+            }
 
+            logger.info("Received valid proof presentation")
+
+            if (proofExchangeRecord.comment.revocationRegistryId != null && proofExchangeRecord.comment.revocationRegistryIndex != null) {
+                issuerVerifierAriesClient.revokeCredential(
+                    CredentialRevocationRegistryRecordDo(
+                        proofExchangeRecord.comment.revocationRegistryId,
+                        proofExchangeRecord.comment.revocationRegistryIndex
+                    )
+                )
+
+                sendProofRequestToConnection(
+                    proofExchangeRecord.connectionId,
+                    ProofExchangeComment(false, null, null)
+                )
+            }
         }
 
-        if (proofExchangeRecord.state == "Should fail") {
+        if (!proofExchangeRecord.comment.shouldBeValid) {
+            if (proofExchangeRecord.isValid) {
+                logger.error("Credential has not been revoked")
+                return
+            }
 
+            logger.info("Credential has been successfully revoked")
+            testRunner?.finishedIteration()
         }
 
-
-        logger.info("Received valid proof presentation")
-
-        testRunner?.finishedIteration()
     }
 }

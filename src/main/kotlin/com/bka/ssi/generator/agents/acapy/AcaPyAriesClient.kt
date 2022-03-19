@@ -133,6 +133,8 @@ class AcaPyAriesClient(
             RevokeRequest.builder()
                 .credRevId(credentialRevocationRegistryRecord.credentialRevocationRegistryIndex)
                 .revRegId(credentialRevocationRegistryRecord.credentialRevocationRegistryId)
+                .publish(true)
+                .notify(false)
                 .build()
         )
 
@@ -155,10 +157,10 @@ class AcaPyAriesClient(
         connectionId: String,
         proofRequestDo: ProofRequestDo,
         checkNonRevoked: Boolean,
-        comment: String
+        comment: ProofExchangeComment
     ) {
         val proofRequestBuilder = PresentProofRequest.ProofRequest.builder()
-            .name("Proof Request: $comment")
+            .name(comment.toString())
             .requestedAttributes(
                 proofRequestDo.requestedCredentials.mapIndexed { index: Int, credentialRequestDo: CredentialRequestDo ->
                     "${index}_credential" to PresentProofRequest.ProofRequest.ProofRequestedAttributes.builder()

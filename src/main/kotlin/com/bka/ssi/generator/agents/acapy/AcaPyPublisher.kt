@@ -3,6 +3,7 @@ package com.bka.ssi.generator.agents.acapy
 import com.bka.ssi.generator.application.logger.ErrorLogger
 import com.bka.ssi.generator.domain.objects.ConnectionRecordDo
 import com.bka.ssi.generator.domain.objects.CredentialExchangeRecordDo
+import com.bka.ssi.generator.domain.objects.ProofExchangeComment
 import com.bka.ssi.generator.domain.objects.ProofExchangeRecordDo
 import com.bka.ssi.generator.domain.services.IAriesObserver
 import org.hyperledger.aries.api.connection.ConnectionRecord
@@ -56,7 +57,9 @@ class AcaPyPublisher(
                     dateStringToMilliseconds(proof.updatedAt),
                     proof.connectionId,
                     proof.state.toString(),
-                    proof.isVerified && proof.state == PresentationExchangeState.VERIFIED
+                    proof.state == PresentationExchangeState.VERIFIED,
+                    proof.isVerified,
+                    ProofExchangeComment(proof.presentationRequest.name)
                 )
             )
         }

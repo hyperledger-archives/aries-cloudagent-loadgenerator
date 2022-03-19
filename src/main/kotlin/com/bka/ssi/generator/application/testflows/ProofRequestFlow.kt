@@ -74,7 +74,8 @@ class ProofRequestFlow(
                     )
                 )
             ),
-            checkNonRevoked
+            checkNonRevoked,
+            ProofExchangeComment(true, null, null)
         )
     }
 
@@ -131,10 +132,15 @@ class ProofRequestFlow(
     }
 
     override fun handleProofRequestRecord(proofExchangeRecord: ProofExchangeRecordDo) {
-        if (!proofExchangeRecord.verifiedAndValid) {
+        if (!proofExchangeRecord.isVerified) {
             return
         }
 
+        if (!proofExchangeRecord.isVerified) {
+            logger.error("Received invalid proof presentation but expected a valid proof presentation")
+            return
+        }
+        
         logger.info("Received valid proof presentation")
 
         testRunner?.finishedIteration()
