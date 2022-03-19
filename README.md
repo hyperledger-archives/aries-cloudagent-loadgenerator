@@ -99,8 +99,58 @@ this a link exists in the top right corner of the dashboards. The PDF generation
 the Dashboard complexity. Check the logs of the `grafana-pdf-exporter` container in case you want to see the progress of
 the PDF generation.
 
+## Debug AcaPy
+
+In case you want to debug the AcaPy while running the load-tests you can
+set `ISSUER_VERIFIER_AGENT_ENABLE_DEBUGGING=true` in the `.env`. Afterwards, you can start the test environment
+using `./setup/manage.sh debug`. This will build an AcaPy docker image based on the AcaPy version currently checked out
+under `./setup/agents/acapy` and includes a Python debugger into the docker image.
+
+Once the test environment started the issuer-verifier-acapy will state `=== Waiting for debugger to attach ===`. To
+attach a debugger open `./setup/agents/acapy` in VS Code, add the following debug configuration to the `launch.json`,
+and start the debugging.
+
+```
+{
+  "version": "0.2.0",
+  "configurations": [
+    
+    {
+      "name": "Python: Remote Attach",
+      "type": "python",
+      "request": "attach",
+      "connect": {
+        "host": "localhost",
+        "port": 5678
+      },
+      "pathMappings": [
+        {
+          "localRoot": "${workspaceFolder}",
+          "remoteRoot": "."
+        }
+      ]
+    }
+  ]
+}
+```
+
+Finally, you can start the load-generator from the IDE.
+
 ## Troubleshooting
+
+### Issues during system start up
 
 The startup process is orchestrated by the [manage.sh](./setup/manage.sh). During this process `sleep XX`
 is used to wait for Docker containers to properly start before continuing with the setup. Depending on the system's
-performance the sleep durations might need to be increased to ensure that the containers get enough time to boot.    
+performance the sleep durations might need to be increased to ensure that the containers get enough time to boot.
+
+### Only started iterations are visible on the "Test Results" Grafana Dashboard
+
+This is likely caused by a communication issue between the AcaPy and the Load Generator. The AcaPy should notify the
+Load Generator about updates via the Webhook Endpoint. If the Load Generator does not receive the updates or is unable
+to process the updates it will not log any progress on the "Test Results" dashboard in Grafana.
+
+Alternatively, it can also indicate that the load generator is not able to reach out to the issuer-verifier and/or holder agents' admin API.
+Ensure that issuer-verifier as well as holder agent containers are running and that the load-generator is using the correct URLs to reach out to the admin APIs.
+
+Further, the holder agents need to be able to reach the issuer-verifier DIDcomm endpoint to accept connection invitations.
