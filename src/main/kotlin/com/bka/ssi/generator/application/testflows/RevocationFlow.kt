@@ -23,10 +23,12 @@ class RevocationFlow(
 ) : TestFlow(
     holderAriesClients
 ) {
-
     protected companion object {
+        const val SESSION_ID_CREDENTIAL_ATTRIBUTE_NAME = "sessionId"
+
         var credentialDefinitionId = ""
         var testRunner: TestRunner? = null
+
     }
 
     override fun initialize(testRunner: TestRunner) {
@@ -37,7 +39,7 @@ class RevocationFlow(
 
         val credentialDefinition = issuerVerifierAriesClient.createSchemaAndCredentialDefinition(
             SchemaDo(
-                listOf("credentialId"),
+                listOf(SESSION_ID_CREDENTIAL_ATTRIBUTE_NAME),
                 "name",
                 "1.0"
             ),
@@ -69,7 +71,7 @@ class RevocationFlow(
             CredentialDo(
                 credentialDefinitionId,
                 mapOf(
-                    "credentialId" to UUID.randomUUID().toString()
+                    SESSION_ID_CREDENTIAL_ATTRIBUTE_NAME to UUID.randomUUID().toString()
                 )
             )
         )
@@ -83,10 +85,11 @@ class RevocationFlow(
         }
 
         sendProofRequestToConnection(
+            credentialExchangeRecord.sessionId,
             credentialExchangeRecord.connectionId,
-            ProofExchangeComment(
+            ProofExchangeCommentDo(
                 true,
-                credentialExchangeRecord.internalCredentialId,
+                credentialExchangeRecord.sessionId,
                 credentialExchangeRecord.revocationRegistryId,
                 credentialExchangeRecord.revocationRegistryIndex
             )
@@ -95,7 +98,7 @@ class RevocationFlow(
         logger.info("Sent proof request")
     }
 
-    private fun sendProofRequestToConnection(connectionId: String, comment: ProofExchangeComment) {
+    private fun sendProofRequestToConnection(sessionId: String, connectionId: String, comment: ProofExchangeCommentDo) {
         issuerVerifierAriesClient.sendProofRequestToConnection(
             connectionId,
             ProofRequestDo(
@@ -103,8 +106,12 @@ class RevocationFlow(
                 Instant.now().toEpochMilli(),
                 listOf(
                     CredentialRequestDo(
-                        listOf("credentialId"),
-                        credentialDefinitionId
+                        listOf(SESSION_ID_CREDENTIAL_ATTRIBUTE_NAME),
+                        credentialDefinitionId,
+                        AttributeValueRestrictionDo(
+                            SESSION_ID_CREDENTIAL_ATTRIBUTE_NAME,
+                            sessionId
+                        )
                     )
                 )
             ),
@@ -135,10 +142,11 @@ class RevocationFlow(
                 )
 
                 sendProofRequestToConnection(
+                    proofExchangeRecord.comment.sessionId,
                     proofExchangeRecord.connectionId,
-                    ProofExchangeComment(
+                    ProofExchangeCommentDo(
                         false,
-                        proofExchangeRecord.comment.credentialId,
+                        proofExchangeRecord.comment.sessionId,
                         proofExchangeRecord.comment.revocationRegistryId,
                         proofExchangeRecord.comment.revocationRegistryIndex
                     )

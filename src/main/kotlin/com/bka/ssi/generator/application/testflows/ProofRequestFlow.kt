@@ -70,12 +70,16 @@ class ProofRequestFlow(
                 listOf(
                     CredentialRequestDo(
                         listOf("first name", "last name"),
-                        credentialDefinitionId
+                        credentialDefinitionId,
+                        AttributeValueRestrictionDo(
+                            "first name",
+                            "bob"
+                        )
                     )
                 )
             ),
             checkNonRevoked,
-            ProofExchangeComment(false, "credential", null, null)
+            ProofExchangeCommentDo(false, "credential", null, null)
         )
     }
 
@@ -87,7 +91,11 @@ class ProofRequestFlow(
                 listOf(
                     CredentialRequestDo(
                         listOf("first name", "last name"),
-                        credentialDefinitionId
+                        credentialDefinitionId,
+                        AttributeValueRestrictionDo(
+                            "first name",
+                            "bob"
+                        )
                     )
                 )
             ),

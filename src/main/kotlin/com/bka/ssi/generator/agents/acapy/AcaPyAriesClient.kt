@@ -157,7 +157,7 @@ class AcaPyAriesClient(
         connectionId: String,
         proofRequestDo: ProofRequestDo,
         checkNonRevoked: Boolean,
-        comment: ProofExchangeComment
+        comment: ProofExchangeCommentDo
     ) {
         val proofRequestBuilder = PresentProofRequest.ProofRequest.builder()
             .name(comment.toString())
@@ -167,13 +167,13 @@ class AcaPyAriesClient(
                         .names(credentialRequestDo.claims)
                         .restriction(
                             Gson().fromJson(
-                                "{\"cred_def_id\": \"${credentialRequestDo.credentialDefinitionId}\"}",
+                                "{\"cred_def_id\": \"${credentialRequestDo.credentialDefinitionIdRestriction}\"}",
                                 JsonObject::class.java
                             )
                         )
                         .restriction(
                             Gson().fromJson(
-                                "{\"attr::credentialId::value\": \"${comment.credentialId}\"}",
+                                "{\"attr::${credentialRequestDo.attributeValueRestriction.attributeName}::value\": \"${credentialRequestDo.attributeValueRestriction.attributeValue}\"}",
                                 JsonObject::class.java
                             )
                         )

@@ -7,19 +7,19 @@ class ProofExchangeRecordDo(
     val state: String,
     val isVerified: Boolean,
     val isValid: Boolean,
-    val comment: ProofExchangeComment
+    val comment: ProofExchangeCommentDo
 ) {
 }
 
-class ProofExchangeComment {
+class ProofExchangeCommentDo {
     val shouldBeValid: Boolean
-    val credentialId: String
+    val sessionId: String
     val revocationRegistryId: String?
     val revocationRegistryIndex: String?
 
     constructor(comment: String) {
         shouldBeValid = Regex("^${EXPECTED_TO_BE_VALID}.*").matches(comment)
-        credentialId = Regex("${CREDENTIAL_ID_PREFIX}: ([^ ]*) ").find(comment)!!.groupValues[1]
+        sessionId = Regex("${SESSION_ID_PREFIX}: ([^ ]*) ").find(comment)!!.groupValues[1]
         revocationRegistryId =
             Regex("${REVOCATION_REGISTRY_ID_PREFIX}: ([^ ]*) ").find(comment)?.groupValues?.get(1)
         revocationRegistryIndex =
@@ -28,12 +28,12 @@ class ProofExchangeComment {
 
     constructor(
         shouldBeValid: Boolean,
-        credentialId: String,
+        sessionId: String,
         revocationRegistryId: String?,
         revocationRegistryIndex: String?
     ) {
         this.shouldBeValid = shouldBeValid
-        this.credentialId = credentialId
+        this.sessionId = sessionId
         this.revocationRegistryId = revocationRegistryId
         this.revocationRegistryIndex = revocationRegistryIndex
 
@@ -42,7 +42,7 @@ class ProofExchangeComment {
     companion object {
         private const val EXPECTED_TO_BE_VALID = "Expected to be valid"
         private const val EXPECTED_TO_BE_INVALID = "Expected to be invalid"
-        private const val CREDENTIAL_ID_PREFIX = "credentialId"
+        private const val SESSION_ID_PREFIX = "sessionId"
         private const val REVOCATION_REGISTRY_ID_PREFIX = "revocationRegistryId"
         private const val REVOCATION_REGISTRY_INDEX_PREFIX = "revocationRegistryIndex"
 
@@ -57,7 +57,7 @@ class ProofExchangeComment {
             comment += EXPECTED_TO_BE_INVALID
         }
 
-        comment += " (${CREDENTIAL_ID_PREFIX}: ${credentialId} ${REVOCATION_REGISTRY_ID_PREFIX}: ${revocationRegistryId} ${REVOCATION_REGISTRY_INDEX_PREFIX}: ${revocationRegistryIndex})"
+        comment += " (${SESSION_ID_PREFIX}: ${sessionId} ${REVOCATION_REGISTRY_ID_PREFIX}: ${revocationRegistryId} ${REVOCATION_REGISTRY_INDEX_PREFIX}: ${revocationRegistryIndex})"
 
         return comment
     }
