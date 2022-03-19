@@ -7,3 +7,6 @@
 [submodule "setup/agents/patroni"]
 	path = setup/agents/patroni
 	url = https://github.com/zalando/patroni
+[submodule "setup/agents/acapy"]
+	path = setup/agents/acapy
+	url = https://github.com/hyperledger/aries-cloudagent-python
