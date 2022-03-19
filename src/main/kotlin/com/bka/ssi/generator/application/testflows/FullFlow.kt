@@ -130,7 +130,7 @@ class FullFlow(
                 )
             ),
             checkNonRevoked,
-            ProofExchangeComment(true, null, null)
+            ProofExchangeComment(false, "credential", null, null)
         )
     }
 

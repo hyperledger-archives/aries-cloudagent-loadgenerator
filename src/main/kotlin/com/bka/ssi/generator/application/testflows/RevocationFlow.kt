@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Service
 import java.time.Instant
+import java.util.*
 
 
 @Service
@@ -36,7 +37,7 @@ class RevocationFlow(
 
         val credentialDefinition = issuerVerifierAriesClient.createSchemaAndCredentialDefinition(
             SchemaDo(
-                listOf("first name", "last name"),
+                listOf("credentialId"),
                 "name",
                 "1.0"
             ),
@@ -68,8 +69,7 @@ class RevocationFlow(
             CredentialDo(
                 credentialDefinitionId,
                 mapOf(
-                    "first name" to "Holder",
-                    "last name" to "Mustermann"
+                    "credentialId" to UUID.randomUUID().toString()
                 )
             )
         )
@@ -86,8 +86,9 @@ class RevocationFlow(
             credentialExchangeRecord.connectionId,
             ProofExchangeComment(
                 true,
+                credentialExchangeRecord.internalCredentialId,
                 credentialExchangeRecord.revocationRegistryId,
-                credentialExchangeRecord.revocationIndex
+                credentialExchangeRecord.revocationRegistryIndex
             )
         )
 
@@ -102,7 +103,7 @@ class RevocationFlow(
                 Instant.now().toEpochMilli(),
                 listOf(
                     CredentialRequestDo(
-                        listOf("first name", "last name"),
+                        listOf("credentialId"),
                         credentialDefinitionId
                     )
                 )
@@ -135,7 +136,12 @@ class RevocationFlow(
 
                 sendProofRequestToConnection(
                     proofExchangeRecord.connectionId,
-                    ProofExchangeComment(false, null, null)
+                    ProofExchangeComment(
+                        false,
+                        proofExchangeRecord.comment.credentialId,
+                        proofExchangeRecord.comment.revocationRegistryId,
+                        proofExchangeRecord.comment.revocationRegistryIndex
+                    )
                 )
             }
         }

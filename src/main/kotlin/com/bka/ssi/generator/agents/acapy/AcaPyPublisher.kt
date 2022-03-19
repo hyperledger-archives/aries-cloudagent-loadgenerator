@@ -75,6 +75,7 @@ class AcaPyPublisher(
             it.handleCredentialExchangeRecord(
                 CredentialExchangeRecordDo(
                     credential.credentialExchangeId,
+                    credential.credentialOfferDict.credentialPreview.attributes[0].value,
                     credential.connectionId,
                     dateStringToMilliseconds(credential.updatedAt),
                     credential.state.toString(),

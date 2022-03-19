@@ -171,6 +171,12 @@ class AcaPyAriesClient(
                                 JsonObject::class.java
                             )
                         )
+                        .restriction(
+                            Gson().fromJson(
+                                "{\"attr::credentialId::value\": \"${comment.credentialId}\"}",
+                                JsonObject::class.java
+                            )
+                        )
                         .build()
                 }.toMap()
             )

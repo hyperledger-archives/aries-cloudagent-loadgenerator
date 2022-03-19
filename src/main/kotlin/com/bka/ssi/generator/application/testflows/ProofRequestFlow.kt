@@ -75,7 +75,7 @@ class ProofRequestFlow(
                 )
             ),
             checkNonRevoked,
-            ProofExchangeComment(true, null, null)
+            ProofExchangeComment(false, "credential", null, null)
         )
     }
 
@@ -140,7 +140,7 @@ class ProofRequestFlow(
             logger.error("Received invalid proof presentation but expected a valid proof presentation")
             return
         }
-        
+
         logger.info("Received valid proof presentation")
 
         testRunner?.finishedIteration()
