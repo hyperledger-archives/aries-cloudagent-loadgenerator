@@ -4106,7 +4106,7 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 12,
+        "w": 8,
         "x": 0,
         "y": 150
       },
@@ -4140,6 +4140,66 @@
       "type": "stat"
     },
     {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 8,
+        "x": 8,
+        "y": 150
+      },
+      "id": 165,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"Backend error. Caused by: error returned from database: canceling statement due to statement timeout.\"\n[10d])",
+          "refId": "A"
+        }
+      ],
+      "title": "Error DB: Statement timed out.",
+      "type": "stat"
+    },
+    {
       "description": "Error when finding storage record. Backend error. Caused by: error returned from database: sorry, too many clients already.",
       "fieldConfig": {
         "defaults": {
@@ -4166,8 +4226,8 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 12,
-        "x": 12,
+        "w": 8,
+        "x": 16,
         "y": 150
       },
       "id": 147,
@@ -4305,7 +4365,7 @@
           },
           "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"Backend error. Caused by: error returned from database: sorry, too many clients already.\"\n[1m])",
           "hide": false,
-          "legendFormat": "Error DB: sorry, too many clients already.",
+          "legendFormat": "Error DB: Too many clients already.",
           "refId": "G"
         },
         {
@@ -4315,8 +4375,18 @@
           },
           "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"Backend error. Caused by: pool timed out while waiting for an open connection.\"\n[1m])",
           "hide": false,
-          "legendFormat": "Error DB: pool timed out while waiting for an open connection.",
+          "legendFormat": "Error DB: Pool timed out while waiting for an open connection.",
           "refId": "I"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"Backend error. Caused by: error returned from database: canceling statement due to statement timeout.\"\n[1m])",
+          "hide": false,
+          "legendFormat": "Error DB: Statement timed out.",
+          "refId": "F"
         }
       ],
       "title": "Errors Reported through Events (per Minute)",
