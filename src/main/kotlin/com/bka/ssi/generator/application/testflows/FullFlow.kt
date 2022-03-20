@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Service
 import java.time.Instant
+import java.util.*
 
 
 @Service
@@ -21,12 +22,15 @@ class FullFlow(
     @Value("\${test-flows.full-flow.use-revocable-credentials}") private val useRevocableCredentials: Boolean,
     @Value("\${test-flows.full-flow.revocation-registry-size}") private val revocationRegistrySize: Int,
     @Value("\${test-flows.full-flow.check-non-revoked}") private val checkNonRevoked: Boolean,
+    @Value("\${test-flows.full-flow.revoke-credentials}") private val revokeCredentials: Boolean,
     @Value("\${test-flows.full-flow.use-oob-instead-of-connection}") private val useOobInsteadOfConnection: Boolean,
 ) : TestFlow(
     holderAriesClients
 ) {
 
     protected companion object {
+        const val SESSION_ID_CREDENTIAL_ATTRIBUTE_NAME = "sessionId"
+
         var credentialDefinitionId = ""
         var testRunner: TestRunner? = null
     }
@@ -36,15 +40,16 @@ class FullFlow(
         logger.info("use-revocable-credentials: $useRevocableCredentials")
         logger.info("revocation-registry-size: $revocationRegistrySize")
         logger.info("check-non-revoked: $checkNonRevoked")
+        logger.info("revoke-credentials: $revokeCredentials")
         logger.info("use-oob-instead-of-connection: $useOobInsteadOfConnection")
 
         Companion.testRunner = testRunner
 
         val credentialDefinition = issuerVerifierAriesClient.createSchemaAndCredentialDefinition(
             SchemaDo(
-                listOf("first name", "last name"),
-                "name",
-                "1.0"
+                listOf(SESSION_ID_CREDENTIAL_ATTRIBUTE_NAME),
+                "test-credential",
+                "1.${Date().time}"
             ),
             useRevocableCredentials,
             revocationRegistrySize
@@ -68,8 +73,7 @@ class FullFlow(
             CredentialDo(
                 credentialDefinitionId,
                 mapOf(
-                    "first name" to "Holder",
-                    "last name" to "Mustermann"
+                    SESSION_ID_CREDENTIAL_ATTRIBUTE_NAME to UUID.randomUUID().toString()
                 )
             )
         )
@@ -93,8 +97,7 @@ class FullFlow(
             CredentialDo(
                 credentialDefinitionId,
                 mapOf(
-                    "first name" to "Holder",
-                    "last name" to "Mustermann"
+                    SESSION_ID_CREDENTIAL_ATTRIBUTE_NAME to UUID.randomUUID().toString()
                 )
             )
         )
@@ -108,15 +111,24 @@ class FullFlow(
         }
 
         if (useOobInsteadOfConnection) {
-            sendProofRequestOob()
+            sendProofRequestOob(credentialExchangeRecord.sessionId)
         } else {
-            sendProofRequestToConnection(credentialExchangeRecord.connectionId)
+            sendProofRequestToConnection(
+                credentialExchangeRecord.sessionId,
+                credentialExchangeRecord.connectionId,
+                ProofExchangeCommentDo(
+                    true,
+                    credentialExchangeRecord.sessionId,
+                    credentialExchangeRecord.revocationRegistryId,
+                    credentialExchangeRecord.revocationRegistryIndex
+                )
+            )
         }
 
         logger.info("Sent proof request")
     }
 
-    private fun sendProofRequestToConnection(connectionId: String) {
+    private fun sendProofRequestToConnection(sessionId: String, connectionId: String, comment: ProofExchangeCommentDo) {
         issuerVerifierAriesClient.sendProofRequestToConnection(
             connectionId,
             ProofRequestDo(
@@ -124,32 +136,32 @@ class FullFlow(
                 Instant.now().toEpochMilli(),
                 listOf(
                     CredentialRequestDo(
-                        listOf("first name", "last name"),
+                        listOf(SESSION_ID_CREDENTIAL_ATTRIBUTE_NAME),
                         credentialDefinitionId,
                         AttributeValueRestrictionDo(
-                            "first name",
-                            "Holder"
+                            SESSION_ID_CREDENTIAL_ATTRIBUTE_NAME,
+                            sessionId
                         )
                     )
                 )
             ),
-            checkNonRevoked,
-            ProofExchangeCommentDo(false, "credential", null, null)
+            true,
+            comment
         )
     }
 
-    private fun sendProofRequestOob() {
+    private fun sendProofRequestOob(sessionId: String) {
         val oobProofRequest = issuerVerifierAriesClient.createOobProofRequest(
             ProofRequestDo(
                 Instant.now().toEpochMilli(),
                 Instant.now().toEpochMilli(),
                 listOf(
                     CredentialRequestDo(
-                        listOf("first name", "last name"),
+                        listOf(SESSION_ID_CREDENTIAL_ATTRIBUTE_NAME),
                         credentialDefinitionId,
                         AttributeValueRestrictionDo(
-                            "first name",
-                            "Holder"
+                            SESSION_ID_CREDENTIAL_ATTRIBUTE_NAME,
+                            sessionId
                         )
                     )
                 )
@@ -165,13 +177,62 @@ class FullFlow(
             return
         }
 
-        if (!proofExchangeRecord.isVerified) {
-            logger.error("Received invalid proof presentation but expected a valid proof presentation")
-            return
+        if (proofExchangeRecord.comment.shouldBeValid) {
+            if (!proofExchangeRecord.isValid) {
+                logger.error("Received invalid proof presentation but expected a valid proof presentation")
+                return
+            }
+
+            logger.info("Received valid proof presentation")
+
+            if (!revokeCredentials) {
+                testRunner?.finishedIteration()
+                return
+            }
+
+            revokeCredentialAndVerifyRevocationViaProofRequest(
+                proofExchangeRecord.connectionId,
+                proofExchangeRecord.comment.sessionId,
+                proofExchangeRecord.comment.revocationRegistryId,
+                proofExchangeRecord.comment.revocationRegistryIndex
+            )
         }
 
-        logger.info("Received valid proof presentation")
+        if (!proofExchangeRecord.comment.shouldBeValid) {
+            if (proofExchangeRecord.isValid) {
+                logger.error("Credential has not been revoked")
+                return
+            }
 
-        testRunner?.finishedIteration()
+            logger.info("Credential has been successfully revoked")
+            testRunner?.finishedIteration()
+        }
+    }
+
+    private fun revokeCredentialAndVerifyRevocationViaProofRequest(
+        connectionId: String,
+        sessionId: String,
+        revocationRegistryId: String?,
+        revocationRegistryIndex: String?
+    ) {
+        if (revocationRegistryId != null && revocationRegistryIndex != null) {
+            issuerVerifierAriesClient.revokeCredential(
+                CredentialRevocationRegistryRecordDo(
+                    revocationRegistryId,
+                    revocationRegistryIndex
+                )
+            )
+
+            sendProofRequestToConnection(
+                sessionId,
+                connectionId,
+                ProofExchangeCommentDo(
+                    false,
+                    sessionId,
+                    revocationRegistryId,
+                    revocationRegistryIndex
+                )
+            )
+        }
     }
 }
