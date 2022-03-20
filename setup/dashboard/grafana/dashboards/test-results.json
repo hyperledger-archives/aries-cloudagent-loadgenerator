@@ -21,7 +21,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "iteration": 1647800029798,
+  "iteration": 1647801050063,
   "links": [
     {
       "asDropdown": false,
@@ -1270,7 +1270,7 @@
       "type": "timeseries"
     },
     {
-      "collapsed": true,
+      "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -2926,7 +2926,7 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 6,
+        "w": 5,
         "x": 0,
         "y": 106
       },
@@ -2987,8 +2987,8 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 6,
-        "x": 6,
+        "w": 5,
+        "x": 5,
         "y": 106
       },
       "id": 158,
@@ -3048,8 +3048,8 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 6,
-        "x": 12,
+        "w": 5,
+        "x": 10,
         "y": 106
       },
       "id": 159,
@@ -3109,8 +3109,8 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 6,
-        "x": 18,
+        "w": 5,
+        "x": 15,
         "y": 106
       },
       "id": 160,
@@ -3141,6 +3141,67 @@
         }
       ],
       "title": "IV: Revoke Credential *13",
+      "type": "stat"
+    },
+    {
+      "description": "POST/revocation/revoke [HTTP 504]*14",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 20,
+        "y": 106
+      },
+      "id": 166,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n  |= \"type=aries_client_error\"\n  |= \"request:POST/revocation/revoke httpCode:504\"\n  |= \"504 Gateway Time-out\"\n[10d])",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "IV: Rev Cred *14",
       "type": "stat"
     },
     {
@@ -3476,7 +3537,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 10,
         "w": 24,
         "x": 0,
         "y": 118
@@ -3626,6 +3687,16 @@
           "hide": false,
           "legendFormat": "POST/revocation/revoke [HTTP 400] *13",
           "refId": "M"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_client_error\"\n    |= \"POST/revocation/revoke httpCode:504\"\n    |= \"504 Gateway Time-out\"\n[1m])",
+          "hide": false,
+          "legendFormat": "POST/revocation/revoke [HTTP 504] *14",
+          "refId": "N"
         }
       ],
       "title": "Failed HTTP Requests (per Minute)",
@@ -3633,14 +3704,14 @@
     },
     {
       "gridPos": {
-        "h": 14,
+        "h": 15,
         "w": 24,
         "x": 0,
-        "y": 126
+        "y": 128
       },
       "id": 117,
       "options": {
-        "content": "- *1: Error when adding OR fetching storage record. Backend error. Caused by: pool timed out while waiting for an open connection.\n- *2: Internal Server Error\n- *3: recipientKeys [...] is not a raw Ed25519VerificationKey2018 key\n- *4: Error when adding storage record. Backend error. Caused by: pool timed out while waiting for an open connection.\n- *5: Error when adding storage record. Backend error. Caused by: error returned from database: database is locked.\n- *6: Error when adding storage record. Backend error. Caused by: error returned from database: no such savepoint\n- *7: Error when updating storage record value. Backend error. Caused by: error returned from database: no such savepoint\n- *8: Error when adding storage record. Backend error. Caused by: error returned from database: sorry, too many clients already.\n- *9: Error when fetching storage record. Backend error. Caused by: error returned from database: sorry, too many clients already.\n- *10: The current accumulator value [...] must be equal to the last accumulator value\n- *11: Error retrieving revocation registry. Backend error. Caused by: pool timed out while waiting for an open connection.\n- *12: Revocation registry metadata not found. \n- *13: Revocation registry not found.",
+        "content": "- *1: Error when adding OR fetching storage record. Backend error. Caused by: pool timed out while waiting for an open connection.\n- *2: Internal Server Error\n- *3: recipientKeys [...] is not a raw Ed25519VerificationKey2018 key\n- *4: Error when adding storage record. Backend error. Caused by: pool timed out while waiting for an open connection.\n- *5: Error when adding storage record. Backend error. Caused by: error returned from database: database is locked.\n- *6: Error when adding storage record. Backend error. Caused by: error returned from database: no such savepoint\n- *7: Error when updating storage record value. Backend error. Caused by: error returned from database: no such savepoint\n- *8: Error when adding storage record. Backend error. Caused by: error returned from database: sorry, too many clients already.\n- *9: Error when fetching storage record. Backend error. Caused by: error returned from database: sorry, too many clients already.\n- *10: The current accumulator value [...] must be equal to the last accumulator value\n- *11: Error retrieving revocation registry. Backend error. Caused by: pool timed out while waiting for an open connection.\n- *12: Revocation registry metadata not found. \n- *13: Revocation registry not found.\n- *14: Nginx Gateway Time-out",
         "mode": "markdown"
       },
       "pluginVersion": "8.3.5",
@@ -3653,7 +3724,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 140
+        "y": 143
       },
       "id": 59,
       "panels": [],
@@ -3688,7 +3759,7 @@
         "h": 3,
         "w": 24,
         "x": 0,
-        "y": 141
+        "y": 144
       },
       "id": 60,
       "options": {
@@ -3748,7 +3819,7 @@
         "h": 3,
         "w": 6,
         "x": 0,
-        "y": 144
+        "y": 147
       },
       "id": 119,
       "options": {
@@ -3808,7 +3879,7 @@
         "h": 3,
         "w": 6,
         "x": 6,
-        "y": 144
+        "y": 147
       },
       "id": 118,
       "options": {
@@ -3868,7 +3939,7 @@
         "h": 3,
         "w": 6,
         "x": 12,
-        "y": 144
+        "y": 147
       },
       "id": 127,
       "options": {
@@ -3928,7 +3999,7 @@
         "h": 3,
         "w": 6,
         "x": 18,
-        "y": 144
+        "y": 147
       },
       "id": 142,
       "options": {
@@ -3988,7 +4059,7 @@
         "h": 3,
         "w": 12,
         "x": 0,
-        "y": 147
+        "y": 150
       },
       "id": 141,
       "options": {
@@ -4048,7 +4119,7 @@
         "h": 3,
         "w": 12,
         "x": 12,
-        "y": 147
+        "y": 150
       },
       "id": 150,
       "options": {
@@ -4108,7 +4179,7 @@
         "h": 3,
         "w": 8,
         "x": 0,
-        "y": 150
+        "y": 153
       },
       "id": 140,
       "options": {
@@ -4168,7 +4239,7 @@
         "h": 3,
         "w": 8,
         "x": 8,
-        "y": 150
+        "y": 153
       },
       "id": 165,
       "options": {
@@ -4228,7 +4299,7 @@
         "h": 3,
         "w": 8,
         "x": 16,
-        "y": 150
+        "y": 153
       },
       "id": 147,
       "options": {
@@ -4290,7 +4361,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 153
+        "y": 156
       },
       "id": 62,
       "options": {
@@ -4398,7 +4469,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 161
+        "y": 164
       },
       "id": 44,
       "panels": [],
@@ -4433,7 +4504,7 @@
         "h": 4,
         "w": 24,
         "x": 0,
-        "y": 162
+        "y": 165
       },
       "id": 120,
       "options": {
@@ -4470,7 +4541,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 166
+        "y": 169
       },
       "id": 20,
       "panels": [],
@@ -4492,7 +4563,7 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 167
+        "y": 170
       },
       "hiddenSeries": false,
       "id": 75,
@@ -4585,7 +4656,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 177
+        "y": 180
       },
       "hiddenSeries": false,
       "id": 77,
@@ -4717,7 +4788,7 @@
         "h": 11,
         "w": 24,
         "x": 0,
-        "y": 185
+        "y": 188
       },
       "id": 2,
       "options": {
@@ -4750,7 +4821,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 196
+        "y": 199
       },
       "id": 81,
       "panels": [],
@@ -4817,7 +4888,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 197
+        "y": 200
       },
       "id": 83,
       "options": {
@@ -4912,7 +4983,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 206
+        "y": 209
       },
       "id": 85,
       "options": {
@@ -4954,7 +5025,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 215
+        "y": 218
       },
       "id": 103,
       "panels": [],
@@ -5021,7 +5092,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 216
+        "y": 219
       },
       "id": 86,
       "options": {
@@ -5116,7 +5187,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 224
+        "y": 227
       },
       "id": 89,
       "options": {
@@ -5158,7 +5229,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 231
+        "y": 234
       },
       "id": 105,
       "panels": [],
@@ -5225,7 +5296,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 232
+        "y": 235
       },
       "id": 87,
       "options": {
@@ -5320,7 +5391,7 @@
         "h": 11,
         "w": 24,
         "x": 0,
-        "y": 241
+        "y": 244
       },
       "id": 90,
       "options": {
@@ -5362,7 +5433,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 252
+        "y": 255
       },
       "id": 109,
       "panels": [],
@@ -5429,7 +5500,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 253
+        "y": 256
       },
       "id": 98,
       "options": {
@@ -5524,7 +5595,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 261
+        "y": 264
       },
       "id": 91,
       "options": {
@@ -5566,7 +5637,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 270
+        "y": 273
       },
       "id": 111,
       "panels": [],
@@ -5633,7 +5704,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 271
+        "y": 274
       },
       "id": 100,
       "options": {
@@ -5728,7 +5799,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 279
+        "y": 282
       },
       "id": 99,
       "options": {
@@ -5770,7 +5841,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 287
+        "y": 290
       },
       "id": 107,
       "panels": [],
@@ -5837,7 +5908,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 288
+        "y": 291
       },
       "id": 88,
       "options": {
@@ -5932,7 +6003,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 296
+        "y": 299
       },
       "id": 115,
       "options": {
@@ -5974,7 +6045,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 305
+        "y": 308
       },
       "id": 113,
       "panels": [],
@@ -6041,7 +6112,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 306
+        "y": 309
       },
       "id": 114,
       "options": {
@@ -6136,7 +6207,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 306
+        "y": 309
       },
       "id": 101,
       "options": {
@@ -6178,7 +6249,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 315
+        "y": 318
       },
       "id": 79,
       "panels": [],
@@ -6223,7 +6294,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 316
+        "y": 319
       },
       "hiddenSeries": false,
       "id": 97,
@@ -6407,7 +6478,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 316
+        "y": 319
       },
       "hiddenSeries": false,
       "id": 95,
@@ -6629,7 +6700,7 @@
         "h": 12,
         "w": 8,
         "x": 0,
-        "y": 325
+        "y": 328
       },
       "id": 129,
       "links": [],
@@ -7048,7 +7119,7 @@
         "h": 12,
         "w": 8,
         "x": 8,
-        "y": 325
+        "y": 328
       },
       "id": 162,
       "links": [],
@@ -7252,7 +7323,7 @@
         "h": 12,
         "w": 8,
         "x": 16,
-        "y": 325
+        "y": 328
       },
       "id": 164,
       "links": [],
@@ -7329,7 +7400,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 337
+        "y": 340
       },
       "height": "",
       "hiddenSeries": false,
@@ -7468,7 +7539,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 337
+        "y": 340
       },
       "height": "",
       "hiddenSeries": false,
@@ -7611,6 +7682,6 @@
   "timezone": "",
   "title": "Test Results",
   "uid": "0Pe9llbnz",
-  "version": 29,
+  "version": 31,
   "weekStart": ""
 }
