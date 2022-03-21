@@ -71,6 +71,7 @@ test-flows:
         revocation-registry-size: 500
         check-non-revoked: true
         revoke-credentials: true
+        credential-revocation-batch-size: 5
         use-oob-instead-of-connection: false
     issuer-flow:
         active: false

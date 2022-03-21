@@ -1,5 +1,6 @@
 package com.bka.ssi.generator.application.testflows
 
+import com.bka.ssi.generator.application.logger.ErrorLogger
 import com.bka.ssi.generator.application.testrunners.TestRunner
 import com.bka.ssi.generator.domain.objects.*
 import com.bka.ssi.generator.domain.services.IAriesClient
@@ -23,7 +24,9 @@ class FullFlow(
     @Value("\${test-flows.full-flow.revocation-registry-size}") private val revocationRegistrySize: Int,
     @Value("\${test-flows.full-flow.check-non-revoked}") private val checkNonRevoked: Boolean,
     @Value("\${test-flows.full-flow.revoke-credentials}") private val revokeCredentials: Boolean,
+    @Value("\${test-flows.full-flow.credential-revocation-batch-size}") private val credentialRevocationBatchSize: Int,
     @Value("\${test-flows.full-flow.use-oob-instead-of-connection}") private val useOobInsteadOfConnection: Boolean,
+    private val errorLogger: ErrorLogger,
 ) : TestFlow(
     holderAriesClients
 ) {
@@ -31,6 +34,7 @@ class FullFlow(
     protected companion object {
         const val SESSION_ID_CREDENTIAL_ATTRIBUTE_NAME = "sessionId"
 
+        var numberOfBatchedCredentialRevocations = 0
         var credentialDefinitionId = ""
         var testRunner: TestRunner? = null
     }
@@ -41,6 +45,7 @@ class FullFlow(
         logger.info("revocation-registry-size: $revocationRegistrySize")
         logger.info("check-non-revoked: $checkNonRevoked")
         logger.info("revoke-credentials: $revokeCredentials")
+        logger.info("credential-revocation-batch-size: $credentialRevocationBatchSize")
         logger.info("use-oob-instead-of-connection: $useOobInsteadOfConnection")
 
         Companion.testRunner = testRunner
@@ -190,7 +195,7 @@ class FullFlow(
                 return
             }
 
-            revokeCredentialAndVerifyRevocationViaProofRequest(
+            revokeCredential(
                 proofExchangeRecord.connectionId,
                 proofExchangeRecord.comment.sessionId,
                 proofExchangeRecord.comment.revocationRegistryId,
@@ -209,19 +214,29 @@ class FullFlow(
         }
     }
 
-    private fun revokeCredentialAndVerifyRevocationViaProofRequest(
+    private fun revokeCredential(
         connectionId: String,
         sessionId: String,
         revocationRegistryId: String?,
         revocationRegistryIndex: String?
     ) {
-        if (revocationRegistryId != null && revocationRegistryIndex != null) {
-            issuerVerifierAriesClient.revokeCredential(
-                CredentialRevocationRegistryRecordDo(
-                    revocationRegistryId,
-                    revocationRegistryIndex
-                )
-            )
+        if (revocationRegistryId == null || revocationRegistryIndex == null) {
+            errorLogger.reportTestFlowError("Tried to revoke a credential but revocationRegistryId and/or revocationRegistryIndex is missing.")
+            return
+        }
+
+        val publishRevocations = ++numberOfBatchedCredentialRevocations >= credentialRevocationBatchSize
+
+        issuerVerifierAriesClient.revokeCredential(
+            CredentialRevocationRegistryRecordDo(
+                revocationRegistryId,
+                revocationRegistryIndex
+            ),
+            publishRevocations
+        )
+
+        if (publishRevocations) {
+            numberOfBatchedCredentialRevocations = 0
 
             sendProofRequestToConnection(
                 sessionId,

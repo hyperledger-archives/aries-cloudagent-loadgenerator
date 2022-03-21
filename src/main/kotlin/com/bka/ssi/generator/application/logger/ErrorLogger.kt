@@ -9,6 +9,14 @@ import java.time.Instant
 class ErrorLogger() {
     var logger: Logger = LoggerFactory.getLogger(ErrorLogger::class.java)
 
+    fun reportTestFlowError(message: String) {
+        logger.error(
+            "type=test_flow_error message=$message time=${
+                Instant.now().toEpochMilli()
+            }"
+        )
+    }
+
     fun reportTestRunnerError(message: String) {
         logger.error(
             "type=test_runner_error message=$message time=${

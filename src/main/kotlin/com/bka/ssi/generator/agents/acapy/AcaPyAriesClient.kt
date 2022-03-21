@@ -128,12 +128,15 @@ class AcaPyAriesClient(
         }
     }
 
-    override fun revokeCredential(credentialRevocationRegistryRecord: CredentialRevocationRegistryRecordDo) {
+    override fun revokeCredential(
+        credentialRevocationRegistryRecord: CredentialRevocationRegistryRecordDo,
+        publish: Boolean
+    ) {
         val credentialRevocation = acaPy.revocationRevoke(
             RevokeRequest.builder()
                 .credRevId(credentialRevocationRegistryRecord.credentialRevocationRegistryIndex)
                 .revRegId(credentialRevocationRegistryRecord.credentialRevocationRegistryId)
-                .publish(true)
+                .publish(publish)
                 .notify(false)
                 .build()
         )
