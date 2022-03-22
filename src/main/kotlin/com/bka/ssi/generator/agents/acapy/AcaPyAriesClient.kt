@@ -154,11 +154,11 @@ class AcaPyAriesClient(
     }
 
     override fun revokeCredentialAndPublishRevocations(credentialRevocationRegistryRecord: CredentialRevocationRegistryRecordDo) {
-        val tracingId = UUID.randomUUID().toString()
+        val trackingId = UUID.randomUUID().toString()
 
-        ariesClientLogger.startPublishRevokedCredentials(tracingId)
+        ariesClientLogger.startPublishRevokedCredentials(trackingId)
         revokeCredential(credentialRevocationRegistryRecord, true)
-        ariesClientLogger.stopPublishRevokedCredentials(tracingId)
+        ariesClientLogger.stopPublishRevokedCredentials(trackingId)
     }
 
     override fun createOobCredentialOffer(credentialDo: CredentialDo): OobCredentialOfferDo {

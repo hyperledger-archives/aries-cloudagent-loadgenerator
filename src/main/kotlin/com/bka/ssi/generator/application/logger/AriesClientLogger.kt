@@ -9,17 +9,17 @@ import java.time.Instant
 class AriesClientLogger() {
     var logger: Logger = LoggerFactory.getLogger(AriesClientLogger::class.java)
 
-    fun startPublishRevokedCredentials(tracingId: String) {
+    fun startPublishRevokedCredentials(trackingId: String) {
         logger.info(
-            "type=publish_credential_revocations_started trackingId=${tracingId} time=${
+            "type=publish_credential_revocations_started trackingId=${trackingId} time=${
                 Instant.now().toEpochMilli()
             }"
         )
     }
 
-    fun stopPublishRevokedCredentials(tracingId: String) {
+    fun stopPublishRevokedCredentials(trackingId: String) {
         logger.info(
-            "type=publish_credential_revocations_stopped trackingId=${tracingId} time=${
+            "type=publish_credential_revocations_stopped trackingId=${trackingId} time=${
                 Instant.now().toEpochMilli()
             }"
         )
