@@ -21,7 +21,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "iteration": 1647801050063,
+  "iteration": 1647929990662,
   "links": [
     {
       "asDropdown": false,
@@ -2615,7 +2615,7 @@
       },
       "gridPos": {
         "h": 10,
-        "w": 24,
+        "w": 12,
         "x": 0,
         "y": 89
       },
@@ -2641,7 +2641,89 @@
           "refId": "A"
         }
       ],
-      "title": "HTTP Response Times (per Minute in Milliseconds)",
+      "title": "HTTP Response Times of Successful Requests (per Minute in Milliseconds)",
+      "type": "timeseries"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 12,
+        "y": 89
+      },
+      "id": 167,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "avg_over_time (\n  {app=\"aries-load-generator\"}\n    |= \"type=http_request\"\n    != \"httpCode=200\"\n    != \"request=POST/schemas\"\n    != \"request=POST/credential-definitions\"\n    | logfmt\n    | unwrap durationInMs\n[1m]) by (request)",
+          "refId": "A"
+        }
+      ],
+      "title": "HTTP Response Times of Failed Requests (per Minute in Milliseconds)",
       "type": "timeseries"
     },
     {
@@ -7682,6 +7764,6 @@
   "timezone": "",
   "title": "Test Results",
   "uid": "0Pe9llbnz",
-  "version": 31,
+  "version": 34,
   "weekStart": ""
 }
