@@ -1,5 +1,6 @@
 package com.bka.ssi.generator.agents.acapy
 
+import com.bka.ssi.generator.application.logger.AriesClientLogger
 import com.bka.ssi.generator.application.logger.ErrorLogger
 import com.bka.ssi.generator.domain.objects.*
 import com.bka.ssi.generator.domain.services.IAriesClient
@@ -20,7 +21,8 @@ import org.hyperledger.aries.api.schema.SchemaSendRequest
 
 class AcaPyAriesClient(
     private val acaPy: AriesClient,
-    private val errorLogger: ErrorLogger
+    private val errorLogger: ErrorLogger,
+    private val ariesClientLogger: AriesClientLogger
 ) : IAriesClient {
 
     override fun getPublicDid(): String? {
@@ -128,7 +130,7 @@ class AcaPyAriesClient(
         }
     }
 
-    override fun revokeCredential(
+    private fun revokeCredential(
         credentialRevocationRegistryRecord: CredentialRevocationRegistryRecordDo,
         publish: Boolean
     ) {
@@ -144,6 +146,15 @@ class AcaPyAriesClient(
         if (credentialRevocation.isEmpty) {
             errorLogger.reportAriesClientError("AcaPyAriesClient.revokeCredential: Failed to revoke credential.")
         }
+    }
+
+    override fun revokeCredentialWithoutPublishing(credentialRevocationRegistryRecord: CredentialRevocationRegistryRecordDo) {
+        revokeCredential(credentialRevocationRegistryRecord, false)
+    }
+
+    override fun revokeCredentialAndPublishRevocations(credentialRevocationRegistryRecord: CredentialRevocationRegistryRecordDo) {
+        ariesClientLogger.publishRevokedCredentials()
+        revokeCredential(credentialRevocationRegistryRecord, true)
     }
 
     override fun createOobCredentialOffer(credentialDo: CredentialDo): OobCredentialOfferDo {

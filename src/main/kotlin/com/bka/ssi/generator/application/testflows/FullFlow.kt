@@ -226,27 +226,43 @@ class FullFlow(
         }
 
         val publishRevocations = ++numberOfBatchedCredentialRevocations >= credentialRevocationBatchSize
-
         if (publishRevocations) {
-            // Reset the revocation counter to ensure that other threads do not attempt to publish revocations too,
-            // while the current revocation publishing is still being processed. This may result in many parallel
-            // revocation publication processes that will block each other.
-            numberOfBatchedCredentialRevocations = 0
-        }
-
-        issuerVerifierAriesClient.revokeCredential(
-            CredentialRevocationRegistryRecordDo(
+            revokeCredentialAndPublishRevocationsAndTestCredentialIsRevoked(
+                connectionId,
+                sessionId,
                 revocationRegistryId,
                 revocationRegistryIndex
-            ),
-            publishRevocations
-        )
-
-        if (!publishRevocations) {
-            testRunner?.finishedIteration()
+            )
             return
         }
 
+        issuerVerifierAriesClient.revokeCredentialWithoutPublishing(
+            CredentialRevocationRegistryRecordDo(
+                revocationRegistryId,
+                revocationRegistryIndex
+            )
+        )
+
+        testRunner?.finishedIteration()
+    }
+
+    private fun revokeCredentialAndPublishRevocationsAndTestCredentialIsRevoked(
+        connectionId: String,
+        sessionId: String,
+        revocationRegistryId: String,
+        revocationRegistryIndex: String
+    ) {
+        // Reset the revocation counter to ensure that other threads do not attempt to publish revocations too,
+        // while the current revocation publishing is still being processed. This may result in many parallel
+        // revocation publication processes that will block each other.
+        numberOfBatchedCredentialRevocations = 0
+
+        issuerVerifierAriesClient.revokeCredentialAndPublishRevocations(
+            CredentialRevocationRegistryRecordDo(
+                revocationRegistryId,
+                revocationRegistryIndex
+            )
+        )
 
         sendProofRequestToConnection(
             sessionId,
