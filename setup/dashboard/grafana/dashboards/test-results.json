@@ -21,7 +21,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "iteration": 1647929990662,
+  "iteration": 1647931639830,
   "links": [
     {
       "asDropdown": false,
@@ -2584,7 +2584,8 @@
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
-              "type": "linear"
+              "log": 2,
+              "type": "log"
             },
             "showPoints": "auto",
             "spanNulls": false,
@@ -2666,7 +2667,8 @@
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
-              "type": "linear"
+              "log": 2,
+              "type": "log"
             },
             "showPoints": "auto",
             "spanNulls": false,
@@ -7764,6 +7766,6 @@
   "timezone": "",
   "title": "Test Results",
   "uid": "0Pe9llbnz",
-  "version": 34,
+  "version": 35,
   "weekStart": ""
 }
