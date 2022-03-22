@@ -230,7 +230,7 @@ class FullFlow(
         if (publishRevocations) {
             // Reset the revocation counter to ensure that other threads do not attempt to publish revocations too,
             // while the current revocation publishing is still being processed. This may result in many parallel
-            // revocation publication processes that consume lots of CPU resources.
+            // revocation publication processes that will block each other.
             numberOfBatchedCredentialRevocations = 0
         }
 
