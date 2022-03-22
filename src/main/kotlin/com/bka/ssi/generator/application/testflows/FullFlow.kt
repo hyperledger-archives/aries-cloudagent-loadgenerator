@@ -235,19 +235,22 @@ class FullFlow(
             publishRevocations
         )
 
-        if (publishRevocations) {
-            numberOfBatchedCredentialRevocations = 0
-
-            sendProofRequestToConnection(
-                sessionId,
-                connectionId,
-                ProofExchangeCommentDo(
-                    false,
-                    sessionId,
-                    revocationRegistryId,
-                    revocationRegistryIndex
-                )
-            )
+        if (!publishRevocations) {
+            testRunner?.finishedIteration()
+            return
         }
+
+        numberOfBatchedCredentialRevocations = 0
+
+        sendProofRequestToConnection(
+            sessionId,
+            connectionId,
+            ProofExchangeCommentDo(
+                false,
+                sessionId,
+                revocationRegistryId,
+                revocationRegistryIndex
+            )
+        )
     }
 }
