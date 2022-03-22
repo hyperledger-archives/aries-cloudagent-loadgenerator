@@ -17,6 +17,7 @@ import org.hyperledger.aries.api.issue_credential_v1.V1CredentialProposalRequest
 import org.hyperledger.aries.api.present_proof.PresentProofRequest
 import org.hyperledger.aries.api.revocation.RevokeRequest
 import org.hyperledger.aries.api.schema.SchemaSendRequest
+import java.util.*
 
 
 class AcaPyAriesClient(
@@ -153,8 +154,11 @@ class AcaPyAriesClient(
     }
 
     override fun revokeCredentialAndPublishRevocations(credentialRevocationRegistryRecord: CredentialRevocationRegistryRecordDo) {
-        ariesClientLogger.publishRevokedCredentials()
+        val tracingId = UUID.randomUUID().toString()
+
+        ariesClientLogger.startPublishRevokedCredentials(tracingId)
         revokeCredential(credentialRevocationRegistryRecord, true)
+        ariesClientLogger.stopPublishRevokedCredentials(tracingId)
     }
 
     override fun createOobCredentialOffer(credentialDo: CredentialDo): OobCredentialOfferDo {
