@@ -70,11 +70,16 @@ class ProofRequestFlow(
                 listOf(
                     CredentialRequestDo(
                         listOf("first name", "last name"),
-                        credentialDefinitionId
+                        credentialDefinitionId,
+                        AttributeValueRestrictionDo(
+                            "first name",
+                            "bob"
+                        )
                     )
                 )
             ),
-            checkNonRevoked
+            checkNonRevoked,
+            ProofExchangeCommentDo(false, "credential", null, null)
         )
     }
 
@@ -86,7 +91,11 @@ class ProofRequestFlow(
                 listOf(
                     CredentialRequestDo(
                         listOf("first name", "last name"),
-                        credentialDefinitionId
+                        credentialDefinitionId,
+                        AttributeValueRestrictionDo(
+                            "first name",
+                            "bob"
+                        )
                     )
                 )
             ),
@@ -131,7 +140,12 @@ class ProofRequestFlow(
     }
 
     override fun handleProofRequestRecord(proofExchangeRecord: ProofExchangeRecordDo) {
-        if (!proofExchangeRecord.verifiedAndValid) {
+        if (!proofExchangeRecord.isVerified) {
+            return
+        }
+
+        if (!proofExchangeRecord.isVerified) {
+            logger.error("Received invalid proof presentation but expected a valid proof presentation")
             return
         }
 

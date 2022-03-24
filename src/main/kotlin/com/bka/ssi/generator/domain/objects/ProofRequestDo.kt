@@ -9,5 +9,11 @@ class ProofRequestDo(
 
 class CredentialRequestDo(
     val claims: List<String>,
-    val credentialDefinitionId: String
+    val credentialDefinitionIdRestriction: String,
+    val attributeValueRestriction: AttributeValueRestrictionDo
+)
+
+class AttributeValueRestrictionDo(
+    val attributeName: String,
+    val attributeValue: String
 )

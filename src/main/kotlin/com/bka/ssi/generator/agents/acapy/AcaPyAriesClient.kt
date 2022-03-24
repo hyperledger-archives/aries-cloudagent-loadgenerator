@@ -1,5 +1,6 @@
 package com.bka.ssi.generator.agents.acapy
 
+import com.bka.ssi.generator.application.logger.AriesClientLogger
 import com.bka.ssi.generator.application.logger.ErrorLogger
 import com.bka.ssi.generator.domain.objects.*
 import com.bka.ssi.generator.domain.services.IAriesClient
@@ -14,12 +15,15 @@ import org.hyperledger.aries.api.credentials.CredentialAttributes
 import org.hyperledger.aries.api.credentials.CredentialPreview
 import org.hyperledger.aries.api.issue_credential_v1.V1CredentialProposalRequest
 import org.hyperledger.aries.api.present_proof.PresentProofRequest
+import org.hyperledger.aries.api.revocation.RevokeRequest
 import org.hyperledger.aries.api.schema.SchemaSendRequest
+import java.util.*
 
 
 class AcaPyAriesClient(
     private val acaPy: AriesClient,
-    private val errorLogger: ErrorLogger
+    private val errorLogger: ErrorLogger,
+    private val ariesClientLogger: AriesClientLogger
 ) : IAriesClient {
 
     override fun getPublicDid(): String? {
@@ -127,6 +131,36 @@ class AcaPyAriesClient(
         }
     }
 
+    private fun revokeCredential(
+        credentialRevocationRegistryRecord: CredentialRevocationRegistryRecordDo,
+        publish: Boolean
+    ) {
+        val credentialRevocation = acaPy.revocationRevoke(
+            RevokeRequest.builder()
+                .credRevId(credentialRevocationRegistryRecord.credentialRevocationRegistryIndex)
+                .revRegId(credentialRevocationRegistryRecord.credentialRevocationRegistryId)
+                .publish(publish)
+                .notify(false)
+                .build()
+        )
+
+        if (credentialRevocation.isEmpty) {
+            errorLogger.reportAriesClientError("AcaPyAriesClient.revokeCredential: Failed to revoke credential.")
+        }
+    }
+
+    override fun revokeCredentialWithoutPublishing(credentialRevocationRegistryRecord: CredentialRevocationRegistryRecordDo) {
+        revokeCredential(credentialRevocationRegistryRecord, false)
+    }
+
+    override fun revokeCredentialAndPublishRevocations(credentialRevocationRegistryRecord: CredentialRevocationRegistryRecordDo) {
+        val trackingId = UUID.randomUUID().toString()
+
+        ariesClientLogger.startPublishRevokedCredentials(trackingId)
+        revokeCredential(credentialRevocationRegistryRecord, true)
+        ariesClientLogger.stopPublishRevokedCredentials(trackingId)
+    }
+
     override fun createOobCredentialOffer(credentialDo: CredentialDo): OobCredentialOfferDo {
         errorLogger.reportAriesClientError("AcaPyAriesClient.createOobCredentialOffer: Creating an OOB Credential Offer is not implemented yet.")
         throw NotImplementedError("Creating an OOB Credential Offer is not implemented yet.")
@@ -140,17 +174,24 @@ class AcaPyAriesClient(
     override fun sendProofRequestToConnection(
         connectionId: String,
         proofRequestDo: ProofRequestDo,
-        checkNonRevoked: Boolean
+        checkNonRevoked: Boolean,
+        comment: ProofExchangeCommentDo
     ) {
         val proofRequestBuilder = PresentProofRequest.ProofRequest.builder()
-            .name("Proof Request")
+            .name(comment.toString())
             .requestedAttributes(
                 proofRequestDo.requestedCredentials.mapIndexed { index: Int, credentialRequestDo: CredentialRequestDo ->
                     "${index}_credential" to PresentProofRequest.ProofRequest.ProofRequestedAttributes.builder()
                         .names(credentialRequestDo.claims)
                         .restriction(
                             Gson().fromJson(
-                                "{\"cred_def_id\": \"${credentialRequestDo.credentialDefinitionId}\"}",
+                                "{\"cred_def_id\": \"${credentialRequestDo.credentialDefinitionIdRestriction}\"}",
+                                JsonObject::class.java
+                            )
+                        )
+                        .restriction(
+                            Gson().fromJson(
+                                "{\"attr::${credentialRequestDo.attributeValueRestriction.attributeName}::value\": \"${credentialRequestDo.attributeValueRestriction.attributeValue}\"}",
                                 JsonObject::class.java
                             )
                         )
