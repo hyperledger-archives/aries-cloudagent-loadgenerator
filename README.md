@@ -23,16 +23,19 @@ This repository comes with an automated testing setup consisting of:
 ### Prerequisites
 
 You need to have [Docker](https://docs.docker.com/get-docker/)
-and [Docker-Compose](https://docs.docker.com/compose/install/) installed and access to a basic command line.
+and [Docker-Compose](https://docs.docker.com/compose/install/) installed.
+
+Further, you need to ensure to not use [Docker Compose V2](https://docs.docker.com/compose/cli-command/) as it is
+incompatible to the setup used by the load generator. To deactivate Compose V2 run `docker-compose disable-v2`.
 
 ### Configuration
 
 To configure the environment create a `./setup/.env` file similar to [./setup/.env.example](./setup/.env.example)
 
-Declarative deployment approach is used. 
-All variables in the `./setup/.env` which have prefix `SYSTEM_` indicate what and how components must be deployed.
+Declarative deployment approach is used. All variables in the `./setup/.env` which have prefix `SYSTEM_` indicate what
+and how components must be deployed.
 
-- `SYSTEM_LEDGER=true` -  ledger will be deployed
+- `SYSTEM_LEDGER=true` - ledger will be deployed
 - `SYSTEM_ISSUER_POSTGRES_DB=true` - Postgres database wallet will be deployed
 - `SYSTEM_ISSUER_POSTGRES_DB_CLUSTER=true` - Postgres database will be deployed as cluster
 - `SYSTEM_METRICS_DASHBOARD=true` - Dashboard to collect system metrics will be deployed

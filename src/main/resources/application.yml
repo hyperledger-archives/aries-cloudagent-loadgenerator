@@ -8,7 +8,7 @@ spring:
     application:
         name: spring-load-generator
     datasource:
-        url: jdbc:postgresql://localhost:5000/
+        url: jdbc:postgresql://localhost:5432/
         username: postgres
         password: postgres
     mvc:
