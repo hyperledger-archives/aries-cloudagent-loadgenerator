@@ -5081,7 +5081,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "sum(rate(container_cpu_usage_seconds_total{instance=~\".*\",name=~\"agents-issuer-verifier-acapy-.+\",name=~\".+\"}[5m])) by (name) *100",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{instance=~\".*\",name=~\"agents_issuer-verifier-acapy_.+\",name=~\".+\"}[5m])) by (name) *100",
           "hide": false,
           "interval": "",
           "legendFormat": "{{name}}",
@@ -5177,7 +5177,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "sum(container_memory_rss{instance=~\".*\",name=~\"agents-issuer-verifier-acapy-.+\",name=~\".+\"}) by (name)",
+          "expr": "sum(container_memory_rss{instance=~\".*\",name=~\"agents_issuer-verifier-acapy_.+\",name=~\".+\"}) by (name)",
           "hide": false,
           "interval": "",
           "legendFormat": "{{name}}",
@@ -5489,7 +5489,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "sum(rate(container_cpu_usage_seconds_total{instance=~\".*\",name=~\"agents-holder-acapy-.+\",name=~\".+\"}[5m])) by (name) *100",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{instance=~\".*\",name=~\"agents_holder-acapy_.+\",name=~\".+\"}[5m])) by (name) *100",
           "hide": false,
           "interval": "",
           "legendFormat": "{{name}}",
@@ -5585,7 +5585,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "sum(container_memory_rss{instance=~\".*\",name=~\"agents-holder-acapy-.+\",name=~\".+\"}) by (name)",
+          "expr": "sum(container_memory_rss{instance=~\".*\",name=~\"agents_holder-acapy_.+\",name=~\".+\"}) by (name)",
           "hide": false,
           "interval": "",
           "legendFormat": "{{name}}",
