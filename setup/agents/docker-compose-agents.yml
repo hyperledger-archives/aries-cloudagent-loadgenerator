@@ -23,7 +23,7 @@ services:
         --wallet-name ${POSTGRES_DB} \
         --wallet-key key \
         --wallet-storage-type postgres_storage \
-        --wallet-storage-config '{\"url\":\"issuer-verifier-wallet-db:5432\",\"max_connections\":${MAX_WALLET_CONNECTIONS_PER_ACAPY}}' \
+        --wallet-storage-config '{\"url\":\"host.docker.internal:5432\",\"max_connections\":${MAX_WALLET_CONNECTIONS_PER_ACAPY}}' \
         --wallet-storage-creds '{\"account\":\"${POSTGRES_USER}\",\"password\":\"${POSTGRES_PASSWORD}\",\"admin_account\":\"${POSTGRES_USER}\",\"admin_password\":\"${POSTGRES_PASSWORD}\"}' \
         --auto-ping-connection \
         --auto-verify-presentation \
