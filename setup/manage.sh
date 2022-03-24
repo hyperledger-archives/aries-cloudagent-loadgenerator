@@ -98,9 +98,9 @@ function configureMultitenancyFlags() {
 function startLoadGenerator() {
   echo "Starting Load Generator ..."
   if [ "${ENABLE_MULTITENANCY}" = true ]; then
-    docker compose -f ./load-generator/docker compose-load-generator.yml --profile ${NUMBER_OF_LOAD_GENERATOR_INSTANCES_FOR_MULTITENANCY} up -d --build
+    docker compose -f ./load-generator/docker-compose-load-generator.yml --profile ${NUMBER_OF_LOAD_GENERATOR_INSTANCES_FOR_MULTITENANCY} up -d --build
   else
-    docker compose -f ./load-generator/docker compose-load-generator.yml --profile 1 up -d --build
+    docker compose -f ./load-generator/docker-compose-load-generator.yml --profile 1 up -d --build
   fi
 }
 
@@ -109,12 +109,12 @@ function startDashboard() {
 
   if [ "${SYSTEM_ISSUER_POSTGRES_DB}" = true ]; then
     if [ "${SYSTEM_ISSUER_POSTGRES_DB_CLUSTER}" = true ]; then
-      docker compose -f ./dashboard/docker compose-dashboards.yml --profile postgres-cluster up -d
+      docker compose -f ./dashboard/docker-compose-dashboards.yml --profile postgres-cluster up -d
     else
-      docker compose -f ./dashboard/docker compose-dashboards.yml --profile postgres-single-instance up -d
+      docker compose -f ./dashboard/docker-compose-dashboards.yml --profile postgres-single-instance up -d
     fi
   else
-    docker compose -f ./dashboard/docker compose-dashboards.yml up -d
+    docker compose -f ./dashboard/docker-compose-dashboards.yml up -d
   fi
 }
 
@@ -133,24 +133,24 @@ function startIndyNetwork() {
 function startAgents() {
   configureMultitenancyFlags
 
-  docker compose -f ./agents/docker compose-agents.yml up -d issuer-verifier-acapy
+  docker compose -f ./agents/docker-compose-agents.yml up -d issuer-verifier-acapy
 
   echo "Provisioning AcaPys... (sleeping 15 seconds)"
   sleep 15
 
   echo "Starting all AcaPy related docker containers ..."
-  docker compose -f ./agents/docker compose-agents.yml up -d --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES --scale holder-acapy=$NUMBER_OF_HOLDER_ACAPY_INSTANCES
+  docker compose -f ./agents/docker-compose-agents.yml up -d --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES --scale holder-acapy=$NUMBER_OF_HOLDER_ACAPY_INSTANCES
 
   echo "Waiting for all the agents to start... (sleeping 15 seconds)"
   sleep 15
 
-  export HOLDER_ACAPY_URLS="http://`docker network inspect aries-load-test | jq '.[].Containers |  to_entries[].value | select(.Name|test("^agents_holder-acapy_.")) | .IPv4Address' -r | paste -sd, - | sed 's/\/[0-9]*/:10010/g' | sed 's/,/, http:\/\//g'`"
+  export HOLDER_ACAPY_URLS="http://`docker network inspect aries-load-test | jq '.[].Containers |  to_entries[].value | select(.Name|test("^agents-holder-acapy-.")) | .IPv4Address' -r | paste -sd, - | sed 's/\/[0-9]*/:10010/g' | sed 's/,/, http:\/\//g'`"
 }
 
 function startPostgresSingleInstance() {
   configurePostgresLoggingFlags
 
-  docker compose -f ./agents/docker compose-issuer-verifier-walletdb.yml --profile single-instance up -d;
+  docker compose -f ./agents/docker-compose-issuer-verifier-walletdb.yml --profile single-instance up -d;
 
   echo "Starting Issuer Wallet DB as single instance... (sleeping 15 seconds)"
   sleep 15
@@ -164,7 +164,7 @@ function startPostgresCluster() {
   docker build -t postgres-cluster-node --build-arg PG_MAJOR=13 .;
 
   cd $SCRIPT_HOME;
-  docker compose -f ./agents/docker compose-issuer-verifier-walletdb.yml --profile cluster up -d;
+  docker compose -f ./agents/docker-compose-issuer-verifier-walletdb.yml --profile cluster up -d;
 
   echo "Starting Postgres HA Cluster using Patroni... (sleeping 45 seconds)"
   sleep 45
@@ -225,7 +225,7 @@ function debug() {
       export ACAPY_IMAGE=acapy-debug
     fi
 
-    docker compose -f ./agents/docker compose-agents-debugging.yml up -d
+    docker compose -f ./agents/docker-compose-agents-debugging.yml up -d
   fi
 }
 
@@ -234,16 +234,16 @@ function downAll() {
   ./von-network/manage down
 
   echo "Stopping load generator ..."
-  docker compose -f ./load-generator/docker compose-load-generator.yml down -v
+  docker compose -f ./load-generator/docker-compose-load-generator.yml down -v
 
   echo "Stopping and removing any running AcaPy containers as well as volumes ..."
-  docker compose -f ./agents/docker compose-agents.yml down -v
+  docker compose -f ./agents/docker-compose-agents.yml down -v
 
   echo "Stopping and removing any Wallet-DB containers as well as volumes ..."
-  docker compose -f ./agents/docker compose-issuer-verifier-walletdb.yml down -v
+  docker compose -f ./agents/docker-compose-issuer-verifier-walletdb.yml down -v
 
   echo "Stopping and removing dashboard and logging containers as well as volumes ..."
-  docker compose -f ./dashboard/docker compose-dashboards.yml down -v
+  docker compose -f ./dashboard/docker-compose-dashboards.yml down -v
 }
 
 case "${COMMAND}" in
