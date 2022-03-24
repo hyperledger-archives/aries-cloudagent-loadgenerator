@@ -22,7 +22,8 @@ This repository comes with an automated testing setup consisting of:
 
 ### Prerequisites
 
-You need to have [Docker](https://docs.docker.com/get-docker/) installed.
+You need to have [Docker](https://docs.docker.com/get-docker/)
+and [Docker-Compose](https://docs.docker.com/compose/install/) installed and access to a basic command line.
 
 ### Configuration
 
