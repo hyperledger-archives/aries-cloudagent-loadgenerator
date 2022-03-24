@@ -49,12 +49,12 @@ test-runners:
         number-of-total-iterations: 100
         number-of-parallel-iterations: 5
     constant-load-runner:
-        active: false
+        active: true
         number-of-total-iterations: 100
         number-of-iterations-per-minute: 30
         thread-pool-size: 4
     increasing-load-runner:
-        active: true
+        active: false
         peak-duration-in-minutes: 2
         sleep-between-peaks-in-minutes: 1
         initial-number-of-iterations-per-minute: 150
@@ -70,6 +70,8 @@ test-flows:
         use-revocable-credentials: true
         revocation-registry-size: 500
         check-non-revoked: true
+        revoke-credentials: true
+        credential-revocation-batch-size: 5
         use-oob-instead-of-connection: false
     issuer-flow:
         active: false

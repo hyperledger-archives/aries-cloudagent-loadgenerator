@@ -20,6 +20,7 @@ package com.bka.ssi.generator.config
 
 import com.bka.ssi.generator.agents.acapy.AcaPyAriesClient
 import com.bka.ssi.generator.agents.acapy.AcaPyOkHttpInterceptor
+import com.bka.ssi.generator.application.logger.AriesClientLogger
 import com.bka.ssi.generator.application.logger.ErrorLogger
 import com.bka.ssi.generator.domain.services.IAriesClient
 import okhttp3.OkHttpClient
@@ -41,6 +42,7 @@ import java.util.concurrent.TimeUnit
 @Configuration
 class AcaPyConfig(
     private val errorLogger: ErrorLogger,
+    private val ariesClientLogger: AriesClientLogger,
     @Value("\${issuer-verifier.acapy.api-key}") private val issuerVerifierAcaPyApiKey: String?,
     @Value("\${issuer-verifier.acapy.url}") private val issuerVerifierAcaPyUrl: String?,
     @Value("\${issuer-verifier.acapy.http-timeout-in-seconds}") private val issuerVerifierAcaPyHttpTimeoutInSeconds: Long,
@@ -82,7 +84,7 @@ class AcaPyConfig(
                 null
             )
 
-        return AcaPyAriesClient(issuerVerifierAcaPyClient, errorLogger)
+        return AcaPyAriesClient(issuerVerifierAcaPyClient, errorLogger, ariesClientLogger)
     }
 
     private fun issuerVerifierClientWithMultitenancyEnabled(
@@ -111,7 +113,7 @@ class AcaPyConfig(
 
         createAndRegisterNewPublicDid(subWalletIssuerVerifierAcaPyClient)
 
-        return AcaPyAriesClient(subWalletIssuerVerifierAcaPyClient, errorLogger)
+        return AcaPyAriesClient(subWalletIssuerVerifierAcaPyClient, errorLogger, ariesClientLogger)
     }
 
     private fun createNewSubWallet(baseWalletAriesClient: AriesClient): String {
@@ -212,7 +214,7 @@ class AcaPyConfig(
                 buildAcaPyAriesClient(okHttpPublisher, it, holderAcapyHttpTimeoutInSeconds, holderAcaPyApiKey, null)
 
             holderAcaPyClients.add(
-                AcaPyAriesClient(holderAcaPyClient, errorLogger)
+                AcaPyAriesClient(holderAcaPyClient, errorLogger, ariesClientLogger)
             )
         }
 

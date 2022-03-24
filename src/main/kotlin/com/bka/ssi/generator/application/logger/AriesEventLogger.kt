@@ -43,16 +43,16 @@ class AriesEventLogger : IAriesObserver {
             "type=credentialRecord time=${credentialExchangeRecord.time} credentialExchangeId=${credentialExchangeRecord.id} connectionId=${credentialExchangeRecord.connectionId} state=${credentialExchangeRecord.state}"
         )
 
-        if (credentialExchangeRecord.issued && credentialExchangeRecord.revocationRegistryId != null && credentialExchangeRecord.revocationIndex != null) {
+        if (credentialExchangeRecord.issued && credentialExchangeRecord.revocationRegistryId != null && credentialExchangeRecord.revocationRegistryIndex != null) {
             logger.info(
-                "type=credentialRevocationMetadata time=${credentialExchangeRecord.time} credentialExchangeId=${credentialExchangeRecord.id} revocationRegistryId=${credentialExchangeRecord.revocationRegistryId} revocationIndex=${credentialExchangeRecord.revocationIndex}"
+                "type=credentialRevocationMetadata time=${credentialExchangeRecord.time} credentialExchangeId=${credentialExchangeRecord.id} revocationRegistryId=${credentialExchangeRecord.revocationRegistryId} revocationIndex=${credentialExchangeRecord.revocationRegistryIndex}"
             )
         }
     }
 
     override fun handleProofRequestRecord(proofExchangeRecord: ProofExchangeRecordDo) {
         logger.info(
-            "type=presentationRecord time=${proofExchangeRecord.time} presentationExchangeId=${proofExchangeRecord.id} connectionId=${proofExchangeRecord.connectionId} state=${proofExchangeRecord.state}"
+            "type=presentationRecord time=${proofExchangeRecord.time} presentationExchangeId=${proofExchangeRecord.id} connectionId=${proofExchangeRecord.connectionId} state=${proofExchangeRecord.state} valid=${proofExchangeRecord.isValid} comment=${proofExchangeRecord.comment}"
         )
     }
 }

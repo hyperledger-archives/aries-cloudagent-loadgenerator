@@ -21,7 +21,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "iteration": 1646918152143,
+  "iteration": 1647960150560,
   "links": [
     {
       "asDropdown": false,
@@ -39,6 +39,7 @@
   "liveNow": false,
   "panels": [
     {
+      "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -46,6 +47,7 @@
         "y": 0
       },
       "id": 66,
+      "panels": [],
       "title": "Number of Iterations",
       "type": "row"
     },
@@ -321,7 +323,7 @@
       },
       "id": 18,
       "panels": [],
-      "title": "Aries Event Logger",
+      "title": "Aries Event Logger: Connection Invitations and Credential Offers",
       "type": "row"
     },
     {
@@ -346,7 +348,7 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 8,
+        "w": 12,
         "x": 0,
         "y": 13
       },
@@ -401,8 +403,8 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 8,
-        "x": 8,
+        "w": 12,
+        "x": 12,
         "y": 13
       },
       "id": 28,
@@ -448,61 +450,6 @@
               {
                 "color": "green",
                 "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 8,
-        "x": 16,
-        "y": 13
-      },
-      "id": 8,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.3.5",
-      "targets": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=REQUEST_SENT\" [10d])",
-          "refId": "A"
-        }
-      ],
-      "title": "Total Number of Proof Requests",
-      "type": "stat"
-    },
-    {
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "noValue": "0",
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
               },
               {
                 "color": "red",
@@ -515,7 +462,7 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 8,
+        "w": 12,
         "x": 0,
         "y": 16
       },
@@ -545,7 +492,7 @@
           "refId": "A"
         }
       ],
-      "title": "Number of Pending Connection Invitations",
+      "title": "Number of Pending or Failed Connection Invitations",
       "type": "stat"
     },
     {
@@ -574,8 +521,8 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 8,
-        "x": 8,
+        "w": 12,
+        "x": 12,
         "y": 16
       },
       "id": 10,
@@ -604,66 +551,7 @@
           "refId": "A"
         }
       ],
-      "title": "Number of Pending Credential Offers",
-      "type": "stat"
-    },
-    {
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "noValue": "0",
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 1
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 8,
-        "x": 16,
-        "y": 16
-      },
-      "id": 29,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.3.5",
-      "targets": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=REQUEST_SENT\" [10d]) -\n  \ncount_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=VERIFIED\" [10d])",
-          "refId": "A"
-        }
-      ],
-      "title": "Number of Pending Proof Requests",
+      "title": "Number of Pending or Failed Credential Offers",
       "type": "stat"
     },
     {
@@ -750,7 +638,7 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 8,
+        "w": 12,
         "x": 0,
         "y": 19
       },
@@ -894,8 +782,8 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 8,
-        "x": 8,
+        "w": 12,
+        "x": 12,
         "y": 19
       },
       "id": 9,
@@ -957,155 +845,6 @@
       "type": "timeseries"
     },
     {
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Received Presentation"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "purple",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Sent"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "orange",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Verified"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "green",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 16,
-        "y": 19
-      },
-      "id": 7,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=REQUEST_SENT\" [10d])",
-          "hide": false,
-          "legendFormat": "Sent",
-          "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=PRESENTATION_RECEIVED\" [10d])",
-          "hide": false,
-          "legendFormat": "Received Presentation",
-          "refId": "C"
-        },
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=VERIFIED\" [10d])",
-          "legendFormat": "Verified",
-          "refId": "A"
-        }
-      ],
-      "title": "Proof Request Status",
-      "type": "timeseries"
-    },
-    {
       "description": "Average Number of Connections that are being activated per second",
       "fieldConfig": {
         "defaults": {
@@ -1159,7 +898,7 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 8,
+        "w": 12,
         "x": 0,
         "y": 27
       },
@@ -1274,8 +1013,8 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 8,
-        "x": 8,
+        "w": 12,
+        "x": 12,
         "y": 27
       },
       "id": 25,
@@ -1302,136 +1041,6 @@
         }
       ],
       "title": " Credential Issuance Rate (per Second)",
-      "type": "timeseries"
-    },
-    {
-      "description": "Average Number of Proof Requests verified per second",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Credentials Issued per Second"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Proof Requests verified per Second"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "purple",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Proof Requests verified"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "purple",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 16,
-        "y": 27
-      },
-      "id": 26,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "expr": "rate(\n  {app=\"aries-load-generator\"}\n    |= \"type=presentationRecord\"\n    |= \"state=VERIFIED\"\n[1m])",
-          "legendFormat": "Proof Requests verified",
-          "refId": "A"
-        }
-      ],
-      "title": " Proof Request Verification Rate (per Second)",
       "type": "timeseries"
     },
     {
@@ -1487,7 +1096,7 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 8,
+        "w": 12,
         "x": 0,
         "y": 35
       },
@@ -1600,8 +1209,8 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 8,
-        "x": 8,
+        "w": 12,
+        "x": 12,
         "y": 35
       },
       "id": 34,
@@ -1661,6 +1270,926 @@
       "type": "timeseries"
     },
     {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 43
+      },
+      "id": 149,
+      "panels": [],
+      "title": "Aries Event Logger: Proof Requests and Credential Revocations",
+      "type": "row"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 12,
+        "x": 0,
+        "y": 44
+      },
+      "id": 8,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=REQUEST_SENT\"\n  |= \"Expected to be valid\"\n[10d])",
+          "refId": "A"
+        }
+      ],
+      "title": "Total Number of Proof Requests",
+      "type": "stat"
+    },
+    {
+      "description": "Proof requests are send and expected to be invalid as the credentials have been revoked previously",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 12,
+        "x": 12,
+        "y": 44
+      },
+      "id": 151,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=REQUEST_SENT\"\n  |= \"Expected to be invalid\"\n[10d])",
+          "refId": "A"
+        }
+      ],
+      "title": "Total Number of Credential Revocation Verifications",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 12,
+        "x": 0,
+        "y": 47
+      },
+      "id": 29,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=REQUEST_SENT\"\n  |= \"Expected to be valid\"\n[10d]) -\n  \ncount_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=VERIFIED\"\n  |= \"Expected to be valid\"\n[10d])",
+          "refId": "A"
+        }
+      ],
+      "title": "Number of Pending or Failed Proof Requests",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 12,
+        "x": 12,
+        "y": 47
+      },
+      "id": 152,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=REQUEST_SENT\"\n  |= \"Expected to be invalid\"\n[10d]) -\n  \ncount_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=VERIFIED\"\n  |= \"Expected to be invalid\"\n[10d])",
+          "refId": "A"
+        }
+      ],
+      "title": "Number of Pending or Failed Credential Revocation Checks",
+      "type": "stat"
+    },
+    {
+      "description": "Number of times a valid proof request was expected but an invalid proof request was presented",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 12,
+        "x": 0,
+        "y": 50
+      },
+      "id": 150,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=VERIFIED\"\n  |= \"Expected to be valid\"\n  |= \"valid=false\"\n[10d])",
+          "refId": "A"
+        }
+      ],
+      "title": "Number of Incorrect Proof Request Results",
+      "type": "stat"
+    },
+    {
+      "description": "Number of times an invalid proof request was expected as the requested credential has been revoked but a valid proof request was presented",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 12,
+        "x": 12,
+        "y": 50
+      },
+      "id": 153,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=VERIFIED\"\n  |= \"Expected to be invalid\"\n  |= \"valid=true\"\n[10d])",
+          "refId": "A"
+        }
+      ],
+      "title": "Number of Failed Credential Revocations",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Received Presentation"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Sent"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Verified"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 53
+      },
+      "id": 7,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=REQUEST_SENT\"\n  |= \"Expected to be valid\"\n[10d])",
+          "hide": false,
+          "legendFormat": "Sent",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=PRESENTATION_RECEIVED\"\n  |= \"Expected to be valid\"\n[10d])",
+          "hide": false,
+          "legendFormat": "Received Presentation",
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=VERIFIED\"\n  |= \"Expected to be valid\"\n[10d])",
+          "legendFormat": "Verified",
+          "refId": "A"
+        }
+      ],
+      "title": "Proof Request Status",
+      "type": "timeseries"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Received Presentation"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Sent"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Verified"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 53
+      },
+      "id": 154,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=REQUEST_SENT\"\n  |= \"Expected to be invalid\"\n[10d])",
+          "hide": false,
+          "legendFormat": "Sent",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=PRESENTATION_RECEIVED\"\n  |= \"Expected to be invalid\"\n[10d])",
+          "hide": false,
+          "legendFormat": "Received Presentation",
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time({app=\"aries-load-generator\"}\n  |= \"type=presentationRecord\"\n  |= \"state=VERIFIED\"\n  |= \"Expected to be invalid\"\n[10d])",
+          "legendFormat": "Verified",
+          "refId": "A"
+        }
+      ],
+      "title": " Credential Revocation Check Status",
+      "type": "timeseries"
+    },
+    {
+      "description": "Average Number of Proof Requests verified per second",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Credentials Issued per Second"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Proof Requests verified per Second"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Proof Requests verified"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 61
+      },
+      "id": 26,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "rate(\n  {app=\"aries-load-generator\"}\n    |= \"type=presentationRecord\"\n    |= \"state=VERIFIED\"\n    |= \"Expected to be valid\"\n[1m])",
+          "legendFormat": "Proof Requests verified",
+          "refId": "A"
+        }
+      ],
+      "title": " Proof Request Verification Rate (per Second)",
+      "type": "timeseries"
+    },
+    {
+      "description": "Average Number of Credential Revocation Checks per second",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Credentials Issued per Second"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Proof Requests verified per Second"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Proof Requests verified"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 61
+      },
+      "id": 155,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "rate(\n  {app=\"aries-load-generator\"}\n    |= \"type=presentationRecord\"\n    |= \"state=VERIFIED\"\n    |= \"Expected to be invalid\"\n[1m])",
+          "legendFormat": "Proof Requests verified",
+          "refId": "A"
+        }
+      ],
+      "title": "  Credential Revocation Check Rate (per Second)",
+      "type": "timeseries"
+    },
+    {
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1713,9 +2242,9 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 8,
-        "x": 16,
-        "y": 35
+        "w": 12,
+        "x": 0,
+        "y": 69
       },
       "id": 35,
       "options": {
@@ -1735,7 +2264,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "avg (\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=presentationRecord\"\n      |= \"state=VERIFIED\"\n      | logfmt \n      | unwrap time\n  [1m]) by (presentationExchangeId) -\n\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=presentationRecord\"\n      |= \"state=REQUEST_SENT\"\n      | logfmt \n      | unwrap time\n  [1m]) by (presentationExchangeId)\n)",
+          "expr": "avg (\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=presentationRecord\"\n      |= \"state=VERIFIED\"\n      |= \"Expected to be valid\"\n      | logfmt \n      | unwrap time\n  [1m]) by (presentationExchangeId) -\n\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=presentationRecord\"\n      |= \"state=REQUEST_SENT\"\n      |= \"Expected to be valid\"\n      | logfmt \n      | unwrap time\n  [1m]) by (presentationExchangeId)\n)",
           "legendFormat": "E2E - REQUEST_SENT to VERIFIED",
           "refId": "A"
         },
@@ -1744,7 +2273,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "avg (\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=presentationRecord\"\n      |= \"state=PRESENTATION_RECEIVED\"\n      | logfmt \n      | unwrap time\n  [1m]) by (presentationExchangeId) -\n\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=presentationRecord\"\n      |= \"state=REQUEST_SENT\"\n      | logfmt \n      | unwrap time\n  [1m]) by (presentationExchangeId)\n)",
+          "expr": "avg (\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=presentationRecord\"\n      |= \"state=PRESENTATION_RECEIVED\"\n      |= \"Expected to be valid\"\n      | logfmt \n      | unwrap time\n  [1m]) by (presentationExchangeId) -\n\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=presentationRecord\"\n      |= \"state=REQUEST_SENT\"\n      |= \"Expected to be valid\"\n      | logfmt \n      | unwrap time\n  [1m]) by (presentationExchangeId)\n)",
           "hide": false,
           "legendFormat": "REQUEST_SENT to PRESENTATION_RECEIVED",
           "refId": "B"
@@ -1754,7 +2283,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "avg (\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=presentationRecord\"\n      |= \"state=VERIFIED\"\n      | logfmt \n      | unwrap time\n  [1m]) by (presentationExchangeId) -\n\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=presentationRecord\"\n      |= \"state=PRESENTATION_RECEIVED\"\n      | logfmt \n      | unwrap time\n  [1m]) by (presentationExchangeId)\n)",
+          "expr": "avg (\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=presentationRecord\"\n      |= \"state=VERIFIED\"\n      |= \"Expected to be valid\"\n      | logfmt \n      | unwrap time\n  [1m]) by (presentationExchangeId) -\n\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=presentationRecord\"\n      |= \"state=PRESENTATION_RECEIVED\"\n      |= \"Expected to be valid\"\n      | logfmt \n      | unwrap time\n  [1m]) by (presentationExchangeId)\n)",
           "hide": false,
           "legendFormat": "PRESENTATION_RECEIVED to VERIFIED",
           "refId": "C"
@@ -1764,12 +2293,115 @@
       "type": "timeseries"
     },
     {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 69
+      },
+      "id": 156,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "avg (\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=presentationRecord\"\n      |= \"state=VERIFIED\"\n      |= \"Expected to be invalid\"\n      | logfmt \n      | unwrap time\n  [1m]) by (presentationExchangeId) -\n\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=presentationRecord\"\n      |= \"state=REQUEST_SENT\"\n      |= \"Expected to be invalid\"\n      | logfmt \n      | unwrap time\n  [1m]) by (presentationExchangeId)\n)",
+          "legendFormat": "E2E - REQUEST_SENT to VERIFIED",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "avg (\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=presentationRecord\"\n      |= \"state=PRESENTATION_RECEIVED\"\n      |= \"Expected to be invalid\"\n      | logfmt \n      | unwrap time\n  [1m]) by (presentationExchangeId) -\n\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=presentationRecord\"\n      |= \"state=REQUEST_SENT\"\n      |= \"Expected to be invalid\"\n      | logfmt \n      | unwrap time\n  [1m]) by (presentationExchangeId)\n)",
+          "hide": false,
+          "legendFormat": "REQUEST_SENT to PRESENTATION_RECEIVED",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "avg (\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=presentationRecord\"\n      |= \"state=VERIFIED\"\n      |= \"Expected to be invalid\"\n      | logfmt \n      | unwrap time\n  [1m]) by (presentationExchangeId) -\n\n  max_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=presentationRecord\"\n      |= \"state=PRESENTATION_RECEIVED\"\n      |= \"Expected to be invalid\"\n      | logfmt \n      | unwrap time\n  [1m]) by (presentationExchangeId)\n)",
+          "hide": false,
+          "legendFormat": "PRESENTATION_RECEIVED to VERIFIED",
+          "refId": "C"
+        }
+      ],
+      "title": "Credential Revocation Checks - Proof Request Protocol Transition Times  (per minute in Milliseconds)",
+      "type": "timeseries"
+    },
+    {
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 43
+        "y": 77
       },
       "id": 139,
       "panels": [],
@@ -1832,7 +2464,7 @@
         "h": 10,
         "w": 18,
         "x": 0,
-        "y": 44
+        "y": 78
       },
       "id": 135,
       "options": {
@@ -1886,7 +2518,7 @@
         "h": 10,
         "w": 6,
         "x": 18,
-        "y": 44
+        "y": 78
       },
       "id": 137,
       "options": {
@@ -1918,19 +2550,6 @@
       "type": "stat"
     },
     {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 54
-      },
-      "id": 51,
-      "panels": [],
-      "title": "Aries Admin API",
-      "type": "row"
-    },
-    {
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1948,7 +2567,7 @@
               "tooltip": false,
               "viz": false
             },
-            "lineInterpolation": "smooth",
+            "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
@@ -1982,10 +2601,168 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 10,
+        "h": 8,
         "w": 24,
         "x": 0,
-        "y": 55
+        "y": 88
+      },
+      "id": 171,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "avg (\nmax_over_time (\n    {app=\"aries-load-generator\"}\n      |= \"type=publish_credential_revocations_stopped\"\n      | logfmt \n      | unwrap time\n  [1m]) by (trackingId) -\n\nmax_over_time (\n  {app=\"aries-load-generator\"}\n    |= \"type=publish_credential_revocations_started\"\n    | logfmt \n    | unwrap time\n[1m]) by (trackingId)\n)",
+          "refId": "A"
+        }
+      ],
+      "title": "Average Duration to publish \"Credential Revocations\" (per Minute in Milliseconds)",
+      "type": "timeseries"
+    },
+    {
+      "description": "Indicates if multiple \"Publish Revocation\" processes are started parallel",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "custom": {
+            "fillOpacity": 70,
+            "lineWidth": 0
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 2
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 96
+      },
+      "id": 169,
+      "options": {
+        "alignValue": "center",
+        "legend": {
+          "displayMode": "hidden",
+          "placement": "right"
+        },
+        "mergeValues": true,
+        "rowHeight": 0.81,
+        "showValue": "always",
+        "tooltip": {
+          "mode": "none"
+        }
+      },
+      "pluginVersion": "8.3.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time (\n  {app=\"aries-load-generator\"}\n    |= \"type=publish_credential_revocations_started\"\n[5s])",
+          "legendFormat": "Publishing Started",
+          "refId": "A"
+        }
+      ],
+      "title": "Number of \"Publish Revocation\" started ( per 5 seconds)",
+      "type": "state-timeline"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 104
+      },
+      "id": 51,
+      "panels": [],
+      "title": "Aries Admin API",
+      "type": "row"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "log": 2,
+              "type": "log"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 0,
+        "y": 105
       },
       "id": 16,
       "options": {
@@ -2009,7 +2786,90 @@
           "refId": "A"
         }
       ],
-      "title": "HTTP Response Times (per Minute in Milliseconds)",
+      "title": "HTTP Response Times of Successful Requests (per Minute in Milliseconds)",
+      "type": "timeseries"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "log": 2,
+              "type": "log"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 12,
+        "y": 105
+      },
+      "id": 167,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "avg_over_time (\n  {app=\"aries-load-generator\"}\n    |= \"type=http_request\"\n    != \"httpCode=200\"\n    != \"request=POST/schemas\"\n    != \"request=POST/credential-definitions\"\n    | logfmt\n    | unwrap durationInMs\n[1m]) by (request)",
+          "refId": "A"
+        }
+      ],
+      "title": "HTTP Response Times of Failed Requests (per Minute in Milliseconds)",
       "type": "timeseries"
     },
     {
@@ -2018,7 +2878,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 65
+        "y": 115
       },
       "id": 22,
       "panels": [],
@@ -2053,7 +2913,7 @@
         "h": 3,
         "w": 24,
         "x": 0,
-        "y": 66
+        "y": 116
       },
       "id": 67,
       "options": {
@@ -2111,9 +2971,9 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 2,
+        "w": 12,
         "x": 0,
-        "y": 69
+        "y": 119
       },
       "id": 121,
       "options": {
@@ -2137,7 +2997,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n  |= \"type=aries_client_error\"\n  |= \"request:POST/connections/create-invitation httpCode:400\"\n  |= \"Error when fetching storage record. Backend error. Caused by: pool timed out while waiting for an open connection.\"\n[10d])",
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n  |= \"type=aries_client_error\"\n  |= \"request:POST/connections/create-invitation httpCode:400\"\n  |= \"Backend error. Caused by: pool timed out while waiting for an open connection.\"\n[10d])",
           "legendFormat": "",
           "refId": "A"
         }
@@ -2172,9 +3032,9 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 2,
-        "x": 2,
-        "y": 69
+        "w": 6,
+        "x": 12,
+        "y": 119
       },
       "id": 123,
       "options": {
@@ -2198,7 +3058,7 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n  |= \"type=aries_client_error\"\n  |= \"request:POST/issue-credential/send httpCode:400\"\n  |= \"Error when fetching storage record. Backend error. Caused by: pool timed out while waiting for an open connection.\"\n[10d])",
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n  |= \"type=aries_client_error\"\n  |= \"request:POST/issue-credential/send httpCode:400\"\n  |= \"Backend error. Caused by: pool timed out while waiting for an open connection.\"\n[10d])",
           "legendFormat": "",
           "refId": "A"
         }
@@ -2233,9 +3093,9 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 2,
-        "x": 4,
-        "y": 69
+        "w": 6,
+        "x": 18,
+        "y": 119
       },
       "id": 124,
       "options": {
@@ -2268,7 +3128,7 @@
       "type": "stat"
     },
     {
-      "description": "*9",
+      "description": "POST/revocation/revoke [HTTP 400]*10",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2294,11 +3154,11 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 2,
-        "x": 9,
-        "y": 69
+        "w": 5,
+        "x": 0,
+        "y": 122
       },
-      "id": 144,
+      "id": 157,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
@@ -2320,12 +3180,256 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n  |= \"type=aries_client_error\"\n  |= \"Error when fetching storage record. Backend error. Caused by: error returned from database: sorry, too many clients already.\"\n[10d])",
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n  |= \"type=aries_client_error\"\n  |= \"request:POST/revocation/revoke httpCode:400\"\n  |= \"The current accumulator value\"\n  |= \"must be equal to the last accumulator value\"\n[10d])",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "Error reading from DB *9",
+      "title": "IV: Revoke Credential *10",
+      "type": "stat"
+    },
+    {
+      "description": "POST/revocation/revoke [HTTP 400]*11",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 5,
+        "x": 5,
+        "y": 122
+      },
+      "id": 158,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n  |= \"type=aries_client_error\"\n  |= \"request:POST/revocation/revoke httpCode:400\"\n  |= \"Error retrieving revocation registry. Backend error. Caused by: pool timed out while waiting for an open connection.\"\n[10d])",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "IV: Revoke Credential *11",
+      "type": "stat"
+    },
+    {
+      "description": "POST/revocation/revoke [HTTP 400]*12",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 5,
+        "x": 10,
+        "y": 122
+      },
+      "id": 159,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n  |= \"type=aries_client_error\"\n  |= \"request:POST/revocation/revoke httpCode:400\"\n  |= \"Revocation registry metadata not found.\"\n[10d])",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "IV: Revoke Credential *12",
+      "type": "stat"
+    },
+    {
+      "description": "POST/revocation/revoke [HTTP 400]*13",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 5,
+        "x": 15,
+        "y": 122
+      },
+      "id": 160,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n  |= \"type=aries_client_error\"\n  |= \"request:POST/revocation/revoke httpCode:400\"\n  |= \"Revocation registry not found.\"\n[10d])",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "IV: Revoke Credential *13",
+      "type": "stat"
+    },
+    {
+      "description": "POST/revocation/revoke [HTTP 504]*14",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 20,
+        "y": 122
+      },
+      "id": 166,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n  |= \"type=aries_client_error\"\n  |= \"request:POST/revocation/revoke httpCode:504\"\n  |= \"504 Gateway Time-out\"\n[10d])",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "IV: Rev Cred *14",
       "type": "stat"
     },
     {
@@ -2355,9 +3459,9 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 2,
-        "x": 11,
-        "y": 69
+        "w": 12,
+        "x": 0,
+        "y": 125
       },
       "id": 143,
       "options": {
@@ -2386,11 +3490,11 @@
           "refId": "A"
         }
       ],
-      "title": "Error writing to DB *8",
+      "title": "Error writing to Postgres DB *8",
       "type": "stat"
     },
     {
-      "description": "",
+      "description": "*9",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2416,11 +3520,11 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 2,
-        "x": 13,
-        "y": 69
+        "w": 12,
+        "x": 12,
+        "y": 125
       },
-      "id": 145,
+      "id": 144,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
@@ -2442,73 +3546,12 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n  |= \"type=aries_client_error\"\n  != \"request:POST/issue-credential/send httpCode:500\"\n  |= \"500 Internal Server Error\"\n[10d])",
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n  |= \"type=aries_client_error\"\n  |= \"Error when fetching storage record. Backend error. Caused by: error returned from database: sorry, too many clients already.\"\n[10d])",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "500 Internal Server Error",
-      "type": "stat"
-    },
-    {
-      "description": "POST/connections/receive-invitation [HTTP 400/500] *4,5,6,7",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "noValue": "0",
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 1
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 3,
-        "x": 18,
-        "y": 69
-      },
-      "id": 126,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.3.5",
-      "targets": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_client_error\"\n    |~ \"request:POST/connections/receive-invitation httpCode:[4 5]00\"\n[10d])",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "H: Receive Invitation *4,5,6,7",
+      "title": "Error reading from Postgres DB *9",
       "type": "stat"
     },
     {
@@ -2538,9 +3581,9 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 3,
-        "x": 21,
-        "y": 69
+        "w": 12,
+        "x": 0,
+        "y": 128
       },
       "id": 122,
       "options": {
@@ -2573,6 +3616,128 @@
       "type": "stat"
     },
     {
+      "description": "POST/connections/receive-invitation [HTTP 400/500] *4,5,6,7",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 12,
+        "x": 12,
+        "y": 128
+      },
+      "id": 126,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_client_error\"\n    |~ \"request:POST/connections/receive-invitation httpCode:[4 5]00\"\n[10d])",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "H: Receive Invitation *4,5,6,7",
+      "type": "stat"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 24,
+        "x": 0,
+        "y": 131
+      },
+      "id": 145,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n  |= \"type=aries_client_error\"\n  != \"request:POST/issue-credential/send httpCode:500\"\n  |= \"500 Internal Server Error\"\n[10d])",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "500 Internal Server Error",
+      "type": "stat"
+    },
+    {
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2600,10 +3765,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 10,
         "w": 24,
         "x": 0,
-        "y": 72
+        "y": 134
       },
       "id": 55,
       "options": {
@@ -2676,9 +3841,9 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_client_error\"\n    |= \"request:POST/connections/receive-invitation httpCode:400\"\n    |= \"Error when adding storage record. Backend error. Caused by: error returned from database: database is locked.\"\n[1m])",
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_client_error\"\n    |= \"POST/revocation/revoke httpCode:400\"\n    |= \"The current accumulator value\"\n    |= \"must be equal to the last accumulator value\"\n[1m])",
           "hide": false,
-          "legendFormat": "POST/connections/receive-invitation [HTTP 400] *5",
+          "legendFormat": "POST/revocation/revoke [HTTP 400] *10",
           "refId": "F"
         },
         {
@@ -2720,6 +3885,46 @@
           "hide": false,
           "legendFormat": "Error Reading from Database *9",
           "refId": "I"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_client_error\"\n    |= \"POST/revocation/revoke httpCode:400\"\n    |= \"Error retrieving revocation registry. Backend error. Caused by: pool timed out while waiting for an open connection.\"\n[1m])",
+          "hide": false,
+          "legendFormat": "POST/revocation/revoke [HTTP 400] *11",
+          "refId": "K"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_client_error\"\n    |= \"POST/revocation/revoke httpCode:400\"\n    |= \"Revocation registry metadata not found.\"\n[1m])",
+          "hide": false,
+          "legendFormat": "POST/revocation/revoke [HTTP 400] *12",
+          "refId": "L"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_client_error\"\n    |= \"POST/revocation/revoke httpCode:400\"\n    |= \"Revocation registry not found.\"\n[1m])",
+          "hide": false,
+          "legendFormat": "POST/revocation/revoke [HTTP 400] *13",
+          "refId": "M"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_client_error\"\n    |= \"POST/revocation/revoke httpCode:504\"\n    |= \"504 Gateway Time-out\"\n[1m])",
+          "hide": false,
+          "legendFormat": "POST/revocation/revoke [HTTP 504] *14",
+          "refId": "N"
         }
       ],
       "title": "Failed HTTP Requests (per Minute)",
@@ -2727,14 +3932,14 @@
     },
     {
       "gridPos": {
-        "h": 10,
+        "h": 15,
         "w": 24,
         "x": 0,
-        "y": 80
+        "y": 144
       },
       "id": 117,
       "options": {
-        "content": "- *1: Error when fetching storage record. Backend error. Caused by: pool timed out while waiting for an open connection.\n- *2: Internal Server Error\n- *3: recipientKeys [...] is not a raw Ed25519VerificationKey2018 key\n- *4: Error when adding storage record. Backend error. Caused by: pool timed out while waiting for an open connection.\n- *5: Error when adding storage record. Backend error. Caused by: error returned from database: database is locked.\n- *6: Error when adding storage record. Backend error. Caused by: error returned from database: no such savepoint\n- *7: Error when updating storage record value. Backend error. Caused by: error returned from database: no such savepoint\n- *8: Error when adding storage record. Backend error. Caused by: error returned from database: sorry, too many clients already.\n- *9: Error when fetching storage record. Backend error. Caused by: error returned from database: sorry, too many clients already.",
+        "content": "- *1: Error when adding OR fetching storage record. Backend error. Caused by: pool timed out while waiting for an open connection.\n- *2: Internal Server Error\n- *3: recipientKeys [...] is not a raw Ed25519VerificationKey2018 key\n- *4: Error when adding storage record. Backend error. Caused by: pool timed out while waiting for an open connection.\n- *5: Error when adding storage record. Backend error. Caused by: error returned from database: database is locked.\n- *6: Error when adding storage record. Backend error. Caused by: error returned from database: no such savepoint\n- *7: Error when updating storage record value. Backend error. Caused by: error returned from database: no such savepoint\n- *8: Error when adding storage record. Backend error. Caused by: error returned from database: sorry, too many clients already.\n- *9: Error when fetching storage record. Backend error. Caused by: error returned from database: sorry, too many clients already.\n- *10: The current accumulator value [...] must be equal to the last accumulator value\n- *11: Error retrieving revocation registry. Backend error. Caused by: pool timed out while waiting for an open connection.\n- *12: Revocation registry metadata not found. \n- *13: Revocation registry not found.\n- *14: Nginx Gateway Time-out",
         "mode": "markdown"
       },
       "pluginVersion": "8.3.5",
@@ -2747,7 +3952,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 90
+        "y": 159
       },
       "id": 59,
       "panels": [],
@@ -2782,7 +3987,7 @@
         "h": 3,
         "w": 24,
         "x": 0,
-        "y": 91
+        "y": 160
       },
       "id": 60,
       "options": {
@@ -2840,9 +4045,9 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 4,
+        "w": 6,
         "x": 0,
-        "y": 94
+        "y": 163
       },
       "id": 119,
       "options": {
@@ -2900,9 +4105,9 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 4,
-        "x": 4,
-        "y": 94
+        "w": 6,
+        "x": 6,
+        "y": 163
       },
       "id": 118,
       "options": {
@@ -2960,71 +4165,11 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 4,
-        "x": 8,
-        "y": 94
+        "w": 6,
+        "x": 12,
+        "y": 163
       },
       "id": 127,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.3.5",
-      "targets": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"AcaPyPublisher.handleCredential: issuance-abandoned\"\n[10d])",
-          "refId": "A"
-        }
-      ],
-      "title": "IV: Issue Credential",
-      "type": "stat"
-    },
-    {
-      "description": "AcaPyPublisher.handleCredential: issuance-abandoned",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "noValue": "0",
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 1
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 4,
-        "x": 12,
-        "y": 94
-      },
-      "id": 146,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
@@ -3080,9 +4225,9 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 4,
-        "x": 16,
-        "y": 94
+        "w": 6,
+        "x": 18,
+        "y": 163
       },
       "id": 142,
       "options": {
@@ -3140,9 +4285,9 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 4,
-        "x": 20,
-        "y": 94
+        "w": 24,
+        "x": 0,
+        "y": 166
       },
       "id": 141,
       "options": {
@@ -3174,7 +4319,7 @@
       "type": "stat"
     },
     {
-      "description": "Error updating revocation registry index. Backend error. Caused by: error returned from database: sorry, too many clients already.",
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3200,9 +4345,9 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 4,
-        "x": 8,
-        "y": 97
+        "w": 8,
+        "x": 0,
+        "y": 169
       },
       "id": 140,
       "options": {
@@ -3226,11 +4371,71 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"Error updating revocation registry index. Backend error. Caused by: error returned from database: sorry, too many clients already.\"\n[10d])\n+\ncount_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"Error when updating storage record value. Backend error. Caused by: error returned from database: sorry, too many clients already.\"\n[10d])",
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"Backend error. Caused by: error returned from database: sorry, too many clients already.\"\n[10d])",
           "refId": "A"
         }
       ],
-      "title": "Error writing to DB",
+      "title": "Error DB: Too many clients already.",
+      "type": "stat"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 8,
+        "x": 8,
+        "y": 169
+      },
+      "id": 165,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"Backend error. Caused by: error returned from database: canceling statement due to statement timeout.\"\n[10d])",
+          "refId": "A"
+        }
+      ],
+      "title": "Error DB: Statement timed out.",
       "type": "stat"
     },
     {
@@ -3260,9 +4465,9 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 4,
-        "x": 12,
-        "y": 97
+        "w": 8,
+        "x": 16,
+        "y": 169
       },
       "id": 147,
       "options": {
@@ -3286,11 +4491,11 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"Error when finding storage record. Backend error. Caused by: error returned from database: sorry, too many clients already.\"\n[10d])\n+\ncount_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"Error retrieving credential definition. Backend error. Caused by: error returned from database: sorry, too many clients already.\"\n[10d])",
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"Backend error. Caused by: pool timed out while waiting for an open connection.\"\n[10d])",
           "refId": "A"
         }
       ],
-      "title": "Error reading from DB",
+      "title": "Error DB: Pool timed out while waiting for an open connection.",
       "type": "stat"
     },
     {
@@ -3321,10 +4526,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
+        "h": 8,
         "w": 24,
         "x": 0,
-        "y": 100
+        "y": 172
       },
       "id": 62,
       "options": {
@@ -3397,20 +4602,30 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"Error updating revocation registry index. Backend error. Caused by: error returned from database: sorry, too many clients already.\"\n[1m])\n+\ncount_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"Error when updating storage record value. Backend error. Caused by: error returned from database: sorry, too many clients already.\"\n[1m])",
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"Backend error. Caused by: error returned from database: sorry, too many clients already.\"\n[1m])",
           "hide": false,
-          "legendFormat": "Error writing to DB",
-          "refId": "F"
+          "legendFormat": "Error DB: Too many clients already.",
+          "refId": "G"
         },
         {
           "datasource": {
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"Error when finding storage record. Backend error. Caused by: error returned from database: sorry, too many clients already.\"\n[1m])\n+\ncount_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"Error retrieving credential definition. Backend error. Caused by: error returned from database: sorry, too many clients already.\"\n[1m])",
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"Backend error. Caused by: pool timed out while waiting for an open connection.\"\n[1m])",
           "hide": false,
-          "legendFormat": "Error reading from DB",
-          "refId": "G"
+          "legendFormat": "Error DB: Pool timed out while waiting for an open connection.",
+          "refId": "I"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "count_over_time(\n {app=\"aries-load-generator\"}\n    |= \"type=aries_event_error\"\n    |= \"Backend error. Caused by: error returned from database: canceling statement due to statement timeout.\"\n[1m])",
+          "hide": false,
+          "legendFormat": "Error DB: Statement timed out.",
+          "refId": "F"
         }
       ],
       "title": "Errors Reported through Events (per Minute)",
@@ -3422,7 +4637,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 105
+        "y": 180
       },
       "id": 44,
       "panels": [],
@@ -3457,7 +4672,7 @@
         "h": 4,
         "w": 24,
         "x": 0,
-        "y": 106
+        "y": 181
       },
       "id": 120,
       "options": {
@@ -3494,7 +4709,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 110
+        "y": 185
       },
       "id": 20,
       "panels": [],
@@ -3516,7 +4731,7 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 111
+        "y": 186
       },
       "hiddenSeries": false,
       "id": 75,
@@ -3609,7 +4824,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 121
+        "y": 196
       },
       "hiddenSeries": false,
       "id": 77,
@@ -3741,7 +4956,7 @@
         "h": 11,
         "w": 24,
         "x": 0,
-        "y": 129
+        "y": 204
       },
       "id": 2,
       "options": {
@@ -3774,7 +4989,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 140
+        "y": 215
       },
       "id": 81,
       "panels": [],
@@ -3841,7 +5056,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 141
+        "y": 216
       },
       "id": 83,
       "options": {
@@ -3936,7 +5151,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 150
+        "y": 225
       },
       "id": 85,
       "options": {
@@ -3978,7 +5193,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 159
+        "y": 234
       },
       "id": 103,
       "panels": [],
@@ -4045,7 +5260,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 160
+        "y": 235
       },
       "id": 86,
       "options": {
@@ -4140,7 +5355,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 168
+        "y": 243
       },
       "id": 89,
       "options": {
@@ -4182,7 +5397,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 175
+        "y": 250
       },
       "id": 105,
       "panels": [],
@@ -4249,7 +5464,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 176
+        "y": 251
       },
       "id": 87,
       "options": {
@@ -4344,7 +5559,7 @@
         "h": 11,
         "w": 24,
         "x": 0,
-        "y": 185
+        "y": 260
       },
       "id": 90,
       "options": {
@@ -4386,7 +5601,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 196
+        "y": 271
       },
       "id": 109,
       "panels": [],
@@ -4453,7 +5668,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 197
+        "y": 272
       },
       "id": 98,
       "options": {
@@ -4548,7 +5763,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 205
+        "y": 280
       },
       "id": 91,
       "options": {
@@ -4590,7 +5805,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 214
+        "y": 289
       },
       "id": 111,
       "panels": [],
@@ -4657,7 +5872,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 215
+        "y": 290
       },
       "id": 100,
       "options": {
@@ -4752,7 +5967,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 223
+        "y": 298
       },
       "id": 99,
       "options": {
@@ -4794,7 +6009,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 231
+        "y": 306
       },
       "id": 107,
       "panels": [],
@@ -4861,7 +6076,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 232
+        "y": 307
       },
       "id": 88,
       "options": {
@@ -4956,7 +6171,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 240
+        "y": 315
       },
       "id": 115,
       "options": {
@@ -4998,7 +6213,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 249
+        "y": 324
       },
       "id": 113,
       "panels": [],
@@ -5065,7 +6280,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 250
+        "y": 325
       },
       "id": 114,
       "options": {
@@ -5160,7 +6375,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 250
+        "y": 325
       },
       "id": 101,
       "options": {
@@ -5202,7 +6417,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 259
+        "y": 334
       },
       "id": 79,
       "panels": [],
@@ -5247,7 +6462,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 260
+        "y": 335
       },
       "hiddenSeries": false,
       "id": 97,
@@ -5431,7 +6646,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 260
+        "y": 335
       },
       "hiddenSeries": false,
       "id": 95,
@@ -5650,10 +6865,10 @@
         ]
       },
       "gridPos": {
-        "h": 10,
-        "w": 24,
+        "h": 12,
+        "w": 8,
         "x": 0,
-        "y": 269
+        "y": 344
       },
       "id": 129,
       "links": [],
@@ -5695,6 +6910,643 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "IO read (-) / write (+)",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 20,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "iops"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sda_.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#7EB26D",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sdb_.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#EAB839",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sdc_.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#6ED0E0",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sdd_.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#EF843C",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sde_.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E24D42",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sda1.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#584477",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sda2_.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#BA43A9",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sda3_.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#F4D598",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sdb1.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#0A50A1",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sdb2.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#BF1B00",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sdb2.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#BF1B00",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sdb3.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E0752D",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sdc1.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#962D82",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sdc2.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#614D93",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sdc3.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#9AC48A",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sdd1.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#65C5DB",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sdd2.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#F9934E",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sdd3.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#EA6460",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sde1.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E0F9D7",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sdd2.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#FCEACA",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sde3.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#F9E2D2",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 8,
+        "x": 8,
+        "y": 344
+      },
+      "id": 162,
+      "links": [],
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "lastNotNull",
+            "max",
+            "min"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "8.3.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "rate(node_disk_reads_completed_total{instance=\"$node\",job=\"$job\",device=~\".*\"}[$__rate_interval])",
+          "interval": "",
+          "intervalFactor": 4,
+          "legendFormat": "{{device}} - Reads completed",
+          "refId": "A",
+          "step": 240
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "rate(node_disk_writes_completed_total{instance=\"$node\",job=\"$job\",device=~\".*\"}[$__rate_interval])",
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{device}} - Writes completed",
+          "refId": "B",
+          "step": 240
+        }
+      ],
+      "title": "Disk IOps",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "bytes read (-) / write (+)",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 40,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "Bps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "io time"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#890F02",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sda.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#7EB26D",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sdb.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#EAB839",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sdc.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#6ED0E0",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sdd.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#EF843C",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sde.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E24D42",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 8,
+        "x": 16,
+        "y": 344
+      },
+      "id": 164,
+      "links": [],
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "lastNotNull",
+            "max",
+            "min"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "8.3.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "rate(node_disk_read_bytes_total{instance=\"$node\",job=\"$job\",device=~\".*\"}[$__rate_interval])",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{device}} - Successfully read bytes",
+          "refId": "A",
+          "step": 240
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "rate(node_disk_written_bytes_total{instance=\"$node\",job=\"$job\",device=~\".*\"}[$__rate_interval])",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{device}} - Successfully written bytes",
+          "refId": "B",
+          "step": 240
+        }
+      ],
+      "title": "I/O Usage Read / Write",
+      "type": "timeseries"
+    },
+    {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -5716,7 +7568,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 279
+        "y": 356
       },
       "height": "",
       "hiddenSeries": false,
@@ -5855,7 +7707,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 279
+        "y": 356
       },
       "height": "",
       "hiddenSeries": false,
@@ -5991,13 +7843,13 @@
     ]
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Test Results",
   "uid": "0Pe9llbnz",
-  "version": 27,
+  "version": 38,
   "weekStart": ""
 }
