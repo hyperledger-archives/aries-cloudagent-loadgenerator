@@ -195,6 +195,7 @@ function startAll() {
   fi
 
   if [ "${SYSTEM_LOAD_GENERATOR}" = true ]; then
+    export ISSUER_VERIFIER_ACAPY_URL=http://issuer-verifier-nginx:10000
     startLoadGenerator
   fi
 }
@@ -228,7 +229,7 @@ function debug() {
   fi
 
   if [ "${SYSTEM_LOAD_GENERATOR}" = true ]; then
-    export ISSUERVERIFIER_ACAPY_URL=http://issuer-verifier-acapy:10000
+    export ISSUER_VERIFIER_ACAPY_URL=http://issuer-verifier-acapy:10000
     startLoadGenerator
   fi
 }
