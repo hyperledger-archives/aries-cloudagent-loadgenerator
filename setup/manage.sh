@@ -30,10 +30,11 @@ usage() {
               and starts the services based on the docker-compose files
               and configuration supplied in the .env.
 
-      debug - Provides a debugging environment. Only one Issuer/Verifier AcaPy
-              (optionally with a debugger enabled) and only one Holder AcaPy will
-              be started. Can be used for running the load generator via the IDE as
-              well as to debug the Issuer/Verifier AcaPy.
+      debug - Starts all containers but the load generator.
+              Only one Issuer/Verifier AcaPy (optionally with a debugger enabled)
+              and only one Holder AcaPy will be started. Can be used for running
+              the load generator via the IDE as well as to debug the Issuer/Verifier
+              AcaPy. The load generator can also be started using `./mvnw spring-boot:run`.
 
       restart - First, "down" is executed. Then, "start" is run.
 
@@ -226,12 +227,6 @@ function debug() {
     fi
 
     docker-compose -f ./agents/docker-compose-agents-debugging.yml up -d
-  fi
-
-  if [ "${SYSTEM_LOAD_GENERATOR}" = true ]; then
-    export HOLDER_ACAPY_URLS=http://holder-acapy:10010
-    export ISSUER_VERIFIER_ACAPY_URL=http://issuer-verifier-acapy:10000
-    startLoadGenerator
   fi
 }
 
