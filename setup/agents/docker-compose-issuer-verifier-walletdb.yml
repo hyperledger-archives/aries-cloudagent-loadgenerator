@@ -97,7 +97,7 @@ services:
     volumes:
       - issuer-verifier-wallet-db-volume:/var/lib/postgresql/data
     #      - "$PWD/postgresql.conf:/etc/postgresql/postgresql.conf"
-    command: [ "postgres","-p", "5432",
+    command: [ "postgres","-p", "5000",
                "-c", "idle_in_transaction_session_timeout=${IDLE_IN_TRASATION_SESSION_TIMEOUT_IN_MS_WALLET_DB_SINGLE_INSTANCE}",
                "-c", "lock_timeout=${LOCK_TIMEOUT_IN_MS_WALLET_DB_SINGLE_INSTANCE}",
                "-c", "log_checkpoints=${POSTGRES_LOGGING_TOGGLE}",
@@ -124,7 +124,7 @@ services:
         max-file: "5"
         max-size: "50m"
     ports:
-      - 5432:5432
+      - 5432:5000
     restart: always
     profiles: [ "single-instance" ]
 
