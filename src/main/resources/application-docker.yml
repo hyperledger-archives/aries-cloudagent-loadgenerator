@@ -1,6 +1,6 @@
 spring:
     datasource:
-        url: jdbc:postgresql://issuer-verifier-wallet-db:5432/
+        url: jdbc:postgresql://issuer-verifier-wallet-db:5000/
 
 logging:
     config: classpath:logback-spring-docker.xml
