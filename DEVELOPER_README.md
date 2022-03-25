@@ -82,6 +82,7 @@ Dashboards can be created via the Grafana Web UI and exported as JSON afterwards
 - Restart the whole system using `manage.sh restart`
 - Start whole system with postgres cluster
 - Start whole system without the load generator using `manage.sh debug` as well as `SYSTEM_LOAD_GENERATOR=false` and
+  start the load generator using `./mvnw spring-boot:run`
 - Start whole system with the load generator using `manage.sh debug` as well as `SYSTEM_LOAD_GENERATOR=true`
 - Run it on MacOS
 - Run it on Linux
