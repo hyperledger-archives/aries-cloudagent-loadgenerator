@@ -229,6 +229,7 @@ function debug() {
   fi
 
   if [ "${SYSTEM_LOAD_GENERATOR}" = true ]; then
+    export HOLDER_ACAPY_URLS=http://holder-acapy:10010
     export ISSUER_VERIFIER_ACAPY_URL=http://issuer-verifier-acapy:10000
     startLoadGenerator
   fi
