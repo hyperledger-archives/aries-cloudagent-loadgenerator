@@ -147,13 +147,25 @@ The startup process is orchestrated by the [manage.sh](./setup/manage.sh). Durin
 is used to wait for Docker containers to properly start before continuing with the setup. Depending on the system's
 performance the sleep durations might need to be increased to ensure that the containers get enough time to boot.
 
+#### DID is not Published to Ledger
+
+In case the VON network is not up and running before the [manage.sh](./setup/manage.sh) script tries to publish the DID
+on the ledger, the DID will not be published. Consequently, the issuer-verifier-acapy will fail to start and throws a
+error message similar to
+`Ledger rejected transaction request: client request invalid: could not authenticate, verkey for VfHmVDbSvAdnM7Ph2PFh2a cannot be found`
+.
+
+Increase the sleep time between starting the ledger and registering the DID to avoid this issue.
+
 ### Only started iterations are visible on the "Test Results" Grafana Dashboard
 
 This is likely caused by a communication issue between the AcaPy and the Load Generator. The AcaPy should notify the
 Load Generator about updates via the Webhook Endpoint. If the Load Generator does not receive the updates or is unable
 to process the updates it will not log any progress on the "Test Results" dashboard in Grafana.
 
-Alternatively, it can also indicate that the load generator is not able to reach out to the issuer-verifier and/or holder agents' admin API.
-Ensure that issuer-verifier as well as holder agent containers are running and that the load-generator is using the correct URLs to reach out to the admin APIs.
+Alternatively, it can also indicate that the load generator is not able to reach out to the issuer-verifier and/or
+holder agents' admin API. Ensure that issuer-verifier as well as holder agent containers are running and that the
+load-generator is using the correct URLs to reach out to the admin APIs.
 
-Further, the holder agents need to be able to reach the issuer-verifier DIDcomm endpoint to accept connection invitations.
+Further, the holder agents need to be able to reach the issuer-verifier DIDcomm endpoint to accept connection
+invitations.
