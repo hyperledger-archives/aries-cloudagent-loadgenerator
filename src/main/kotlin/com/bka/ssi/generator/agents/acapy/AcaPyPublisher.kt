@@ -8,6 +8,7 @@ import com.bka.ssi.generator.domain.objects.ProofExchangeRecordDo
 import com.bka.ssi.generator.domain.services.IAriesObserver
 import org.hyperledger.aries.api.connection.ConnectionRecord
 import org.hyperledger.aries.api.issue_credential_v1.V1CredentialExchange
+import org.hyperledger.aries.api.message.ProblemReport
 import org.hyperledger.aries.api.present_proof.PresentationExchangeRecord
 import org.hyperledger.aries.api.present_proof.PresentationExchangeState
 import org.hyperledger.aries.webhook.EventHandler
@@ -85,5 +86,9 @@ class AcaPyPublisher(
                 )
             )
         }
+    }
+
+    override fun handleProblemReport(report: ProblemReport?) {
+        errorLogger.reportAriesEventError("AcaPyPublisher.handleProblemReport: ${report.toString()}")
     }
 }
