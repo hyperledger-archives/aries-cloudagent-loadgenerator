@@ -104,6 +104,10 @@ function startLoadGenerator() {
   fi
 }
 
+function startRedisCluster() {
+  docker-compose -f ./redis-cluster/docker-compose-redis-cluster.yml up -d
+}
+
 function startDashboard() {
   echo "Starting dashboard and logging containers ..."
 
@@ -120,7 +124,7 @@ function startDashboard() {
 
 function creatDockerNetwork() {
   echo "Creating the docker network ..."
-  docker network create aries-load-test
+  docker network create --subnet=172.28.0.0/24 aries-load-test
 }
 
 function removeDockerNetwork() {
@@ -195,6 +199,10 @@ function startAll() {
     startDashboard
   fi
 
+  if [ "${SYSTEM_REDIS_CLUSTER}" = true ]; then
+    startRedisCluster
+  fi
+
   if [ "${SYSTEM_ISSUER_POSTGRES_DB}" = true ]; then
     if [ "${SYSTEM_ISSUER_POSTGRES_DB_CLUSTER}" = true ]; then
       startPostgresCluster
@@ -256,6 +264,9 @@ function downAll() {
 
   echo "Stopping and removing any Wallet-DB containers as well as volumes ..."
   docker-compose -f ./agents/docker-compose-issuer-verifier-walletdb.yml down -v
+
+  echo "Stopping and removing any Redis Cluster containers ..."
+  docker-compose -f ./redis-cluster/docker-compose-redis-cluster.yml down -v
 
   echo "Stopping and removing dashboard and logging containers as well as volumes ..."
   docker-compose -f ./dashboard/docker-compose-dashboards.yml down -v
