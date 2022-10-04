@@ -34,7 +34,7 @@
           </option>
           <option name="pluginClasspaths">
             <array>
-              <option value="$KOTLIN_BUNDLED$/lib/allopen-compiler-plugin.jar" />
+              <option value="$USER_HOME$/Library/Caches/JetBrains/IntelliJIdea2022.2/kotlin-dist-for-ide/1.6.10/lib/allopen-compiler-plugin.jar" />
             </array>
           </option>
           <option name="errors">
