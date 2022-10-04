@@ -118,6 +118,16 @@ function startDashboard() {
   fi
 }
 
+function creatDockerNetwork() {
+  echo "Creating the docker network ..."
+  docker network create aries-load-test
+}
+
+function removeDockerNetwork() {
+  echo "Removing the docker network ..."
+  docker network remove aries-load-test
+}
+
 function startIndyNetwork() {
   echo "Starting the VON Network ..."
   ./von-network/manage build
@@ -175,6 +185,8 @@ function buildAcaPyDebugImage() {
 }
 
 function startAll() {
+  creatDockerNetwork
+
   if [ "${SYSTEM_LEDGER}" = true ]; then
     startIndyNetwork
   fi
@@ -202,6 +214,8 @@ function startAll() {
 }
 
 function debug() {
+  creatDockerNetwork
+
   if [ "${SYSTEM_LEDGER}" = true ]; then
       startIndyNetwork
   fi
@@ -245,6 +259,8 @@ function downAll() {
 
   echo "Stopping and removing dashboard and logging containers as well as volumes ..."
   docker-compose -f ./dashboard/docker-compose-dashboards.yml down -v
+
+  removeDockerNetwork
 }
 
 case "${COMMAND}" in
