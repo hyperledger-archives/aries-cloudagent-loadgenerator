@@ -1,0 +1,140 @@
+version: "3.7"
+services:
+
+  issuer-verifier-acapy:
+    image: ${ACAPY_IMAGE}
+    entrypoint: /bin/bash
+    command: [
+        "-c",
+        "sleep 10;
+        aca-py start \
+        --auto-provision
+        --admin 0.0.0.0 10000 \
+        --inbound-transport http 0.0.0.0 10001 \
+        --outbound-transport http \
+        --endpoint http://issuer-verifier-nginx:10001 \
+        --genesis-url ${LEDGER_GENESIS} \
+        --ledger-pool-name ${LEDGER_POOL_NAME} \
+        --invite-base-url didcomm://aries_connection_invitation \
+        ${MULTITENANCY_SETTINGS} \
+        --admin-insecure-mode \
+        --label issuer_verifier_acapy \
+        --wallet-type ${WALLET_TYPE} \
+        --wallet-name ${POSTGRES_DB} \
+        --wallet-key key \
+        --wallet-storage-type postgres_storage \
+        --wallet-storage-config '{\"url\":\"host.docker.internal:5432\",\"max_connections\":${MAX_WALLET_CONNECTIONS_PER_ACAPY}}' \
+        --wallet-storage-creds '{\"account\":\"${POSTGRES_USER}\",\"password\":\"${POSTGRES_PASSWORD}\",\"admin_account\":\"${POSTGRES_USER}\",\"admin_password\":\"${POSTGRES_PASSWORD}\"}' \
+        --auto-ping-connection \
+        --auto-verify-presentation \
+        --invite-public \
+        --public-invites \
+        --invite-multi-use \
+        --tails-server-base-url ${ACAPY_TAILS_SERVER_BASE_URL} \
+        --seed ${ISSUER_DID_SEED} \
+        --log-level ${ACAPY_LOG_LEVEL} \
+        --webhook-url ${LOAD_GENERATOR_WEBHOOK_ENDPOINT} \
+        ${ACAPY_DEBUG_OPTIONS}"
+    ]
+    networks:
+      - aries-load-test
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "50m"
+    restart: always
+
+  issuer-verifier-nginx:
+    container_name: issuer-verifier-nginx
+    image: nginx:latest
+    volumes:
+      - ./nginx-issuer-verifier-${NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES}.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - issuer-verifier-acapy
+    ports:
+      - 10000:10000
+    networks:
+      - aries-load-test
+
+  holder-acapy:
+    image: ${ACAPY_IMAGE}
+    entrypoint: /bin/bash
+    command: [
+        "-c",
+        "sleep 10;
+        export IP=`ifconfig eth0 | grep 'inet ' | awk '{print $$2}'`;
+        echo $$IP;
+        aca-py start \
+        --auto-provision \
+        --inbound-transport http 0.0.0.0 10011 \
+        --outbound-transport http \
+        --admin 0.0.0.0 10010 \
+        --endpoint http://$$IP:10011 \
+        --genesis-url ${LEDGER_GENESIS} \
+        --ledger-pool-name $LEDGER_POOL_NAME \
+        --ledger-pool-name ${LEDGER_POOL_NAME} \
+        --admin-insecure-mode \
+        --label holder_acapy \
+        --wallet-type ${WALLET_TYPE} \
+        --wallet-name wallet_db \
+        --wallet-key key \
+        --wallet-storage-type default \
+        --auto-accept-invites \
+        --invite-public \
+        --public-invites \
+        --auto-accept-requests \
+        --auto-ping-connection \
+        --auto-respond-credential-offer \
+        --auto-respond-credential-proposal \
+        --auto-respond-credential-request \
+        --auto-respond-messages \
+        --auto-store-credential \
+        --auto-respond-presentation-request \
+        --auto-respond-presentation-proposal \
+        --auto-verify-presentation \
+        --log-level ${ACAPY_LOG_LEVEL} \
+        ${ACAPY_DEBUG_OPTIONS}"
+    ]
+    depends_on:
+      - tails-server
+    networks:
+      - aries-load-test
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "50m"
+    restart: always
+
+  tails-server:
+    container_name: tails-server
+    build:
+      context: ./indy-tails-server
+      dockerfile: docker/Dockerfile.tails-server
+    command: >
+      tails-server
+        --host 0.0.0.0
+        --port 6543
+        --storage-path /tmp/tails-files
+        --log-level INFO
+
+    volumes:
+      - tails-server-volume:/home/indy/tails-files
+    ports:
+      - 6543:6543
+    networks:
+      - aries-load-test
+    restart: always
+
+networks:
+  aries-load-test:
+    external: true
+    name: aries-load-test
+
+volumes:
+  tails-server-volume:
