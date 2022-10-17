@@ -22,17 +22,14 @@ services:
           --wallet-key key \
           --wallet-storage-type default \
           --log-level ${ACAPY_LOG_LEVEL} \
-          --plugin redis_queue.v1_0.events
-          --plugin-config /config/queue-plugin-config-mediator.yml
           --open-mediation
           ${ACAPY_DEBUG_OPTIONS}"
     ]
-    volumes:
-      - ./queue-plugin-config-mediator.yml:/config/queue-plugin-config-mediator.yml:ro
     networks:
       - aries-load-test
     ports:
-      - 10000:10000
+      - 10001:10001
+      - 10002:10002
     extra_hosts:
       - "host.docker.internal:host-gateway"
     logging:
@@ -50,10 +47,12 @@ services:
         "sleep 10;
         aca-py start \
         --auto-provision
+        --mediator-connections-invite true \
+        --mediator-invitation mediator-invitation-url-placeholder \
         --admin 0.0.0.0 10000 \
         --inbound-transport http 0.0.0.0 10001 \
         --outbound-transport http \
-        --endpoint http://issuer-verifier-nginx:10001 \
+        --endpoint http://issuer-verifier-mediator:10001 \
         --genesis-url ${LEDGER_GENESIS} \
         --ledger-pool-name ${LEDGER_POOL_NAME} \
         --invite-base-url didcomm://aries_connection_invitation \
