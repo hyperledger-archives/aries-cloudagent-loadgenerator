@@ -7,14 +7,13 @@ services:
     command: [
       "-c",
       "sleep 10;
-          pip install git+https://github.com/bcgov/aries-acapy-plugin-redis-events.git;
           aca-py start \
-          --auto-provision
+          --no-ledger \
+          --auto-provision \
           --admin 0.0.0.0 10002 \
           --inbound-transport http 0.0.0.0 10001 \
-          --outbound-transport redis_queue.v1_0.outbound \
+          --outbound-transport http \
           --endpoint http://issuer-verifier-mediator:10001 \
-          --invite-base-url didcomm://aries_connection_invitation \
           --admin-insecure-mode \
           --label mediator \
           --wallet-type ${WALLET_TYPE} \
@@ -22,7 +21,7 @@ services:
           --wallet-key key \
           --wallet-storage-type default \
           --log-level ${ACAPY_LOG_LEVEL} \
-          --open-mediation
+          --open-mediation \
           ${ACAPY_DEBUG_OPTIONS}"
     ]
     networks:
@@ -45,14 +44,16 @@ services:
     command: [
         "-c",
         "sleep 10;
+        MEDIATOR_INVITATION=$$(curl -X 'POST' 'http://issuer-verifier-mediator:10002/connections/create-invitation?alias=issuer-verifier&auto_accept=true' | grep -o 'http:\/\/issuer-verifier-mediator:10001?c_i=[^\"]*'); \
+        echo $${MEDIATOR_INVITATION}; \
         aca-py start \
-        --auto-provision
-        --mediator-connections-invite true \
-        --mediator-invitation mediator-invitation-url-placeholder \
+        --auto-provision \
+        --mediator-connections-invite \
+        --mediator-invitation $${MEDIATOR_INVITATION} \
         --admin 0.0.0.0 10000 \
         --inbound-transport http 0.0.0.0 10001 \
         --outbound-transport http \
-        --endpoint http://issuer-verifier-mediator:10001 \
+        --endpoint http://issuer-verifier-nginx:10001 \
         --genesis-url ${LEDGER_GENESIS} \
         --ledger-pool-name ${LEDGER_POOL_NAME} \
         --invite-base-url didcomm://aries_connection_invitation \
@@ -78,6 +79,8 @@ services:
     ]
     networks:
       - aries-load-test
+    depends_on:
+      - issuer-verifier-mediator
     extra_hosts:
       - "host.docker.internal:host-gateway"
     logging:
