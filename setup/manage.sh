@@ -153,7 +153,13 @@ function startAgents() {
   sleep 15
 
   echo "Starting all AcaPy related docker containers ..."
-  docker-compose -f ./agents/docker-compose-agents.yml up -d --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES --scale holder-acapy=$NUMBER_OF_HOLDER_ACAPY_INSTANCES
+  if [ "${ENABLE_MEDIATOR}" = true ]; then
+    docker-compose -f ./agents/docker-compose-agents-mediator.yml up -d --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES --scale holder-acapy=$NUMBER_OF_HOLDER_ACAPY_INSTANCES
+  elif [ "${ENABLE_REDIS_QUEUES}" = true ]; then
+    docker-compose -f ./agents/docker-compose-agents-redis.yml up -d --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES --scale holder-acapy=$NUMBER_OF_HOLDER_ACAPY_INSTANCES
+  else
+    docker-compose -f ./agents/docker-compose-agents.yml up -d --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES --scale holder-acapy=$NUMBER_OF_HOLDER_ACAPY_INSTANCES
+  fi
 
   echo "Waiting for all the agents to start... (sleeping 15 seconds)"
   sleep 15
@@ -248,7 +254,13 @@ function debug() {
       export ACAPY_IMAGE=acapy-debug
     fi
 
-    docker-compose -f ./agents/docker-compose-agents-debugging.yml up -d
+    if [ "${ENABLE_MEDIATOR}" = true ]; then
+      docker-compose -f ./agents/docker-compose-agents-mediator.yml up -d --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES --scale holder-acapy=$NUMBER_OF_HOLDER_ACAPY_INSTANCES
+    elif [ "${ENABLE_REDIS_QUEUES}" = true ]; then
+      docker-compose -f ./agents/docker-compose-agents-redis.yml up -d --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES --scale holder-acapy=$NUMBER_OF_HOLDER_ACAPY_INSTANCES
+    else
+      docker-compose -f ./agents/docker-compose-agents.yml up -d --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES --scale holder-acapy=$NUMBER_OF_HOLDER_ACAPY_INSTANCES
+    fi
   fi
 }
 
@@ -261,6 +273,8 @@ function downAll() {
 
   echo "Stopping and removing any running AcaPy containers as well as volumes ..."
   docker-compose -f ./agents/docker-compose-agents.yml down -v
+  docker-compose -f ./agents/docker-compose-agents-mediator.yml down -v
+  docker-compose -f ./agents/docker-compose-agents-redis.yml down -v
 
   echo "Stopping and removing any Wallet-DB containers as well as volumes ..."
   docker-compose -f ./agents/docker-compose-issuer-verifier-walletdb.yml down -v
