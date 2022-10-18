@@ -9,12 +9,12 @@ services:
       "sleep 10;
           pip install git+https://github.com/bcgov/aries-acapy-plugin-redis-events.git;
           aca-py start \
-          --auto-provision
+          --no-ledger \
+          --auto-provision \
           --admin 0.0.0.0 10002 \
           --inbound-transport http 0.0.0.0 10001 \
           --outbound-transport redis_queue.v1_0.outbound \
           --endpoint http://issuer-verifier-mediator:10001 \
-          --invite-base-url didcomm://aries_connection_invitation \
           --admin-insecure-mode \
           --label mediator \
           --wallet-type ${WALLET_TYPE} \
@@ -22,17 +22,18 @@ services:
           --wallet-key key \
           --wallet-storage-type default \
           --log-level ${ACAPY_LOG_LEVEL} \
-          --plugin redis_queue.v1_0.events
-          --plugin-config /config/queue-plugin-config-mediator.yml
-          --open-mediation
+          --plugin redis_queue.v1_0.events \
+          --plugin-config /config/queue-plugin-config.yml \
+          --open-mediation \
           ${ACAPY_DEBUG_OPTIONS}"
     ]
     volumes:
-      - ./queue-plugin-config-mediator.yml:/config/queue-plugin-config-mediator.yml:ro
+      - ./queue-plugin-config-mediator.yml:/config/queue-plugin-config.yml:ro
     networks:
       - aries-load-test
     ports:
-      - 10000:10000
+      - 10001:10001
+      - 10002:10002
     extra_hosts:
       - "host.docker.internal:host-gateway"
     logging:
@@ -46,13 +47,18 @@ services:
     image: ${ACAPY_IMAGE}
     entrypoint: /bin/bash
     command: [
-        "-c",
-        "sleep 10;
+      "-c",
+      "sleep 10;
+        pip install git+https://github.com/bcgov/aries-acapy-plugin-redis-events.git;
+        MEDIATOR_INVITATION=$$(curl -X 'POST' 'http://issuer-verifier-mediator:10002/connections/create-invitation?alias=issuer-verifier&auto_accept=true' | grep -o 'http:\/\/issuer-verifier-mediator:10001?c_i=[^\"]*'); \
+        echo $${MEDIATOR_INVITATION}; \
         aca-py start \
-        --auto-provision
+        --auto-provision \
+        --mediator-connections-invite \
+        --mediator-invitation $${MEDIATOR_INVITATION} \
         --admin 0.0.0.0 10000 \
-        --inbound-transport http 0.0.0.0 10001 \
-        --outbound-transport http \
+        --inbound-transport redis_queue.v1_0.inbound redis 0 \
+        --outbound-transport redis_queue.v1_0.outbound \
         --endpoint http://issuer-verifier-nginx:10001 \
         --genesis-url ${LEDGER_GENESIS} \
         --ledger-pool-name ${LEDGER_POOL_NAME} \
@@ -75,10 +81,16 @@ services:
         --seed ${ISSUER_DID_SEED} \
         --log-level ${ACAPY_LOG_LEVEL} \
         --webhook-url ${LOAD_GENERATOR_WEBHOOK_ENDPOINT} \
+        --plugin redis_queue.v1_0.events \
+        --plugin-config /config/queue-plugin-config.yml \
         ${ACAPY_DEBUG_OPTIONS}"
     ]
+    volumes:
+      - ./queue-plugin-config-agent.yml:/config/queue-plugin-config.yml:ro
     networks:
       - aries-load-test
+    depends_on:
+      - issuer-verifier-mediator
     extra_hosts:
       - "host.docker.internal:host-gateway"
     logging:
@@ -104,8 +116,8 @@ services:
     image: ${ACAPY_IMAGE}
     entrypoint: /bin/bash
     command: [
-        "-c",
-        "sleep 10;
+      "-c",
+      "sleep 10;
         export IP=`ifconfig eth0 | grep 'inet ' | awk '{print $$2}'`;
         echo $$IP;
         aca-py start \
