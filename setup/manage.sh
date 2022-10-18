@@ -137,8 +137,8 @@ function startIndyNetwork() {
   ./von-network/manage build
   ./von-network/manage start --wait
 
-  echo "Waiting for the ledger to start... (sleeping 10 seconds)"
-  sleep 10
+  echo "Waiting for the ledger to start... (sleeping 20 seconds)"
+  sleep 20
 
   echo "Registering issuer DID..."
   curl -d "{\"role\": \"ENDORSER\", \"seed\":\"$ISSUER_DID_SEED\"}" -H "Content-Type: application/json" -X POST $LEDGER_REGISTER_DID_ENDPOINT_HOST
