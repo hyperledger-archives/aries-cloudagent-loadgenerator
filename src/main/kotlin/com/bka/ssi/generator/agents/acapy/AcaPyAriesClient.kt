@@ -83,7 +83,7 @@ class AcaPyAriesClient(
         return ConnectionInvitationDo(
             createInvitationRequest.get().invitation.atType,
             createInvitationRequest.get().invitation.atId,
-            createInvitationRequest.get().invitation.routingKeys,
+            createInvitationRequest.get().invitation.routingKeys ?: emptyList(),
             createInvitationRequest.get().invitation.recipientKeys,
             createInvitationRequest.get().invitation.serviceEndpoint,
             createInvitationRequest.get().invitation.label
