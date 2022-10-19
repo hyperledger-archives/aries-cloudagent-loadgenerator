@@ -90,7 +90,7 @@
           "titleSize": 17,
           "valueSize": 36
         },
-        "textMode": "value_and_name"
+        "textMode": "auto"
       },
       "pluginVersion": "9.1.6",
       "targets": [
