@@ -11,7 +11,7 @@ class ErrorLogger() {
 
     fun reportTestFlowError(message: String) {
         logger.error(
-            "type=test_flow_error message=$message time=${
+            "type=test_flow_error message=\"$message\" time=${
                 Instant.now().toEpochMilli()
             }"
         )
@@ -19,7 +19,7 @@ class ErrorLogger() {
 
     fun reportTestRunnerError(message: String) {
         logger.error(
-            "type=test_runner_error message=$message time=${
+            "type=test_runner_error message=\"$message\" time=${
                 Instant.now().toEpochMilli()
             }"
         )
@@ -27,15 +27,23 @@ class ErrorLogger() {
 
     fun reportAriesEventError(message: String) {
         logger.error(
-            "type=aries_event_error message=$message time=${
+            "type=aries_event_error message=\"$message\" time=${
                 Instant.now().toEpochMilli()
             }"
         )
     }
 
-    fun reportAriesClientError(message: String) {
+    fun reportAriesClientHttpRequestError(
+        ariesClientType: String,
+        httpMethod: String,
+        uri: String,
+        httpResponseCode: Int,
+        durationInMs: Double,
+        appErrorCode: String,
+        message: String
+    ) {
         logger.error(
-            "type=aries_client_error message=$message time=${
+            "type=aries_client_error ariesClientType=$ariesClientType httpMethod=$httpMethod uri=$uri httpCode=${httpResponseCode} durationInMs=${durationInMs} appErrorCode=$appErrorCode message=\"$message\" time=${
                 Instant.now().toEpochMilli()
             }"
         )

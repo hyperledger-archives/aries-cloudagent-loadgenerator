@@ -26,6 +26,11 @@ schema_config:
         prefix: index_
         period: 24h
 
+querier:
+  engine:
+    timeout: 5m
+  query_timeout: 5m
+
 ruler:
   alertmanager_url: http://localhost:9093
 
