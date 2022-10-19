@@ -2435,7 +2435,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -2536,7 +2537,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -2579,7 +2581,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(rate(container_cpu_usage_seconds_total{instance=~\".*\",name=~\"issuer-verifier-mediator.+\",name=~\".+\"}[5m])) by (name) *100",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{instance=~\".*\",name=~\".*issuer-verifier-mediator.+\"}[5m])) by (name) *100",
           "hide": false,
           "interval": "",
           "legendFormat": "{{name}}",
@@ -2635,7 +2637,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -2679,7 +2682,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(container_memory_rss{instance=~\".*\",name=~\"issuer-verifier-mediator.+\",name=~\".+\"}) by (name)",
+          "expr": "sum(container_memory_rss{instance=~\".*\",name=~\".*issuer-verifier-mediator.+\"}) by (name)",
           "hide": false,
           "interval": "",
           "legendFormat": "{{name}}",
@@ -2761,7 +2764,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -2803,7 +2807,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "sum(rate(container_cpu_usage_seconds_total{instance=~\".*\",name=~\"agents_issuer-verifier-acapy_.+\",name=~\".+\"}[5m])) by (name) *100",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{instance=~\".*\",name=~\"agents_issuer-verifier-acapy_.+\"}[5m])) by (name) *100",
           "hide": false,
           "interval": "",
           "legendFormat": "{{name}}",
@@ -2858,7 +2862,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -2901,7 +2906,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "sum(container_memory_rss{instance=~\".*\",name=~\"agents_issuer-verifier-acapy_.+\",name=~\".+\"}) by (name)",
+          "expr": "sum(container_memory_rss{instance=~\".*\",name=~\"agents_issuer-verifier-acapy_.+\"}) by (name)",
           "hide": false,
           "interval": "",
           "legendFormat": "{{name}}",
@@ -2982,7 +2987,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -3024,7 +3030,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "sum(rate(container_cpu_usage_seconds_total{instance=~\".*\",name=~\"issuer-verifier-wallet-db\",name=~\".+\"}[5m])) by (name) *100",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{instance=~\".*\",name=~\"issuer-verifier-wallet-db\"}[5m])) by (name) *100",
           "hide": false,
           "interval": "",
           "legendFormat": "{{name}}",
@@ -3079,7 +3085,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -3122,7 +3129,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "sum(container_memory_rss{instance=~\".*\",name=~\"issuer-verifier-wallet-db\",name=~\".+\"}) by (name)",
+          "expr": "sum(container_memory_rss{instance=~\".*\",name=~\"issuer-verifier-wallet-db\"}) by (name)",
           "hide": false,
           "interval": "",
           "legendFormat": "{{name}}",
@@ -3203,7 +3210,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -3245,7 +3253,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "sum(rate(container_cpu_usage_seconds_total{instance=~\".*\",name=~\"agents_holder-acapy_.+\",name=~\".+\"}[5m])) by (name) *100",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{instance=~\".*\",name=~\"agents_holder-acapy_.+\"}[5m])) by (name) *100",
           "hide": false,
           "interval": "",
           "legendFormat": "{{name}}",
@@ -3300,7 +3308,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -3343,7 +3352,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "sum(container_memory_rss{instance=~\".*\",name=~\"agents_holder-acapy_.+\",name=~\".+\"}) by (name)",
+          "expr": "sum(container_memory_rss{instance=~\".*\",name=~\"agents_holder-acapy_.+\"}) by (name)",
           "hide": false,
           "interval": "",
           "legendFormat": "{{name}}",
@@ -3424,7 +3433,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -3466,7 +3476,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "sum(rate(container_cpu_usage_seconds_total{instance=~\".*\",name=~\"von_node.*\",name=~\".+\"}[5m])) by (name) *100",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{instance=~\".*\",name=~\"von_node.*\"}[5m])) by (name) *100",
           "hide": false,
           "interval": "",
           "legendFormat": "{{name}}",
@@ -3521,7 +3531,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -3564,7 +3575,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "sum(container_memory_rss{instance=~\".*\",name=~\"von_node.+\",name=~\".+\"}) by (name)",
+          "expr": "sum(container_memory_rss{instance=~\".*\",name=~\"von_node.+\"}) by (name)",
           "hide": false,
           "interval": "",
           "legendFormat": "{{name}}",
@@ -3645,7 +3656,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -3687,7 +3699,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "sum(rate(container_cpu_usage_seconds_total{instance=~\".*\",name=~\"tails-server\",name=~\".+\"}[5m])) by (name) *100",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{instance=~\".*\",name=~\"tails-server\"}[5m])) by (name) *100",
           "hide": false,
           "interval": "",
           "legendFormat": "{{name}}",
@@ -3742,7 +3754,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -3785,7 +3798,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "sum(container_memory_rss{instance=~\".*\",name=~\"tails-server\",name=~\".+\"}) by (name)",
+          "expr": "sum(container_memory_rss{instance=~\".*\",name=~\"tails-server\"}) by (name)",
           "hide": false,
           "interval": "",
           "legendFormat": "{{name}}",
@@ -3866,7 +3879,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -3908,7 +3922,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "sum(rate(container_cpu_usage_seconds_total{instance=~\".*\",name=~\"load-generator.*\",name=~\".+\"}[5m])) by (name) *100",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{instance=~\".*\",name=~\"load-generator.*\"}[5m])) by (name) *100",
           "hide": false,
           "interval": "",
           "legendFormat": "{{name}}",
@@ -3963,7 +3977,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -4006,7 +4021,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "sum(container_memory_rss{instance=~\".*\",name=~\"load-generator.*\",name=~\".+\"}) by (name)",
+          "expr": "sum(container_memory_rss{instance=~\".*\",name=~\"load-generator.*\"}) by (name)",
           "hide": false,
           "interval": "",
           "legendFormat": "{{name}}",
@@ -4087,7 +4102,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -4129,7 +4145,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "sum(rate(container_cpu_usage_seconds_total{instance=~\".*\",name=~\".*\",name=~\".+\"}[5m])) by (name) *100",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{instance=~\".*\",name=~\".*\"}[5m])) by (name) *100",
           "hide": false,
           "interval": "",
           "legendFormat": "{{name}}",
@@ -4184,7 +4200,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -4227,7 +4244,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "sum(container_memory_rss{instance=~\".*\",name=~\".*\",name=~\".+\"}) by (name)",
+          "expr": "sum(container_memory_rss{instance=~\".*\",name=~\".*\"}) by (name)",
           "hide": false,
           "interval": "",
           "legendFormat": "{{name}}",
@@ -4708,7 +4725,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -4841,7 +4859,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -5273,7 +5292,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
