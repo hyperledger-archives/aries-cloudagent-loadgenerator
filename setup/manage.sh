@@ -148,8 +148,7 @@ function startAgents() {
   configureMultitenancyFlags
 
   docker-compose -f ./agents/docker-compose-agents.yml up -d issuer-verifier-acapy
-
-  echo "Provisioning AcaPys... (sleeping 15 seconds)"
+  echo "Provisioning Issuer-Verifier-AcaPy Wallet... (sleeping 15 seconds)"
   sleep 15
 
   echo "Starting all AcaPy related docker containers ..."
