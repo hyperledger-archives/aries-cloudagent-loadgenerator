@@ -169,13 +169,13 @@
             "uid": "P8E80F9AEF21F6940"
           },
           "editorMode": "code",
-          "expr": "sum (count_over_time(\n  {compose_service=\"issuer-verifier-mediator\"} |= \"aries_cloudagent.transport.outbound.manager ERROR >>> Error when posting to\" | pattern \"<_>aries_cloudagent.transport.outbound.manager ERROR >>> Error when posting to: <client>; Error:<_>\"\n[$rate_interval])) by (client)",
-          "legendFormat": "{{client}}",
+          "expr": "sum (count_over_time(\n  {compose_service=\"issuer-verifier-mediator\"} |= \"error\" | pattern \"<_>aries_cloudagent.<error>:<_>\"\n[$rate_interval])) by (error)",
+          "legendFormat": "{{error}}",
           "queryType": "range",
           "refId": "A"
         }
       ],
-      "title": "Number of undelivered Webhook Events [$rate_interval]",
+      "title": "Types of Errors Logged [$rate_interval]",
       "type": "state-timeline"
     }
   ],
@@ -315,6 +315,6 @@
   "timezone": "",
   "title": "IssuerVerifier Mediator AcaPy Logs",
   "uid": "Pf8FabFJw",
-  "version": 1,
+  "version": 2,
   "weekStart": ""
 }
