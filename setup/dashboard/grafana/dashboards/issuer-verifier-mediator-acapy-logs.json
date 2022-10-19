@@ -89,9 +89,9 @@
           "titleSize": 17,
           "valueSize": 36
         },
-        "textMode": "value_and_name"
+        "textMode": "auto"
       },
-      "pluginVersion": "9.1.5",
+      "pluginVersion": "9.1.6",
       "targets": [
         {
           "datasource": {
@@ -99,13 +99,13 @@
             "uid": "P8E80F9AEF21F6940"
           },
           "editorMode": "code",
-          "expr": "count_over_time(\n  {compose_service=\"issuer-verifier-mediator\"} |= \"aries_cloudagent.transport.outbound.manager ERROR >>> Outbound message failed to deliver, NOT Re-queued\"\n[$aggregation_period])",
-          "legendFormat": "{{httpMethod}} {{uri}} [{{httpCode}}]: {{message}} ",
+          "expr": "count_over_time(\n  {compose_service=\"issuer-verifier-mediator\"} |=\"error\"\n[$aggregation_period])",
+          "legendFormat": "",
           "queryType": "range",
           "refId": "A"
         }
       ],
-      "title": "Number of undelivered Webhook Events  [Last $aggregation_period]",
+      "title": "Number of Errors Logged [Last $aggregation_period]",
       "type": "stat"
     },
     {
@@ -315,6 +315,6 @@
   "timezone": "",
   "title": "IssuerVerifier Mediator AcaPy Logs",
   "uid": "Pf8FabFJw",
-  "version": 2,
+  "version": 1,
   "weekStart": ""
 }
