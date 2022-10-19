@@ -4,10 +4,9 @@ import com.bka.ssi.generator.application.logger.ErrorLogger
 import com.bka.ssi.generator.domain.services.IHttpRequestObserver
 import okhttp3.Interceptor
 import okhttp3.Response
-import org.springframework.stereotype.Service
 
-@Service
-class AcaPyOkHttpInterceptor(
+class AcaPyRequestLoggerInterceptor(
+    private val ariesClientType: String,
     private val handler: IHttpRequestObserver,
     private val errorLogger: ErrorLogger
 ) : Interceptor {
@@ -24,8 +23,14 @@ class AcaPyOkHttpInterceptor(
         handler.logHttpRequest(request.method, request.url.encodedPath, response.code, durationInMs)
 
         if (response.code != 200 && response.code != 201) {
-            errorLogger.reportAriesClientError(
-                "request:${request.method}${request.url.encodedPath} httpCode:${response.code} durationInMs:${durationInMs} body:${response.body?.string()}"
+            errorLogger.reportAriesClientHttpRequestError(
+                ariesClientType = "AcaPy.$ariesClientType",
+                httpMethod = request.method,
+                uri = request.url.encodedPath,
+                httpResponseCode = response.code,
+                durationInMs = durationInMs,
+                appErrorCode = "n/a",
+                message = response.body?.string() ?: ""
             )
         }
 
