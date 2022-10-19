@@ -43,6 +43,7 @@
         "type": "loki",
         "uid": "P8E80F9AEF21F6940"
       },
+      "description": "This counter only counts those events that could not be delivered even after retrying it multiple times.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -91,7 +92,7 @@
         },
         "textMode": "value_and_name"
       },
-      "pluginVersion": "9.1.5",
+      "pluginVersion": "9.1.6",
       "targets": [
         {
           "datasource": {
@@ -100,7 +101,7 @@
           },
           "editorMode": "code",
           "expr": "count_over_time(\n  {compose_service=\"issuer-verifier-acapy\"} |= \"aries_cloudagent.transport.outbound.manager ERROR >>> Outbound message failed to deliver, NOT Re-queued\"\n[$aggregation_period])",
-          "legendFormat": "{{httpMethod}} {{uri}} [{{httpCode}}]: {{message}} ",
+          "legendFormat": "",
           "queryType": "range",
           "refId": "A"
         }
@@ -113,6 +114,7 @@
         "type": "loki",
         "uid": "P8E80F9AEF21F6940"
       },
+      "description": "Since all failed deliveries will be retired, the event might still have been delivered successfully.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -169,13 +171,13 @@
             "uid": "P8E80F9AEF21F6940"
           },
           "editorMode": "code",
-          "expr": "sum (count_over_time(\n  {compose_service=\"issuer-verifier-acapy\"} |= \"aries_cloudagent.transport.outbound.manager ERROR >>> Error when posting to\" | pattern \"<_>aries_cloudagent.transport.outbound.manager ERROR >>> Error when posting to: <client>; Error:<_>\"\n[$rate_interval])) by (client)",
+          "expr": "sum (count_over_time(\n  {compose_service=\"issuer-verifier-acapy\"} |= \"aries_cloudagent.transport.outbound.manager ERROR >>> Error when posting to\" | pattern \"<_>aries_cloudagent.transport.outbound.manager ERROR >>> Error when posting to: <client>/topic/<_>; Error:<_>\"\n[$rate_interval])) by (client)",
           "legendFormat": "{{client}}",
           "queryType": "range",
           "refId": "A"
         }
       ],
-      "title": "Number of undelivered Webhook Events [$rate_interval]",
+      "title": "Number of Failed Delivery Attempts [$rate_interval]",
       "type": "state-timeline"
     },
     {
@@ -231,7 +233,7 @@
         },
         "textMode": "value_and_name"
       },
-      "pluginVersion": "9.1.5",
+      "pluginVersion": "9.1.6",
       "targets": [
         {
           "datasource": {
@@ -268,8 +270,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -455,6 +456,6 @@
   "timezone": "",
   "title": "IssuerVerifier AcaPy Logs",
   "uid": "Pf8FurFJy",
-  "version": 2,
+  "version": 1,
   "weekStart": ""
 }
