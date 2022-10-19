@@ -42,10 +42,10 @@ class ErrorLogger() {
         appErrorCode: String,
         message: String
     ) {
-        val reformatedMessage = message.replace("\"", "'")
+        val reformattedMessage = message.replace("\"", "'")
 
         logger.error(
-            "type=aries_client_error ariesClientType=$ariesClientType httpMethod=$httpMethod uri=$uri httpCode=${httpResponseCode} durationInMs=${durationInMs} appErrorCode=$appErrorCode message=\"$reformatedMessage\" time=${
+            "type=aries_client_error ariesClientType=$ariesClientType httpMethod=$httpMethod uri=$uri httpCode=${httpResponseCode} durationInMs=${durationInMs} appErrorCode=$appErrorCode message=\"$reformattedMessage\" time=${
                 Instant.now().toEpochMilli()
             }"
         )
