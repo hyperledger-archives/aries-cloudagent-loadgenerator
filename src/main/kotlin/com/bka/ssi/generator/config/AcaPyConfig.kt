@@ -19,10 +19,11 @@
 package com.bka.ssi.generator.config
 
 import com.bka.ssi.generator.agents.acapy.AcaPyAriesClient
-import com.bka.ssi.generator.agents.acapy.AcaPyOkHttpInterceptor
+import com.bka.ssi.generator.agents.acapy.AcaPyRequestLoggerInterceptor
 import com.bka.ssi.generator.application.logger.AriesClientLogger
 import com.bka.ssi.generator.application.logger.ErrorLogger
 import com.bka.ssi.generator.domain.services.IAriesClient
+import com.bka.ssi.generator.domain.services.IHttpRequestObserver
 import okhttp3.OkHttpClient
 import org.hyperledger.acy_py.generated.model.DID
 import org.hyperledger.acy_py.generated.model.DIDCreate
@@ -58,42 +59,45 @@ class AcaPyConfig(
     var logger: Logger = LoggerFactory.getLogger(AcaPyConfig::class.java)
 
     @Bean(name = ["IssuerVerifier"])
-    fun issuerVerifierAriesClient(okHttpPublisher: AcaPyOkHttpInterceptor): IAriesClient? {
+    fun issuerVerifierAriesClient(
+        handler: IHttpRequestObserver,
+        errorLogger: ErrorLogger
+    ): IAriesClient? {
         if (issuerVerifierAcaPyUrl == null) {
             logger.error("Unable to establish connection to Issuer/Verifier AcaPy. Issuer/Verifier AcaPy URL not configured.")
             return null
         }
 
         if (issuerVerifierMultitenancyEnabled) {
-            return issuerVerifierClientWithMultitenancyEnabled(issuerVerifierAcaPyUrl, okHttpPublisher)
+            return issuerVerifierClientWithMultitenancyEnabled(issuerVerifierAcaPyUrl, handler)
         }
 
-        return issuerVerifierClientWithMultitenancyDisabled(issuerVerifierAcaPyUrl, okHttpPublisher)
+        return issuerVerifierClientWithMultitenancyDisabled(issuerVerifierAcaPyUrl, handler)
     }
 
     private fun issuerVerifierClientWithMultitenancyDisabled(
         issuerVerifierAcaPyUrl: String,
-        okHttpPublisher: AcaPyOkHttpInterceptor
+        handler: IHttpRequestObserver
     ): IAriesClient {
         val issuerVerifierAcaPyClient =
             buildAcaPyAriesClient(
-                okHttpPublisher,
+                AcaPyRequestLoggerInterceptor("IssuerVerifier", handler, errorLogger),
                 issuerVerifierAcaPyUrl,
                 issuerVerifierAcaPyHttpTimeoutInSeconds,
                 issuerVerifierAcaPyApiKey,
                 null
             )
 
-        return AcaPyAriesClient(issuerVerifierAcaPyClient, errorLogger, ariesClientLogger)
+        return AcaPyAriesClient(issuerVerifierAcaPyClient, ariesClientLogger)
     }
 
     private fun issuerVerifierClientWithMultitenancyEnabled(
         issuerVerifierAcaPyUrl: String,
-        okHttpPublisher: AcaPyOkHttpInterceptor
+        handler: IHttpRequestObserver,
     ): IAriesClient {
         val baseWalletAriesClient =
             buildAcaPyAriesClient(
-                okHttpPublisher,
+                AcaPyRequestLoggerInterceptor("IssuerVerifierBaseWallet", handler, errorLogger),
                 issuerVerifierAcaPyUrl,
                 issuerVerifierAcaPyHttpTimeoutInSeconds,
                 issuerVerifierAcaPyApiKey,
@@ -104,7 +108,7 @@ class AcaPyConfig(
 
         val subWalletIssuerVerifierAcaPyClient =
             buildAcaPyAriesClient(
-                okHttpPublisher,
+                AcaPyRequestLoggerInterceptor("IssuerVerifierSubWallet", handler, errorLogger),
                 issuerVerifierAcaPyUrl,
                 issuerVerifierAcaPyHttpTimeoutInSeconds,
                 issuerVerifierAcaPyApiKey,
@@ -113,7 +117,7 @@ class AcaPyConfig(
 
         createAndRegisterNewPublicDid(subWalletIssuerVerifierAcaPyClient)
 
-        return AcaPyAriesClient(subWalletIssuerVerifierAcaPyClient, errorLogger, ariesClientLogger)
+        return AcaPyAriesClient(subWalletIssuerVerifierAcaPyClient, ariesClientLogger)
     }
 
     private fun createNewSubWallet(baseWalletAriesClient: AriesClient): String {
@@ -199,7 +203,9 @@ class AcaPyConfig(
 
 
     @Bean(name = ["Holder"])
-    fun holderAriesClient(okHttpPublisher: AcaPyOkHttpInterceptor): List<IAriesClient> {
+    fun holderAriesClient(
+        handler: IHttpRequestObserver
+    ): List<IAriesClient> {
         val holderAcaPyClients = mutableListOf<IAriesClient>()
 
         if (holderAcaPyUrls.isEmpty()) {
@@ -211,10 +217,10 @@ class AcaPyConfig(
         holderAcaPyUrls.forEach {
         logger.info("Using Holder Agent: $it")
             val holderAcaPyClient =
-                buildAcaPyAriesClient(okHttpPublisher, it, holderAcapyHttpTimeoutInSeconds, holderAcaPyApiKey, null)
+                buildAcaPyAriesClient(AcaPyRequestLoggerInterceptor("Holder", handler, errorLogger), it, holderAcapyHttpTimeoutInSeconds, holderAcaPyApiKey, null)
 
             holderAcaPyClients.add(
-                AcaPyAriesClient(holderAcaPyClient, errorLogger, ariesClientLogger)
+                AcaPyAriesClient(holderAcaPyClient, ariesClientLogger)
             )
         }
 
@@ -222,7 +228,7 @@ class AcaPyConfig(
     }
 
     private fun buildAcaPyAriesClient(
-        acaPyOkHttpInterceptor: AcaPyOkHttpInterceptor,
+        acaPyOkHttpInterceptor: AcaPyRequestLoggerInterceptor,
         acaPyUrl: String,
         acaPyHttpTimeoutInSeconds: Long,
         acaPyApiKey: String?,
