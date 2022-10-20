@@ -147,16 +147,24 @@ function startIndyNetwork() {
 function startAgents() {
   configureMultitenancyFlags
 
-  docker-compose -f ./agents/docker-compose-agents.yml up -d issuer-verifier-acapy
-  echo "Provisioning Issuer-Verifier-AcaPy Wallet... (sleeping 15 seconds)"
-  sleep 15
-
   echo "Starting all AcaPy related docker containers ..."
   if [ "${ENABLE_MEDIATOR}" = true ]; then
+    docker-compose -f ./agents/docker-compose-agents-mediator.yml up -d issuer-verifier-mediator-wallet-db issuer-verifier-acapy issuer-verifier-mediator
+    echo "Provisioning AcaPy Wallets... (sleeping 15 seconds)"
+    sleep 15
+
     docker-compose -f ./agents/docker-compose-agents-mediator.yml up -d --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES --scale holder-acapy=$NUMBER_OF_HOLDER_ACAPY_INSTANCES --scale issuer-verifier-mediator=$NUMBER_OF_ISSUER_VERIFIER_MEDIATOR_ACAPY_INSTANCES
   elif [ "${ENABLE_REDIS_QUEUES}" = true ]; then
+    docker-compose -f ./agents/docker-compose-agents-redis.yml up -d issuer-verifier-mediator-wallet-db issuer-verifier-acapy issuer-verifier-mediator
+    echo "Provisioning AcaPy Wallets... (sleeping 15 seconds)"
+    sleep 15
+
     docker-compose -f ./agents/docker-compose-agents-redis.yml up -d --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES --scale holder-acapy=$NUMBER_OF_HOLDER_ACAPY_INSTANCES --scale issuer-verifier-mediator=$NUMBER_OF_ISSUER_VERIFIER_MEDIATOR_ACAPY_INSTANCES
   else
+    docker-compose -f ./agents/docker-compose-agents.yml up -d issuer-verifier-acapy
+    echo "Provisioning Issuer-Verifier-AcaPy Wallet... (sleeping 15 seconds)"
+    sleep 15
+
     docker-compose -f ./agents/docker-compose-agents.yml up -d --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES --scale holder-acapy=$NUMBER_OF_HOLDER_ACAPY_INSTANCES
   fi
 
