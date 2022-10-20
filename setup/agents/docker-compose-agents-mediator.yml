@@ -44,10 +44,10 @@ services:
           aca-py start \
           --no-ledger \
           --auto-provision \
-          --admin 0.0.0.0 10002 \
+          --admin 0.0.0.0 10000 \
           --inbound-transport http 0.0.0.0 10001 \
           --outbound-transport http \
-          --endpoint http://issuer-verifier-mediator:10001 \
+          --endpoint http://issuer-verifier-mediator-nginx:10001 \
           --admin-insecure-mode \
           --label mediator \
           --wallet-type ${WALLET_TYPE} \
@@ -62,9 +62,6 @@ services:
     ]
     networks:
       - aries-load-test
-    ports:
-      - 10001:10001
-      - 10002:10002
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:
@@ -79,13 +76,25 @@ services:
         max-size: "50m"
     restart: always
 
+  issuer-verifier-mediator-nginx:
+    container_name: issuer-verifier-mediator-nginx
+    image: nginx:latest
+    volumes:
+      - ./issuer-verifier-mediator-nginx-configs/nginx-issuer-verifier-mediator-${NUMBER_OF_ISSUER_VERIFIER_MEDIATOR_ACAPY_INSTANCES}.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - issuer-verifier-mediator
+    ports:
+      - "10002:10000"
+    networks:
+      - aries-load-test
+
   issuer-verifier-acapy:
     image: ${ACAPY_IMAGE}
     entrypoint: /bin/bash
     command: [
         "-c",
         "sleep 10;
-        MEDIATOR_INVITATION=$$(curl -X 'POST' 'http://issuer-verifier-mediator:10002/connections/create-invitation?alias=issuer-verifier&auto_accept=true' | grep -o 'http:\/\/issuer-verifier-mediator:10001?c_i=[^\"]*'); \
+        MEDIATOR_INVITATION=$$(curl -X 'POST' 'http://issuer-verifier-mediator-nginx:10000/connections/create-invitation?alias=issuer-verifier&auto_accept=true' | grep -o 'http:\/\/issuer-verifier-mediator-nginx:10001?c_i=[^\"]*'); \
         echo $${MEDIATOR_INVITATION}; \
         aca-py start \
         --auto-provision \
@@ -121,7 +130,7 @@ services:
     networks:
       - aries-load-test
     depends_on:
-      - issuer-verifier-mediator
+      - issuer-verifier-mediator-nginx
     extra_hosts:
       - "host.docker.internal:host-gateway"
     logging:
@@ -138,11 +147,11 @@ services:
     container_name: issuer-verifier-nginx
     image: nginx:latest
     volumes:
-      - ./nginx-issuer-verifier-${NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES}.conf:/etc/nginx/nginx.conf:ro
+      - ./issuer-verifier-nginx-configs/nginx-issuer-verifier-${NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES}.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - issuer-verifier-acapy
     ports:
-      - 10000:10000
+      - "10000:10000"
     networks:
       - aries-load-test
 
@@ -213,7 +222,7 @@ services:
     volumes:
       - tails-server-volume:/home/indy/tails-files
     ports:
-      - 6543:6543
+      - "6543:6543"
     networks:
       - aries-load-test
     restart: always
