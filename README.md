@@ -28,11 +28,13 @@ and [Docker-Compose](https://docs.docker.com/compose/install/) installed.
 Further, you need to ensure to not use [Docker Compose V2](https://docs.docker.com/compose/cli-command/) as it is
 incompatible to the setup used by the load generator. To deactivate Compose V2 run `docker-compose disable-v2`.
 
-Last but not least, the following dependencies need to be installed:
+Moreover, the following dependencies need to be installed:
 1. Java JDK 11
 2. jq
 
 To install the dependencies on Ubuntu run `apt install jq openjdk-11-jre-headless`.
+
+Last but not least, the docker plugin `loki-docker-drive` is required and can be installed using `docker plugin install grafana/loki-docker-driver:latest --alias loki --grant-all-permissions`.
 
 ### Configuration
 
