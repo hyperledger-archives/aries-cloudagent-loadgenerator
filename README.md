@@ -149,17 +149,13 @@ Finally, you can start the load-generator from the IDE or by running `./mvnw spr
 
 ## Start IssuerVerifier AcaPy with Mediator
 It is possible to connect the IssuerVerifier AcaPys to a mediator. To enable the mediator set `ENABLE_MEDIATOR=true` in the `.env` file.
+`NUMBER_OF_ISSUER_VERIFIER_MEDIATOR_ACAPY_INSTANCES` allows to horizontally scale the mediator.
 
-### Limitations
-- the mediator is not scaled horizontally
-- the mediator is using an askar wallet backed by an in-memory SQLite database
+In high-load situations the mediator does not receive the recipient keys in time leading to "Error resolving recipient for forwarded message" errors.
+To mitigate the errors a timeout can be defined using `TEST_FLOWS_FULL_FLOW_TIMEOUT_IN_MS_BEFORE_SHARING_CONNECTION_INNVITAION_WITH_HOLDER`.
 
 ## Start IssuerVerifier AcaPy with Mediator + Redis Message Queue
 It is possible to connect the IssuerVerifier AcaPys to a mediator + [redis message queue](https://github.com/bcgov/aries-acapy-plugin-redis-events). To enable it set `ENABLE_MEDIATOR=false`, `ENABLE_REDIS_QUEUES=true`, and `SYSTEM_REDIS_CLUSTER=true` in the `.env` file.
-
-### Limitations
-- the mediator is not scaled horizontally
-- the mediator is using an askar wallet backed by an in-memory SQLite database
 
 ## Troubleshooting
 

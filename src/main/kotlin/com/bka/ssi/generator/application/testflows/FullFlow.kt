@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Service
 import java.time.Instant
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 @Service
@@ -26,6 +27,7 @@ class FullFlow(
     @Value("\${test-flows.full-flow.revoke-credentials}") private val revokeCredentials: Boolean,
     @Value("\${test-flows.full-flow.credential-revocation-batch-size}") private val credentialRevocationBatchSize: Int,
     @Value("\${test-flows.full-flow.use-oob-instead-of-connection}") private val useOobInsteadOfConnection: Boolean,
+    @Value("\${test-flows.full-flow.timeout-in-milliseconds-before-sharing-connection-invitation-with-holder}") private val timeoutInMillisecondsBeforeSharingConnectionInvitationWithHolder: Long,
     private val errorLogger: ErrorLogger,
 ) : TestFlow(
     holderAriesClients
@@ -47,6 +49,7 @@ class FullFlow(
         logger.info("revoke-credentials: $revokeCredentials")
         logger.info("credential-revocation-batch-size: $credentialRevocationBatchSize")
         logger.info("use-oob-instead-of-connection: $useOobInsteadOfConnection")
+        logger.info("timeout-in-milliseconds-before-sharing-connection-invitation-with-holder: $timeoutInMillisecondsBeforeSharingConnectionInvitationWithHolder")
 
         Companion.testRunner = testRunner
 
@@ -88,6 +91,8 @@ class FullFlow(
 
     private fun initiateConnection() {
         val connectionInvitation = issuerVerifierAriesClient.createConnectionInvitation("holder-acapy")
+
+        TimeUnit.MILLISECONDS.sleep(timeoutInMillisecondsBeforeSharingConnectionInvitationWithHolder);
 
         nextHolderClient().receiveConnectionInvitation(connectionInvitation)
     }

@@ -73,6 +73,7 @@ test-flows:
         revoke-credentials: true
         credential-revocation-batch-size: 5
         use-oob-instead-of-connection: false
+        timeout-in-milliseconds-before-sharing-connection-invitation-with-holder: 0
     issuer-flow:
         active: false
         use-revocable-credentials: true
