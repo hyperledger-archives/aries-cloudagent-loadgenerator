@@ -105,8 +105,11 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     logging:
-      driver: "json-file"
+      driver: loki
       options:
+        loki-url: http://172.17.0.1:3100/loki/api/v1/push
+        loki-max-backoff: "10s"
+        loki-retries: "5"
         max-file: "5"
         max-size: "50m"
     restart: always
