@@ -15,3 +15,12 @@ Feature: Author Endorser Connection
         Then the issuer has an "active" connection to the holder
         And the holder has an "active" connection with the issuer
         And the issuer has mediation active on the holder connection
+
+    @TestSetup-002
+    Scenario: Setup issuer (with schema and cred def) and holder, and connect to mediator consolidated
+        Given the issuer and holder are running
+        And the issuer is ready to issue credentials "without" revocation support
+        And the issuer and holder have a connection
+        Then the issuer has an "active" connection to the holder
+        And the holder has an "active" connection with the issuer
+        And the issuer has mediation active on the holder connection

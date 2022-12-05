@@ -239,6 +239,7 @@ def step_impl(context):
     put_holder_context(context, "holder", "mediator_request", mediator_req)
 
 
+@given('the issuer generates an invitation "{with_or_without}" mediation')
 @when('the issuer generates an invitation "{with_or_without}" mediation')
 def step_impl(context, with_or_without: str):
     data = None
@@ -265,6 +266,7 @@ def step_impl(context, with_or_without: str):
     put_issuer_context(context, "issuer", "connection_id", connection_id)
 
 
+@given('the holder accepts the invitation "{with_or_without}" mediation')
 @when('the holder accepts the invitation "{with_or_without}" mediation')
 def step_impl(context, with_or_without: str):
     # accept the connection invitation
@@ -336,6 +338,7 @@ def step_impl(context, connection_status: str):
             time.sleep(SLEEP_INC)
 
 
+@given('the issuer has mediation active on the holder connection')
 @then('the issuer has mediation active on the holder connection')
 def step_impl(context):
     connection_id = get_issuer_context(context, "issuer", "connection_id")
@@ -347,3 +350,39 @@ def step_impl(context):
     )
     assert "their_endpoint" in resp, pprint.pp(resp)
     assert "mediator" in resp["their_endpoint"], pprint.pp(resp)
+
+
+@given('the issuer and holder are running')
+def step_impl(context):
+    context.execute_steps(
+        """
+        Given the issuer service is running
+        And the holder service is running
+        And the holder connects with the mediator
+        """
+    )
+
+
+@given('the issuer is ready to issue credentials "{with_or_without}" revocation support')
+def step_impl(context, with_or_without: str):
+    context.execute_steps(
+        '''
+        Given the issuer publishes a schema
+        And the issuer has an active schema on the ledger
+        And the issuer publishes a credential definition "''' + with_or_without + '''" revocation support
+        And the issuer has an active credential definition on the ledger
+        '''
+    )
+
+
+@given('the issuer and holder have a connection')
+def step_impl(context):
+    context.execute_steps(
+        '''
+        Given the issuer generates an invitation "without" mediation
+        And the holder accepts the invitation "with" mediation
+        And the issuer has an "active" connection to the holder
+        And the holder has an "active" connection with the issuer
+        And the issuer has mediation active on the holder connection
+        '''
+    )
