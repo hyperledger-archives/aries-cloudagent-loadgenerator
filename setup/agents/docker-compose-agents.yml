@@ -117,6 +117,18 @@ services:
         max-size: "50m"
     restart: always
 
+  holder-nginx:
+    container_name: holder-nginx
+    image: nginx:latest
+    volumes:
+      - ./holder-nginx-configs/nginx-holder-${NUMBER_OF_HOLDER_ACAPY_INSTANCES}.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - holder-acapy
+    ports:
+      - 10010:10010
+    networks:
+      - aries-load-test
+
   tails-server:
     container_name: tails-server
     build:

@@ -75,3 +75,5 @@ buildNumber.properties
 .env
 
 # End of https://www.toptal.com/developers/gitignore/api/maven
+.DS_Store
+

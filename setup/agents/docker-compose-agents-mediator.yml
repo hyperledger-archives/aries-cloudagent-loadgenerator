@@ -89,17 +89,13 @@ services:
       - aries-load-test
 
   issuer-verifier-acapy:
-    image: ${ACAPY_IMAGE}
+    image: ${ACAPY_IMAGE_IVH}
     entrypoint: /bin/bash
     command: [
         "-c",
         "sleep 10;
-        MEDIATOR_INVITATION=$$(curl -X 'POST' 'http://issuer-verifier-mediator-nginx:10000/connections/create-invitation?alias=issuer-verifier&auto_accept=true' | grep -o 'http:\/\/issuer-verifier-mediator-nginx:10001?c_i=[^\"]*'); \
-        echo $${MEDIATOR_INVITATION}; \
         aca-py start \
         --auto-provision \
-        --mediator-connections-invite \
-        --mediator-invitation $${MEDIATOR_INVITATION} \
         --admin 0.0.0.0 10000 \
         --inbound-transport http 0.0.0.0 10001 \
         --outbound-transport http \
@@ -156,7 +152,7 @@ services:
       - aries-load-test
 
   holder-acapy:
-    image: ${ACAPY_IMAGE}
+    image: ${ACAPY_IMAGE_IVH}
     entrypoint: /bin/bash
     command: [
         "-c",
@@ -175,9 +171,11 @@ services:
         --admin-insecure-mode \
         --label holder_acapy \
         --wallet-type ${WALLET_TYPE} \
-        --wallet-name wallet_db \
+        --wallet-name holder_wallet \
         --wallet-key key \
-        --wallet-storage-type default \
+        --wallet-storage-type postgres_storage \
+        --wallet-storage-config '{\"url\":\"host.docker.internal:5432\",\"max_connections\":${MAX_WALLET_CONNECTIONS_PER_ACAPY}}' \
+        --wallet-storage-creds '{\"account\":\"${POSTGRES_USER}\",\"password\":\"${POSTGRES_PASSWORD}\",\"admin_account\":\"${POSTGRES_USER}\",\"admin_password\":\"${POSTGRES_PASSWORD}\"}' \
         --auto-accept-invites \
         --invite-public \
         --public-invites \
@@ -209,6 +207,18 @@ services:
         max-file: "5"
         max-size: "50m"
     restart: always
+
+  holder-nginx:
+    container_name: holder-nginx
+    image: nginx:latest
+    volumes:
+      - ./holder-nginx-configs/nginx-holder-${NUMBER_OF_HOLDER_ACAPY_INSTANCES}.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - holder-acapy
+    ports:
+      - 10010:10010
+    networks:
+      - aries-load-test
 
   tails-server:
     container_name: tails-server
