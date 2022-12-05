@@ -28,6 +28,7 @@ class FullFlow(
     @Value("\${test-flows.full-flow.credential-revocation-batch-size}") private val credentialRevocationBatchSize: Int,
     @Value("\${test-flows.full-flow.use-oob-instead-of-connection}") private val useOobInsteadOfConnection: Boolean,
     @Value("\${test-flows.full-flow.timeout-in-milliseconds-before-sharing-connection-invitation-with-holder}") private val timeoutInMillisecondsBeforeSharingConnectionInvitationWithHolder: Long,
+    @Value("\${test-flows.full-flow.timeout-in-milliseconds-after-creating-a-credential-definition}") private val timeoutInMillisecondsAfterCreatingACredentialDefinition: Long,
     private val errorLogger: ErrorLogger,
 ) : TestFlow(
     holderAriesClients
@@ -50,6 +51,7 @@ class FullFlow(
         logger.info("credential-revocation-batch-size: $credentialRevocationBatchSize")
         logger.info("use-oob-instead-of-connection: $useOobInsteadOfConnection")
         logger.info("timeout-in-milliseconds-before-sharing-connection-invitation-with-holder: $timeoutInMillisecondsBeforeSharingConnectionInvitationWithHolder")
+        logger.info("timeout-in-milliseconds-after-creating-a-credential-definition: $timeoutInMillisecondsAfterCreatingACredentialDefinition")
 
         Companion.testRunner = testRunner
 
@@ -63,6 +65,8 @@ class FullFlow(
             revocationRegistrySize
         )
         credentialDefinitionId = credentialDefinition.id
+
+        TimeUnit.MILLISECONDS.sleep(timeoutInMillisecondsAfterCreatingACredentialDefinition)
 
         testRunner.finishedInitialization()
     }
@@ -92,7 +96,7 @@ class FullFlow(
     private fun initiateConnection() {
         val connectionInvitation = issuerVerifierAriesClient.createConnectionInvitation("holder-acapy")
 
-        TimeUnit.MILLISECONDS.sleep(timeoutInMillisecondsBeforeSharingConnectionInvitationWithHolder);
+        TimeUnit.MILLISECONDS.sleep(timeoutInMillisecondsBeforeSharingConnectionInvitationWithHolder)
 
         nextHolderClient().receiveConnectionInvitation(connectionInvitation)
     }
