@@ -187,3 +187,11 @@ load-generator is using the correct URLs to reach out to the admin APIs.
 
 Further, the holder agents need to be able to reach the issuer-verifier DIDcomm endpoint to accept connection
 invitations.
+
+### POST /issue-credential/send 422: Value is not an indy credential definition identifier
+
+This error can occur when trying to issue revocable credentials to early. After creating a revocable credential definition, AcaPy asynchronously generates the tail files. If a client attempts 
+to issue a credential before the first tails file has been generated, this error can occur.
+
+To mitigate the errors a timeout can be defined using `TEST_FLOWS_FULL_FLOW_TIMEOUT_IN_MS_AFTER_CREATING_A_CREDENTIAL_DEFINITION`. This will let the load generator wait after creating a credential definition.
+
