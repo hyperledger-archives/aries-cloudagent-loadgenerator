@@ -11,6 +11,9 @@ from behave import *
 from starlette import status
 
 from util import (
+    MAX_INC,
+    SLEEP_INC,
+    DISPLAY_INTERVAL,
     call_issuer_verifier_service,
     call_holder_service,
     GET,
@@ -29,9 +32,6 @@ from util import (
 )
 
 
-MAX_INC = 20
-SLEEP_INC = 1
-DISPLAY_INTERVAL = 100
 LEDGER_URL = os.getenv("LEDGER_URL")
 REVOC_REG_COUNT = 3000
 
@@ -46,6 +46,7 @@ def step_impl(context):
     (cred_id, resp) = run_coroutine(issue_credential, context, "issuer", connection_id, cred_def_id)
 
     # save into context
+    assert cred_id, "Error no cred_id returned"
     assert "state" in resp, pprint.pp(resp)
     put_issuer_context(context, "issuer", "current_credential", resp)
     put_issuer_context(context, "issuer", "current_credential_id", cred_id)
@@ -58,6 +59,7 @@ def step_impl(context):
     (cred_id, credential) = run_coroutine(receive_credential, context, "holder", cred_id)
 
     # save into context
+    assert cred_id, "Error no cred_id returned"
     assert credential["attrs"]["id_number"] == cred_id, pprint.pp(credential)
     put_holder_context(context, "holder", "current_credential", credential)
     put_holder_context(context, "holder", "current_credential_id", cred_id)
@@ -71,7 +73,7 @@ def step_impl(context, total_cred_count: str, parallel_cred_count: str):
     cred_def = get_issuer_context(context, "issuer", "credential_definition")
     cred_def_id = cred_def["credential_definition_id"]
 
-    (success_count, failed_count, cred_ids_issued) = run_coroutine(
+    cred_ids_issued = run_coroutine(
         issue_and_receive_credentials, context,
         "issuer", "holder",
         connection_id, cred_def_id,

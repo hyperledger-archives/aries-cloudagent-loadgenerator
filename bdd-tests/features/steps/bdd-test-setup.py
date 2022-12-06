@@ -9,6 +9,9 @@ from behave import *
 from starlette import status
 
 from util import (
+    MAX_INC,
+    SLEEP_INC,
+    DISPLAY_INTERVAL,
     call_issuer_verifier_service,
     call_holder_service,
     call_mediator_service,
@@ -22,9 +25,6 @@ from util import (
     put_holder_context,
     clear_holder_context,
 )
-
-MAX_INC = 20
-SLEEP_INC = 1
 
 
 @given('the issuer service is running')

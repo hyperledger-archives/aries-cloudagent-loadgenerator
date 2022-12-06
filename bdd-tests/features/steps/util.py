@@ -3,7 +3,7 @@ import datetime
 import os
 import pprint
 import random
-import requests
+import aiohttp
 import time
 import asyncio
 import nest_asyncio
@@ -33,9 +33,10 @@ DELETE = "DELETE"
 HEAD = "HEAD"
 OPTIONS = "OPTIONS"
 
-MAX_INC = 20
-SLEEP_INC = 1
+MAX_INC = 100
+SLEEP_INC = 0.2
 DISPLAY_INTERVAL = 100
+MAX_TIMEOUT = 2.0 * MAX_INC * SLEEP_INC
 
 
 def issuer_verifier_headers(context, token=None) -> dict:
@@ -73,6 +74,10 @@ def mediator_headers(context) -> dict:
 
 
 def call_issuer_verifier_service(context, issuer_wallet, method, url_path, agency=False, data=None, params=None, json_data=True):
+    return run_coroutine(call_issuer_verifier_service_async, context, issuer_wallet, method, url_path, agency, data, params, json_data)
+
+
+async def call_issuer_verifier_service_async(context, issuer_wallet, method, url_path, agency=False, data=None, params=None, json_data=True):
     """Call an http service on the issuer agent/agency (create wallet etc.)."""
     url = ISSUER_VERIFIER_BASE_URL + url_path
     issuer_config_key = f"issuer_{issuer_wallet}_config"
@@ -81,10 +86,14 @@ def call_issuer_verifier_service(context, issuer_wallet, method, url_path, agenc
     else:
         token = None
     headers = issuer_verifier_headers(context, token=token)
-    return call_http_service(method, url, headers, data=data, params=params, json_data=json_data)
+    return await call_http_service(method, url, headers, data=data, params=params, json_data=json_data)
 
 
 def call_holder_service(context, holder_wallet, method, url_path, agency=False, data=None, params=None, json_data=True):
+    return run_coroutine(call_holder_service_async, context, holder_wallet, method, url_path, agency, data, params, json_data)
+
+
+async def call_holder_service_async(context, holder_wallet, method, url_path, agency=False, data=None, params=None, json_data=True):
     """Call an http service on an holder agent/agency (accept invitation, etc.)."""
     url = HOLDER_BASE_URL + url_path
     holder_config_key = f"holder_{holder_wallet}_config"
@@ -93,65 +102,71 @@ def call_holder_service(context, holder_wallet, method, url_path, agency=False, 
     else:
         token = None
     headers = holder_headers(context, token=token)
-    return call_http_service(method, url, headers, data=data, params=params, json_data=json_data)
+    return await call_http_service(method, url, headers, data=data, params=params, json_data=json_data)
 
 
 def call_mediator_service(context, method, url_path, data=None, params=None, json_data=True):
+    return run_coroutine(call_mediator_service_async, context, method, url_path, data, params, json_data)
+
+
+async def call_mediator_service_async(context, method, url_path, data=None, params=None, json_data=True):
     """Call an http service on the mediator agent (accept invitation, etc.)."""
     url = MEDIATOR_BASE_URL + url_path
     headers = mediator_headers(context)
-    return call_http_service(method, url, headers, data=data, params=params, json_data=json_data)
+    return await call_http_service(method, url, headers, data=data, params=params, json_data=json_data)
 
 
-def call_http_service(method, url, headers, data=None, params=None, json_data=True):
+async def call_http_service(method, url, headers, data=None, params=None, json_data=True):
     method = method.upper()
     data = json.dumps(data) if (data is not None) else None
     # print(method, url)
-    if method == POST:
-        response = requests.post(
-            url=url,
-            data=data,
-            headers=headers,
-            params=params,
-        )
-    elif method == GET:
-        response = requests.get(
-            url=url,
-            headers=headers,
-            params=params,
-        )
-    elif method == PUT:
-        response = requests.put(
-            url=url,
-            data=data,
-            headers=headers,
-            params=params,
-        )
-    elif method == DELETE:
-        response = requests.delete(
-            url=url,
-            headers=headers,
-            params=params,
-        )
-    elif method == HEAD:
-        response = requests.head(
-            url=url,
-            headers=headers,
-            params=params,
-        )
-    elif method == OPTIONS:
-        response = requests.options(
-            url=url,
-            headers=headers,
-            params=params,
-        )
-    else:
-        assert False, pprint.pp("Incorrect method passed: " + method)
-    response.raise_for_status()
+    async with aiohttp.ClientSession() as local_http_client:
+        if method == POST:
+            response = await local_http_client.post(
+                url,
+                data=data,
+                headers=headers,
+                params=params,
+            )
+        elif method == GET:
+            response = await local_http_client.get(
+                url,
+                headers=headers,
+                params=params,
+            )
+        elif method == PUT:
+            response = await local_http_client.put(
+                url,
+                data=data,
+                headers=headers,
+                params=params,
+            )
+        elif method == DELETE:
+            response = await local_http_client.delete(
+                url=url,
+                headers=headers,
+                params=params,
+            )
+        elif method == HEAD:
+            response = await local_http_client.head(
+                url=url,
+                headers=headers,
+                params=params,
+            )
+        elif method == OPTIONS:
+            response = await local_http_client.options(
+                url=url,
+                headers=headers,
+                params=params,
+            )
+        else:
+            raise Exception("Incorrect method passed: " + method)
+    if response.status >= 300:
+        raise Exception("Error response status for %s is %s", url, response.status)
     if json_data:
-        return response.json()
+        return await response.json()
     else:
-        return response.text
+        return await response.text()
 
 
 # manage bdd context for issuer(s)
@@ -212,7 +227,7 @@ async def issue_credential(context, issuer: str, connection_id: str, cred_def_id
     d = datetime.date.today()
     birth_date = datetime.date(d.year-age, random.randint(1, 12), random.randint(1, 28))
     birth_date_format = "%Y%m%d"
-    cred_id = str(random.randint(100000, 999999))
+    cred_id = str(random.randint(1000000, 9999999))
     cred_offer = {
         "auto_issue": True,
         "auto_remove": True,
@@ -246,7 +261,7 @@ async def issue_credential(context, issuer: str, connection_id: str, cred_def_id
         },
         "trace": False
     }
-    resp = call_issuer_verifier_service(
+    resp = await call_issuer_verifier_service_async(
         context,
         issuer,
         POST,
@@ -254,8 +269,11 @@ async def issue_credential(context, issuer: str, connection_id: str, cred_def_id
         data=cred_offer,
     )
     # save into context
-    assert "state" in resp, pprint.pp(resp)
-    return (cred_id, resp)
+    if "state" in resp:
+        return (cred_id, resp)
+    else:
+        print("Error no state in response: " + str(resp))
+        return (None, resp)
 
 
 async def receive_credential(context, holder: str, cred_id: str) -> (str, dict):
@@ -263,7 +281,7 @@ async def receive_credential(context, holder: str, cred_id: str) -> (str, dict):
     credential = None
     inc = 0
     while not credential:
-        resp = call_holder_service(
+        resp = await call_holder_service_async(
             context,
             holder,
             GET,
@@ -275,9 +293,29 @@ async def receive_credential(context, holder: str, cred_id: str) -> (str, dict):
             assert credential["attrs"]["id_number"] == cred_id, pprint.pp(credential)
         if not credential:
             inc += 1
-            assert inc <= MAX_INC, pprint.pp("Error too many retries can't find credential " + cred_id)
+            if inc > MAX_INC:
+                print("Error too many retries can't find credential " + cred_id)
+                return (None, "Error too many retries can't find credential " + cred_id)
             async_sleep(SLEEP_INC)
 
+    return (cred_id, credential)
+
+
+async def issue_and_receive_credential(
+    context,
+    issuer: str, holder: str,
+    connection_id: str, cred_def_id: str,
+) -> (str, dict):
+    try:
+        (cred_id, resp) = await issue_credential(context, issuer, connection_id, cred_def_id)
+        if not cred_id:
+            return (None, resp)
+        (cred_id, credential) = await receive_credential(context, holder, cred_id)
+        if not cred_id:
+            return (None, credential)
+    except Exception as e:
+        print(e)
+        return (None, e)
     return (cred_id, credential)
 
 
@@ -286,25 +324,23 @@ async def issue_and_receive_credentials(
     issuer: str, holder: str,
     connection_id: str, cred_def_id: str,
     total_cred_count: int, parallel_cred_count: int
-) -> (int, int, dict):
-    cred_ids_issued = []
-
+) -> dict:
     # set up a thread pool for issuing (issuer) and receiving (holder)
-    pool = mpool.ThreadPool(parallel_cred_count)
+    pool = mpool.ThreadPool(2 * parallel_cred_count)
     loop = asyncio.get_event_loop()
     tasks = []
+    creds_initiated = 0
 
     start_time = time.perf_counter()
-    while len(cred_ids_issued) < total_cred_count:
-        (cred_id, resp) = run_coroutine(issue_credential, context, "issuer", connection_id, cred_def_id)
-        cred_ids_issued.append(cred_id)
-        cred_task = loop.create_task(receive_credential(context, "holder", cred_id))
+    while creds_initiated < total_cred_count:
+        cred_task = loop.create_task(issue_and_receive_credential(context, issuer, holder, connection_id, cred_def_id))
         tasks.append(cred_task)
+        creds_initiated += 1
         active_tasks = len([task for task in tasks if not task.done()])
         while active_tasks >= parallel_cred_count:
             # done is cumulative, includes the full set of "done" tasks
             done, pending = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
-            active_tasks = len(pending)
+            # active_tasks = len(pending)
 
             # reset counters since we are counting *all* done tasks
             failed_count = 0
@@ -314,29 +350,36 @@ async def issue_and_receive_credentials(
                 # TODO what to do with result
             active_tasks = len([task for task in tasks if not task.done()])
 
-        if 0 == (len(cred_ids_issued) % DISPLAY_INTERVAL):
-            count = len(cred_ids_issued)
+        if 0 == (creds_initiated % DISPLAY_INTERVAL):
             processing_time = time.perf_counter() - start_time
-            print(f"Submitted {count} in {processing_time} ({active_tasks} active)")
+            print(f"Submitted {creds_initiated} in {processing_time} ({active_tasks} active)")
 
     # wait for the current batch of credential posts to complete
-    done, pending = await asyncio.wait(tasks, return_when=asyncio.ALL_COMPLETED)
+    print("Awaiting tasks to be completed ...")
+    done, pending = await asyncio.wait(tasks, return_when=asyncio.ALL_COMPLETED, timeout=MAX_TIMEOUT)
+
+    if 0 < len(pending):
+        print(" ... uh oh still has pending tasks: %s", len(pending))
+        print(pending)
+
     # reset counters since we are counting *all* done tasks
     failed_count = 0
     success_count = 0
+    cred_ids_issued = []
     for finished in done:
         done_result = finished.result()
-        # TODO what to do with result
+        if done_result[0]:
+            cred_ids_issued.append(done_result[0])
     tasks = []
 
     count = len(cred_ids_issued)
     processing_time = time.perf_counter() - start_time
-    print(f"Completed {count} in {processing_time}")
-    creds_per_minute = count / (processing_time/60.0)
+    print(f"Completed {creds_initiated} in {processing_time}")
+    creds_per_minute = creds_initiated / (processing_time/60.0)
     print(f" -> {creds_per_minute} per minute")
     print("done")
 
-    return (success_count, failed_count, cred_ids_issued)
+    return cred_ids_issued
 
 
 def request_proof(context):
