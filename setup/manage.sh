@@ -42,6 +42,7 @@ usage() {
 
       run-bdd - Runs bdd test(s) (note the tests run locally not in docker)
                 Use "-t" to run a single test e.g. "./scripts/manage.sh run_bdd -t @my_test"
+                Use "--no-capture" to display print statements as tests run
 
 EOF
   exit 1
@@ -292,12 +293,6 @@ function downAll() {
   removeDockerNetwork
 }
 
-function runBdd() {
-  echo "Running bdd tests ..."
-  cd ../bdd-tests
-  behave $@
-}
-
 case "${COMMAND}" in
 start)
   startAll
@@ -313,7 +308,10 @@ down)
   downAll
   ;;
 run-bdd)
-  runBdd
+  echo "Running bdd tests ..."
+  cd ../bdd-tests
+  echo "behave $@"
+  behave $@
   ;;
 *)
   usage

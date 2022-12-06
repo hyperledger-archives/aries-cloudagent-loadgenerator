@@ -1,5 +1,5 @@
 @TestSetup
-Feature: Author Endorser Connection
+Feature: Issuer/Holder Test Setup
 
     @TestSetup-001
     Scenario: Setup issuer (with schema and cred def) and holder, and connect to mediator

@@ -23,8 +23,8 @@ from util import (
     clear_holder_context,
 )
 
-MAX_INC = 10
-SLEEP_INC = 2
+MAX_INC = 20
+SLEEP_INC = 1
 
 
 @given('the issuer service is running')
@@ -169,7 +169,7 @@ def step_impl(context):
     )
     assert "invitation" in resp, pprint.pp(resp)
     invitation = resp["invitation"]
-    print(invitation)
+    # print(invitation)
 
     # accept the invitation
     resp = call_holder_service(
@@ -181,7 +181,7 @@ def step_impl(context):
         params={"alias": "mediator", "auto_accept": "true"},
     )
     assert "connection_id" in resp, pprint.pp(resp)
-    print(resp)
+    # print(resp)
     connection_id = resp["connection_id"]
 
     # wait for connection to go into "active" state

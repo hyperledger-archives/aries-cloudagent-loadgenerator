@@ -2,6 +2,8 @@ aiohttp==3.7.4.post0
 anyio==3.5.0
 asgiref==3.4.1
 async-timeout==3.0.1
+asyncio
+nest-asyncio
 attrs==21.4.0
 behave==1.2.6
 black==21.12b0

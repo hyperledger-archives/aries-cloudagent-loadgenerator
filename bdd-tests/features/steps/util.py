@@ -1,11 +1,19 @@
 import json
+import datetime
 import os
 import pprint
+import random
 import requests
 import time
+import asyncio
+import nest_asyncio
+import multiprocessing.pool as mpool
 
 from behave import *
 from starlette import status
+
+
+nest_asyncio.apply()
 
 
 ISSUER_VERIFIER_API_KEY = os.getenv("ACAPY_ISSUER_API_ADMIN_KEY")
@@ -25,8 +33,9 @@ DELETE = "DELETE"
 HEAD = "HEAD"
 OPTIONS = "OPTIONS"
 
-MAX_INC = 10
-SLEEP_INC = 2
+MAX_INC = 20
+SLEEP_INC = 1
+DISPLAY_INTERVAL = 100
 
 
 def issuer_verifier_headers(context, token=None) -> dict:
@@ -96,9 +105,8 @@ def call_mediator_service(context, method, url_path, data=None, params=None, jso
 
 def call_http_service(method, url, headers, data=None, params=None, json_data=True):
     method = method.upper()
-    print(data)
     data = json.dumps(data) if (data is not None) else None
-    print(method, url)
+    # print(method, url)
     if method == POST:
         response = requests.post(
             url=url,
@@ -179,3 +187,169 @@ def put_holder_context(context, holder_wallet: str, context_str: str, context_va
 
 def clear_holder_context(context, holder_wallet: str, context_str: str = None):
     clear_issuer_context(context, holder_wallet, context_str=context_str, w_type="holder")
+
+
+# coroutine utilities
+def run_coroutine(coroutine, *args, **kwargs):
+    loop = asyncio.get_event_loop()
+    if not loop:
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+    try:
+        return loop.run_until_complete(coroutine(*args, **kwargs))
+    finally:
+        pass
+        # loop.close()
+
+
+def async_sleep(delay):
+    run_coroutine(asyncio.sleep, delay)
+
+
+# utility functions for issuing credentials, requesting proofs, etc.
+async def issue_credential(context, issuer: str, connection_id: str, cred_def_id: str) -> (str, dict):
+    age = 24
+    d = datetime.date.today()
+    birth_date = datetime.date(d.year-age, random.randint(1, 12), random.randint(1, 28))
+    birth_date_format = "%Y%m%d"
+    cred_id = str(random.randint(100000, 999999))
+    cred_offer = {
+        "auto_issue": True,
+        "auto_remove": True,
+        "comment": "string",
+        "connection_id": connection_id,
+        "cred_def_id": cred_def_id,
+        "credential_preview": {
+        "@type": "issue-credential/1.0/credential-preview",
+        "attributes": [
+            {
+            "name": "full_name",
+            "value": "martini"
+            },
+            {
+            "name": "birthdate",
+            "value": str(birth_date)
+            },
+            {
+            "name": "birthdate_dateint",
+            "value": birth_date.strftime(birth_date_format)
+            },
+            {
+            "name": "id_number",
+            "value": cred_id
+            },
+            {
+            "name": "favourite_colour",
+            "value": "purple"
+            },
+        ]
+        },
+        "trace": False
+    }
+    resp = call_issuer_verifier_service(
+        context,
+        issuer,
+        POST,
+        "/issue-credential/send-offer",
+        data=cred_offer,
+    )
+    # save into context
+    assert "state" in resp, pprint.pp(resp)
+    return (cred_id, resp)
+
+
+async def receive_credential(context, holder: str, cred_id: str) -> (str, dict):
+    wql = {"attr::id_number::value": cred_id}
+    credential = None
+    inc = 0
+    while not credential:
+        resp = call_holder_service(
+            context,
+            holder,
+            GET,
+            f"/credentials",
+            params={"wql": json.dumps(wql)}
+        )
+        if "results" in resp and 0 < len(resp["results"]):
+            credential = resp["results"][0]
+            assert credential["attrs"]["id_number"] == cred_id, pprint.pp(credential)
+        if not credential:
+            inc += 1
+            assert inc <= MAX_INC, pprint.pp("Error too many retries can't find credential " + cred_id)
+            async_sleep(SLEEP_INC)
+
+    return (cred_id, credential)
+
+
+async def issue_and_receive_credentials(
+    context,
+    issuer: str, holder: str,
+    connection_id: str, cred_def_id: str,
+    total_cred_count: int, parallel_cred_count: int
+) -> (int, int, dict):
+    cred_ids_issued = []
+
+    # set up a thread pool for issuing (issuer) and receiving (holder)
+    pool = mpool.ThreadPool(parallel_cred_count)
+    loop = asyncio.get_event_loop()
+    tasks = []
+
+    start_time = time.perf_counter()
+    while len(cred_ids_issued) < total_cred_count:
+        (cred_id, resp) = run_coroutine(issue_credential, context, "issuer", connection_id, cred_def_id)
+        cred_ids_issued.append(cred_id)
+        cred_task = loop.create_task(receive_credential(context, "holder", cred_id))
+        tasks.append(cred_task)
+        active_tasks = len([task for task in tasks if not task.done()])
+        while active_tasks >= parallel_cred_count:
+            # done is cumulative, includes the full set of "done" tasks
+            done, pending = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
+            active_tasks = len(pending)
+
+            # reset counters since we are counting *all* done tasks
+            failed_count = 0
+            success_count = 0
+            for finished in done:
+                done_result = finished.result()
+                # TODO what to do with result
+            active_tasks = len([task for task in tasks if not task.done()])
+
+        if 0 == (len(cred_ids_issued) % DISPLAY_INTERVAL):
+            count = len(cred_ids_issued)
+            processing_time = time.perf_counter() - start_time
+            print(f"Submitted {count} in {processing_time} ({active_tasks} active)")
+
+    # wait for the current batch of credential posts to complete
+    done, pending = await asyncio.wait(tasks, return_when=asyncio.ALL_COMPLETED)
+    # reset counters since we are counting *all* done tasks
+    failed_count = 0
+    success_count = 0
+    for finished in done:
+        done_result = finished.result()
+        # TODO what to do with result
+    tasks = []
+
+    count = len(cred_ids_issued)
+    processing_time = time.perf_counter() - start_time
+    print(f"Completed {count} in {processing_time}")
+    creds_per_minute = count / (processing_time/60.0)
+    print(f" -> {creds_per_minute} per minute")
+    print("done")
+
+    return (success_count, failed_count, cred_ids_issued)
+
+
+def request_proof(context):
+    pass
+
+
+def provide_proof(context):
+    pass
+
+
+def validate_proof(context):
+    pass
+
+
+def revoke_credential(context):
+    pass

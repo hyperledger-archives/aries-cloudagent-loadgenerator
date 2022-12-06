@@ -24,8 +24,8 @@ from util import (
 )
 
 
-MAX_INC = 10
-SLEEP_INC = 2
+MAX_INC = 20
+SLEEP_INC = 1
 LEDGER_URL = os.getenv("LEDGER_URL")
 REVOC_REG_COUNT = 3000
 
