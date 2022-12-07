@@ -75,5 +75,9 @@ buildNumber.properties
 .env
 
 # End of https://www.toptal.com/developers/gitignore/api/maven
-.DS_Store
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
 
+.DS_Store

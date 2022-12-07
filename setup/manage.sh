@@ -153,13 +153,13 @@ function startAgents() {
 
   echo "Starting all AcaPy related docker containers ..."
   if [ "${ENABLE_MEDIATOR}" = true ]; then
-    docker-compose -f ./agents/docker-compose-agents-mediator.yml up -d issuer-verifier-mediator-wallet-db issuer-verifier-acapy issuer-verifier-mediator
+    docker-compose -f ./agents/docker-compose-agents-mediator.yml up -d issuer-verifier-mediator-wallet-db issuer-verifier-acapy issuer-verifier-mediator holder-acapy
     echo "Provisioning AcaPy Wallets... (sleeping 15 seconds)"
     sleep 15
 
     docker-compose -f ./agents/docker-compose-agents-mediator.yml up -d --scale issuer-verifier-acapy=$NUMBER_OF_ISSUER_VERIFIER_ACAPY_INSTANCES --scale holder-acapy=$NUMBER_OF_HOLDER_ACAPY_INSTANCES --scale issuer-verifier-mediator=$NUMBER_OF_ISSUER_VERIFIER_MEDIATOR_ACAPY_INSTANCES
   elif [ "${ENABLE_REDIS_QUEUES}" = true ]; then
-    docker-compose -f ./agents/docker-compose-agents-redis.yml up -d issuer-verifier-mediator-wallet-db issuer-verifier-acapy issuer-verifier-mediator
+    docker-compose -f ./agents/docker-compose-agents-redis.yml up -d issuer-verifier-mediator-wallet-db issuer-verifier-acapy issuer-verifier-mediator holder-acapy
     echo "Provisioning AcaPy Wallets... (sleeping 15 seconds)"
     sleep 15
 
