@@ -10,7 +10,7 @@ COPY src /build/src/
 
 RUN mvn package -Dmaven.test.skip=true
 
-FROM eclipse-temurin:17.0.1_12-jre-alpine
+FROM registry.access.redhat.com/ubi8/openjdk-11
 
 WORKDIR /app
 
