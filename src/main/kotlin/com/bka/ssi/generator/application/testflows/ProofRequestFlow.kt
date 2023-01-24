@@ -20,7 +20,6 @@ class ProofRequestFlow(
     @Qualifier("Holder") holderAriesClients: List<IAriesClient>,
     @Value("\${test-flows.proof-request-flow.revocation-registry-size}") private val revocationRegistrySize: Int,
     @Value("\${test-flows.proof-request-flow.check-non-revoked}") private val checkNonRevoked: Boolean,
-    @Value("\${test-flows.proof-request-flow.use-oob-proof-requests}") private val useOobProofRequests: Boolean,
 ) : TestFlow(holderAriesClients) {
 
     protected companion object {
@@ -33,7 +32,6 @@ class ProofRequestFlow(
         logger.info("Initializing ProofRequestFlow...")
         logger.info("revocation-registry-size: $revocationRegistrySize")
         logger.info("check-non-revoked: $checkNonRevoked")
-        logger.info("use-oob-proof-requests: $useOobProofRequests")
 
         Companion.testRunner = testRunner
 
@@ -52,12 +50,7 @@ class ProofRequestFlow(
     }
 
     override fun startIteration() {
-        if (useOobProofRequests) {
-            sendProofRequestOob()
-        } else {
-            sendProofRequestToConnection()
-        }
-
+        sendProofRequestToConnection()
         logger.info("Sent proof request")
     }
 
@@ -81,28 +74,6 @@ class ProofRequestFlow(
             checkNonRevoked,
             ProofExchangeCommentDo(false, "credential", null, null)
         )
-    }
-
-    private fun sendProofRequestOob() {
-        val oobProofRequest = issuerVerifierAriesClient.createOobProofRequest(
-            ProofRequestDo(
-                Instant.now().toEpochMilli(),
-                Instant.now().toEpochMilli(),
-                listOf(
-                    CredentialRequestDo(
-                        listOf("first name", "last name"),
-                        credentialDefinitionId,
-                        AttributeValueRestrictionDo(
-                            "first name",
-                            "bob"
-                        )
-                    )
-                )
-            ),
-            checkNonRevoked
-        )
-
-        nextHolderClient().receiveOobProofRequest(oobProofRequest)
     }
 
     private fun initiateConnection() {

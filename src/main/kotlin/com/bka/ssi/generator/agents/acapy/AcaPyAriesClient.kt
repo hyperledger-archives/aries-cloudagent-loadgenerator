@@ -136,14 +136,6 @@ class AcaPyAriesClient(
         ariesClientLogger.stopPublishRevokedCredentials(trackingId)
     }
 
-    override fun createOobCredentialOffer(credentialDo: CredentialDo): OobCredentialOfferDo {
-        throw NotImplementedError("Creating an OOB Credential Offer is not implemented yet.")
-    }
-
-    override fun receiveOobCredentialOffer(oobCredentialOfferDo: OobCredentialOfferDo) {
-        throw NotImplementedError("Receiving an OOB Credential Offer is not implemented yet.")
-    }
-
     override fun sendProofRequestToConnection(
         connectionId: String,
         proofRequestDo: ProofRequestDo,
@@ -192,13 +184,5 @@ class AcaPyAriesClient(
                 "Proof Request"
             )
         )
-    }
-
-    override fun createOobProofRequest(proofRequestDo: ProofRequestDo, checkNonRevoked: Boolean): OobProofRequestDo {
-        throw NotImplementedError("Creating an OOB Proof Request is not implemented yet.")
-    }
-
-    override fun receiveOobProofRequest(oobProofRequestDo: OobProofRequestDo) {
-        throw NotImplementedError("Receiving an OOB Proof Request is not implemented yet.")
     }
 }
