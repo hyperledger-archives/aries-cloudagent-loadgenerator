@@ -72,21 +72,17 @@ test-flows:
         check-non-revoked: true
         revoke-credentials: true
         credential-revocation-batch-size: 5
-        use-oob-instead-of-connection: false
     issuer-flow:
         active: false
         use-revocable-credentials: true
         revocation-registry-size: 500
-        use-oob-credential-issuance: false
     connection-flow:
         active: false
     credential-issuance-flow:
         active: false
         use-revocable-credentials: true
         revocation-registry-size: 500
-        use-oob-credential-issuance: false
     proof-request-flow:
         active: false
         check-non-revoked: true
         revocation-registry-size: 500
-        use-oob-proof-requests: false

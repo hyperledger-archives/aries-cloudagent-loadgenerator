@@ -21,15 +21,10 @@ interface IAriesClient {
         credentialRevocationRegistryRecord: CredentialRevocationRegistryRecordDo
     )
 
-    fun createOobCredentialOffer(credentialDo: CredentialDo): OobCredentialOfferDo
-    fun receiveOobCredentialOffer(oobCredentialOfferDo: OobCredentialOfferDo)
     fun sendProofRequestToConnection(
         connectionId: String,
         proofRequestDo: ProofRequestDo,
         checkNonRevoked: Boolean,
         comment: ProofExchangeCommentDo
     )
-
-    fun createOobProofRequest(proofRequestDo: ProofRequestDo, checkNonRevoked: Boolean): OobProofRequestDo
-    fun receiveOobProofRequest(oobProofRequestDo: OobProofRequestDo)
 }
