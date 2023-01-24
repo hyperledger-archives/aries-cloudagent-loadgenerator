@@ -19,7 +19,6 @@ class CredentialIssuanceFlow(
     @Qualifier("Holder") holderAriesClients: List<IAriesClient>,
     @Value("\${test-flows.credential-issuance-flow.use-revocable-credentials}") private val useRevocableCredentials: Boolean,
     @Value("\${test-flows.credential-issuance-flow.revocation-registry-size}") private val revocationRegistrySize: Int,
-    @Value("\${test-flows.credential-issuance-flow.use-oob-credential-issuance}") private val useOobCredentialIssuance: Boolean,
 ) : TestFlow(holderAriesClients) {
 
     protected companion object {
@@ -32,7 +31,6 @@ class CredentialIssuanceFlow(
         logger.info("Initializing CredentialIssuanceFlow...")
         logger.info("use-revocable-credentials: $useRevocableCredentials")
         logger.info("revocation-registry-size: $revocationRegistrySize")
-        logger.info("use-oob-credential-issuance: $useOobCredentialIssuance")
 
         Companion.testRunner = testRunner
 
@@ -47,20 +45,11 @@ class CredentialIssuanceFlow(
         )
         credentialDefinitionId = credentialDefinition.id
 
-        if (useOobCredentialIssuance) {
-            testRunner.finishedInitialization()
-        } else {
-            initiateConnection()
-        }
+        initiateConnection()
     }
 
     override fun startIteration() {
-        if (useOobCredentialIssuance) {
-            issueCredentialOob()
-        } else {
-            issueCredentialToConnection()
-        }
-
+        issueCredentialToConnection()
         logger.info("Sent Credential Offer")
     }
 
@@ -75,20 +64,6 @@ class CredentialIssuanceFlow(
                 )
             )
         )
-    }
-
-    private fun issueCredentialOob() {
-        val oobCredentialOffer = issuerVerifierAriesClient.createOobCredentialOffer(
-            CredentialDo(
-                credentialDefinitionId,
-                mapOf(
-                    "first name" to "Holder",
-                    "last name" to "Mustermann"
-                )
-            )
-        )
-
-        nextHolderClient().receiveOobCredentialOffer(oobCredentialOffer)
     }
 
     private fun initiateConnection() {

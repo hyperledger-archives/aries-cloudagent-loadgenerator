@@ -43,23 +43,19 @@ test-flows:
         use-revocable-credentials: true
         revocation-registry-size: 500
         check-non-revoked: true
-        use-oob-instead-of-connection: false
     issuer-flow:
         active: false
         use-revocable-credentials: true
         revocation-registry-size: 500
-        use-oob-credential-issuance: false
     connection-request-flow:
         active: false
     credential-issuance-flow:
         active: false
         use-revocable-credentials: true
         revocation-registry-size: 500
-        use-oob-credential-issuance: false
     proof-request-flow:
         active: false
         check-non-revoked: true
-        use-oob-proof-requests: false
 ```
 
 Only one Test Runner and one Test Flow should be set to `active: true` at a time. The Test Flow will **automatically be
