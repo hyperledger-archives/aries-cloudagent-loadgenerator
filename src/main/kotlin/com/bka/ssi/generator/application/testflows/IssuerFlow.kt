@@ -19,7 +19,6 @@ class IssuerFlow(
     @Qualifier("Holder") holderAriesClients: List<IAriesClient>,
     @Value("\${test-flows.issuer-flow.use-revocable-credentials}") private val useRevocableCredentials: Boolean,
     @Value("\${test-flows.issuer-flow.revocation-registry-size}") private val revocationRegistrySize: Int,
-    @Value("\${test-flows.issuer-flow.use-oob-credential-issuance}") private val useOobCredentialIssuance: Boolean,
 ) : TestFlow(holderAriesClients) {
 
     protected companion object {
@@ -31,7 +30,6 @@ class IssuerFlow(
         logger.info("Initializing IssuerFlow...")
         logger.info("use-revocable-credentials: $useRevocableCredentials")
         logger.info("revocation-registry-size: $revocationRegistrySize")
-        logger.info("use-oob-credential-issuance: $useOobCredentialIssuance")
 
         Companion.testRunner = testRunner
 
@@ -50,26 +48,7 @@ class IssuerFlow(
     }
 
     override fun startIteration() {
-        if (useOobCredentialIssuance) {
-            issueCredentialOob()
-            return
-        }
-
         initiateConnection()
-    }
-
-    private fun issueCredentialOob() {
-        val oobCredentialOffer = issuerVerifierAriesClient.createOobCredentialOffer(
-            CredentialDo(
-                credentialDefinitionId,
-                mapOf(
-                    "first name" to "Holder",
-                    "last name" to "Mustermann"
-                )
-            )
-        )
-
-        nextHolderClient().receiveOobCredentialOffer(oobCredentialOffer)
     }
 
     private fun initiateConnection() {

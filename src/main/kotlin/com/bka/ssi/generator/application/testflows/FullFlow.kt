@@ -26,7 +26,6 @@ class FullFlow(
     @Value("\${test-flows.full-flow.check-non-revoked}") private val checkNonRevoked: Boolean,
     @Value("\${test-flows.full-flow.revoke-credentials}") private val revokeCredentials: Boolean,
     @Value("\${test-flows.full-flow.credential-revocation-batch-size}") private val credentialRevocationBatchSize: Int,
-    @Value("\${test-flows.full-flow.use-oob-instead-of-connection}") private val useOobInsteadOfConnection: Boolean,
     @Value("\${test-flows.full-flow.timeout-in-milliseconds-before-sharing-connection-invitation-with-holder}") private val timeoutInMillisecondsBeforeSharingConnectionInvitationWithHolder: Long,
     @Value("\${test-flows.full-flow.timeout-in-milliseconds-after-creating-a-credential-definition}") private val timeoutInMillisecondsAfterCreatingACredentialDefinition: Long,
     private val errorLogger: ErrorLogger,
@@ -49,7 +48,6 @@ class FullFlow(
         logger.info("check-non-revoked: $checkNonRevoked")
         logger.info("revoke-credentials: $revokeCredentials")
         logger.info("credential-revocation-batch-size: $credentialRevocationBatchSize")
-        logger.info("use-oob-instead-of-connection: $useOobInsteadOfConnection")
         logger.info("timeout-in-milliseconds-before-sharing-connection-invitation-with-holder: $timeoutInMillisecondsBeforeSharingConnectionInvitationWithHolder")
         logger.info("timeout-in-milliseconds-after-creating-a-credential-definition: $timeoutInMillisecondsAfterCreatingACredentialDefinition")
 
@@ -72,25 +70,7 @@ class FullFlow(
     }
 
     override fun startIteration() {
-        if (useOobInsteadOfConnection) {
-            issueCredentialOob()
-            return
-        }
-
         initiateConnection()
-    }
-
-    private fun issueCredentialOob() {
-        val oobCredentialOffer = issuerVerifierAriesClient.createOobCredentialOffer(
-            CredentialDo(
-                credentialDefinitionId,
-                mapOf(
-                    SESSION_ID_CREDENTIAL_ATTRIBUTE_NAME to UUID.randomUUID().toString()
-                )
-            )
-        )
-
-        nextHolderClient().receiveOobCredentialOffer(oobCredentialOffer)
     }
 
     private fun initiateConnection() {
@@ -124,20 +104,16 @@ class FullFlow(
             return
         }
 
-        if (useOobInsteadOfConnection) {
-            sendProofRequestOob(credentialExchangeRecord.sessionId)
-        } else {
-            sendProofRequestToConnection(
+        sendProofRequestToConnection(
+            credentialExchangeRecord.sessionId,
+            credentialExchangeRecord.connectionId,
+            ProofExchangeCommentDo(
+                true,
                 credentialExchangeRecord.sessionId,
-                credentialExchangeRecord.connectionId,
-                ProofExchangeCommentDo(
-                    true,
-                    credentialExchangeRecord.sessionId,
-                    credentialExchangeRecord.revocationRegistryId,
-                    credentialExchangeRecord.revocationRegistryIndex
-                )
+                credentialExchangeRecord.revocationRegistryId,
+                credentialExchangeRecord.revocationRegistryIndex
             )
-        }
+        )
 
         logger.info("Sent proof request")
     }
@@ -162,28 +138,6 @@ class FullFlow(
             true,
             comment
         )
-    }
-
-    private fun sendProofRequestOob(sessionId: String) {
-        val oobProofRequest = issuerVerifierAriesClient.createOobProofRequest(
-            ProofRequestDo(
-                Instant.now().toEpochMilli(),
-                Instant.now().toEpochMilli(),
-                listOf(
-                    CredentialRequestDo(
-                        listOf(SESSION_ID_CREDENTIAL_ATTRIBUTE_NAME),
-                        credentialDefinitionId,
-                        AttributeValueRestrictionDo(
-                            SESSION_ID_CREDENTIAL_ATTRIBUTE_NAME,
-                            sessionId
-                        )
-                    )
-                )
-            ),
-            checkNonRevoked
-        )
-
-        nextHolderClient().receiveOobProofRequest(oobProofRequest)
     }
 
     override fun handleProofRequestRecord(proofExchangeRecord: ProofExchangeRecordDo) {
